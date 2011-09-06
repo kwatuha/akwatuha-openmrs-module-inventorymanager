@@ -55,7 +55,8 @@ public interface CoreService extends OpenmrsService {
 	 * @should return all patient id with certain location on their observations between certain date
 	 * @should return empty cohort when no patient match the criteria
 	 */
-	@Authorized({PrivilegeConstants.VIEW_LOCATIONS, PrivilegeConstants.VIEW_PATIENTS})
+	@Authorized
+	({PrivilegeConstants.VIEW_LOCATIONS, PrivilegeConstants.VIEW_PATIENTS})
 	Cohort getCohort(final Location location, final Date startDate, final Date endDate) throws APIException;
 
 	/**
