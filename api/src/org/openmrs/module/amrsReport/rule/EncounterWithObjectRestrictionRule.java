@@ -51,7 +51,7 @@ public class EncounterWithObjectRestrictionRule extends EncounterWithRestriction
 
 	private static final Log log = LogFactory.getLog(EncounterWithObjectRestrictionRule.class);
 
-	public static final String TOKEN = "Encounter Object Restrictions";
+	public static final String TOKEN = "MOH Encounter Object Restrictions";
 
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
