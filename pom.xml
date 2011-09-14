@@ -7,14 +7,14 @@
 	<version>0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>AMRS Report Module</name>
-	<description>Parent project for Basic Module</description>
+	<description>Parent project for amrs Reporting Module</description>
 
-	<url>http://wiki.openmrs.org/docs/Basic+Module</url>
+	<url>http://wiki.ampath.or.ke/display/data/Comprehensive+Care+Clinic+Pre+ART+Register+MOH+361A</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/basicmodule/trunk/</connection>
-		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/basicmodule/trunk/</developerConnection>
-		<url>http://svn.openmrs.org/openmrs-modules/basicmodule/trunk/</url>
+		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/amrsreports/trunk/</connection>
+		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/amrsreports/trunk/</developerConnection>
+		<url>http://svn.openmrs.org/openmrs-modules/amrsreports/trunk/</url>
 	</scm>
 
 	<modules>
