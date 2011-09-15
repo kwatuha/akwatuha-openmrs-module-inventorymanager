@@ -3,7 +3,7 @@
 <module configVersion="1.2">
 	
 	<!-- Base Module Properties -->
-	<id>amrsReport</id>
+	<id>amrsreport</id>
 	<name>AMRS Reporting Module</name>
 	<version>0.1</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
@@ -12,7 +12,7 @@
 			AMRS Reporting Module. MOH Pre-Register Reporting Module.
 	</description>
 
-	<activator>@MODULE_PACKAGE@.AmrsReportModuleActivator</activator>
+	<activator>org.openmrs.module.amrsreport.AmrsReportModuleActivator</activator>
 	
 	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
 	<!-- /Base Module Properties -->

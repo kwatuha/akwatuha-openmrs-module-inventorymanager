@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
-		<artifactId>amrsReport-parent</artifactId>
+		<artifactId>amrsreport</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>org.openmrs.module</groupId>
-	<artifactId>amrsReport</artifactId>
+	<artifactId>amrsreport-omod</artifactId>
 	<packaging>omod</packaging>
 	<name>AMRS Report Module OMOD</name>
 	<description>AMRS module project for Reporting Module</description>
@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
-			<artifactId>amrsReport-api</artifactId>
+			<artifactId>amrsreport-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		
