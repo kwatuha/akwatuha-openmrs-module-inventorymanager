@@ -12,7 +12,7 @@
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
-package org.openmrs.module.clinicalsummary.rule;
+package org.openmrs.module.amrsreports.rule;
 
 public interface EvaluableNameConstants {
 
