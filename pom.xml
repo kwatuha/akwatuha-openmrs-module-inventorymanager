@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>amrsreport</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<packaging>pom</packaging>
 	<name>AMRS Report Module</name>
 	<description>Parent project for amrs Reporting Module</description>
@@ -71,6 +71,13 @@
 				<version>${openMRSVersion}</version>
 				<type>pom</type>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openmrs.module.logic</groupId>
+				<artifactId>logic-api</artifactId>
+				<version>0.5-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>provided</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
