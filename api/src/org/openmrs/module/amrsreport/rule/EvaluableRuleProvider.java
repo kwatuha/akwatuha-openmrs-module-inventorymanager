@@ -37,9 +37,9 @@ public class EvaluableRuleProvider extends ClassRuleProvider {
 
 	private static final Log log = LogFactory.getLog(EvaluableRuleProvider.class);
 
-	private static final String CLINICAL_SUMMARY_MODULE = "amrsreport";
+	private static final String AMRS_REPORT_MODULE = "amrsreport";
 
-	private static final String CLINICAL_SUMMARY_MODULE_API = "amrsreport-api";
+	private static final String AMRS_REPORT_MODULE_API = "amrsreport-api";
 
 	private static final String RULE_CLASS_SUFFIX = "Rule";
 
@@ -55,10 +55,10 @@ public class EvaluableRuleProvider extends ClassRuleProvider {
 			log.debug("Registering AMRS reports summary rules ...");
 
 		try {
-			ModuleClassLoader moduleClassLoader = ModuleFactory.getModuleClassLoader(CLINICAL_SUMMARY_MODULE);
+			ModuleClassLoader moduleClassLoader = ModuleFactory.getModuleClassLoader(AMRS_REPORT_MODULE);
 			for (URL url : moduleClassLoader.getURLs()) {
 				String filename = url.getFile();
-				if (StringUtils.contains(filename, CLINICAL_SUMMARY_MODULE_API)) {
+				if (StringUtils.contains(filename, AMRS_REPORT_MODULE_API)) {
 					ZipFile zipFile = new ZipFile(filename);
 					for (Enumeration list = zipFile.entries(); list.hasMoreElements(); ) {
 						ZipEntry entry = (ZipEntry) list.nextElement();
