@@ -52,6 +52,7 @@ public class CryptococcalRule extends EvaluableRule {
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 		Result result = new Result();
 		// check if the caller already pass encounter list object in the parameter
+		try{
 		Object encounters = parameters.get(EvaluableConstants.OBS_ENCOUNTER);
 		if (encounters == null) {
 			EncounterWithRestrictionRule encounterWithRestrictionRule = new EncounterWithStringRestrictionRule();
@@ -76,6 +77,11 @@ public class CryptococcalRule extends EvaluableRule {
 			if (CollectionUtils.isNotEmpty(planResults))
 				result.add(new Result(fluconazoleConcept));
 
+		}
+		}
+		catch (NullPointerException nullPointerException) {
+			// TODO: handle exception
+			nullPointerException.toString();
 		}
 
 		return result;

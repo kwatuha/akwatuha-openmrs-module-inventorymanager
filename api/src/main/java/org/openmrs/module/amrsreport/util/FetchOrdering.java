@@ -15,6 +15,7 @@ package org.openmrs.module.amrsreport.util;
 
 import org.openmrs.module.amrsreport.db.hibernate.type.StringEnum;
 
+
 /**
  */
 

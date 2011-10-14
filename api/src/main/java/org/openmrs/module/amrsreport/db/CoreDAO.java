@@ -31,11 +31,17 @@ import java.util.Map;
  */
 public interface CoreDAO {
 
-	Cohort getCohort(final Location location, final Date startDate, Date endDate) throws DAOException;
-
+	Cohort getAdultMOHRegisterCohort() throws DAOException;
+	
+	Cohort getChildMOHRegisterCohortWithAge() throws DAOException;
+	
+	Cohort getChildMOHRegisterCohortBasedOnObservation() throws DAOException;
+	
+	
 	List<Encounter> getPatientEncounters(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                     final FetchRestriction fetchRestriction) throws DAOException;
 
 	List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                 final FetchRestriction fetchRestriction) throws DAOException;
 }
+

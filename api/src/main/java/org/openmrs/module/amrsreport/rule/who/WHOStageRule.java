@@ -10,9 +10,13 @@
  * under the License.
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
- */
+ *//*
 
 package org.openmrs.module.amrsreport.rule.who;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -25,24 +29,19 @@ import org.openmrs.module.amrsreport.rule.EvaluableParameter;
 import org.openmrs.module.amrsreport.rule.EvaluableRule;
 import org.openmrs.module.amrsreport.rule.observation.ObsWithRestrictionRule;
 import org.openmrs.module.amrsreport.rule.observation.ObsWithStringRestrictionRule;
-import org.openmrs.module.amrsreport.rule.util.ResultUtils;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-/**
+*//**
  * Parameters: <ul> <li>[Required] concept: the concept in question </li> <ul>
- */
+ *//*
 public class WHOStageRule extends EvaluableRule {
 
 	private static final Log log = LogFactory.getLog(WHOStageRule.class);
 
 	public static final String TOKEN = "MOH WHO Stage";
 
-	/**
+	*//**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
-	 */
+	 *//*
 	@Override
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 		Result result = new Result();
@@ -73,19 +72,19 @@ public class WHOStageRule extends EvaluableRule {
 		return result;
 	}
 
-	/**
+	*//**
 	 * @see org.openmrs.logic.Rule#getDependencies()
-	 */
+	 *//*
 	@Override
 	public String[] getDependencies() {
 		return new String[]{ObsWithStringRestrictionRule.TOKEN};
 	}
 
-	/**
+	*//**
 	 * Get the definition of each parameter that should be passed to this rule execution
 	 *
 	 * @return all parameter that applicable for each rule execution
-	 */
+	 *//*
 	@Override
 	public Set<EvaluableParameter> getEvaluationParameters() {
 		Set<EvaluableParameter> evaluableParameters = new HashSet<EvaluableParameter>();
@@ -93,13 +92,14 @@ public class WHOStageRule extends EvaluableRule {
 		return evaluableParameters;
 	}
 
-	/**
+	*//**
 	 * Get the token name of the rule that can be used to reference the rule from LogicService
 	 *
 	 * @return the token name
-	 */
+	 *//*
 	@Override
 	protected String getEvaluableToken() {
 		return TOKEN;
 	}
 }
+*/

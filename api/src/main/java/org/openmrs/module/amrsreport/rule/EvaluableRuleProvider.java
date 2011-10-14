@@ -14,21 +14,10 @@
 
 package org.openmrs.module.amrsreport.rule;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.rule.provider.ClassRuleProvider;
-import org.openmrs.module.ModuleClassLoader;
-import org.openmrs.module.ModuleFactory;
-import org.springframework.asm.ClassReader;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  */
@@ -48,8 +37,8 @@ public class EvaluableRuleProvider extends ClassRuleProvider {
 	/**
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#afterStartup()
 	 */
-	@Override
-	public void afterStartup() {
+	//@Override
+	/*public void afterStartup() {
 
 		if (log.isDebugEnabled())
 			log.debug("Registering AMRS reports summary rules ...");
@@ -78,4 +67,5 @@ public class EvaluableRuleProvider extends ClassRuleProvider {
 			log.error("Processing rule classes failed. Rule might not get registered.");
 		}
 	}
-}
+*/
+	}

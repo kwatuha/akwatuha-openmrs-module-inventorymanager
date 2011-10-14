@@ -15,6 +15,14 @@
 package org.openmrs.module.amrsreport.db.hibernate;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -28,21 +36,19 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
+import org.openmrs.Concept;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Person;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.amrsreport.db.CoreDAO;
 import org.openmrs.module.amrsreport.util.FetchOrdering;
 import org.openmrs.module.amrsreport.util.FetchRestriction;
 import org.openmrs.util.OpenmrsUtil;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -58,9 +64,88 @@ public class HibernateCoreDAO implements CoreDAO {
 	 *
 	 * @param sessionFactory the session factory to be injected
 	 */
-	public void setSessionFactory(final SessionFactory sessionFactory) {
+	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+	
+	public Cohort getChildMOHRegisterCohortWithAge()
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -18);
+		Date eighteenMonthsAgo = calendar.getTime();
+
+		calendar = Calendar.getInstance();
+		calendar.add(Calendar.YEAR, -14);
+		Date fourteenYearsAgo = calendar.getTime();
+		
+		Concept childCurrentHivStatusPositiveConcept = Context.getConceptService().getConcept("CHILD'S CURRENT HIV STATUS POSITIVE");
+
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Person.class);
+		criteria.add(Restrictions.ge("birthdate", fourteenYearsAgo));
+		criteria.add(Restrictions.le("birthdate", eighteenMonthsAgo));
+		
+
+		criteria.setProjection(Projections.property("personId"));
+		criteria.add(Restrictions.eq("valueCoded", childCurrentHivStatusPositiveConcept));
+		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+		return new Cohort(criteria.list());
+
+	}
+
+	public Cohort getObservationCohort() throws DAOException {
+		
+		EncounterType adultInitialEncounter=Context.getEncounterService().getEncounterType("ADULTINITIAL");
+		EncounterType adultReturnEncounter=Context.getEncounterService().getEncounterType("ADULTRETURN");
+		
+		List<EncounterType> encounterTypes = Arrays.asList(adultInitialEncounter,adultReturnEncounter);
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Encounter.class);
+		// put restrictions on the encounter type
+
+		
+		
+		criteria.add(Restrictions.in("encounterType", encounterTypes));
+
+		criteria.setProjection(Projections.property("patient.personId"));
+		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+		Cohort enrolledAdultsCohort= new Cohort(criteria.list());
+		
+		return enrolledAdultsCohort;
+
+		
+	}
+	
+	public Cohort getChildMOHRegisterCohortBasedOnObservation(){
+		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Encounter.class);
+		//--> put restrictions on the encounter type
+				
+		 return new Cohort(criteria.list());
+	}
+
+	
+	
+	
+	/*public Cohort getObservationCohort() throws DAOException {
+			
+			
+			Concept firstRapidConcept = Context.getConceptService().getConcept("HIV RAPID TEST, QUALITATIVE");
+			Concept secondRapidConcept = Context.getConceptService().getConcept("HIV RAPID TEST 2, QUALITATIVE"); 
+			
+			List<Concept> concepts = Arrays.asList(firstRapidConcept, secondRapidConcept);
+			
+			Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
+			criteria.add(Restrictions.in("concept", concepts));
+			
+			Concept positiveConcept = Context.getConceptService().getConcept("POSITIVE");
+			criteria.add(Restrictions.eq("valueCoded", positiveConcept));
+
+			criteria.setProjection(Projections.property("patient.personId"));
+			criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+			return new Cohort(criteria.list());
+		}
+
+		*/
 
 	/**
 	 * @see CoreDAO#getPatientObservations(Integer, java.util.Map, org.openmrs.module.clinicalsummary.util.FetchRestriction)
@@ -202,5 +287,11 @@ public class HibernateCoreDAO implements CoreDAO {
 		criteria.setProjection(Projections.property("person.personId"));
 		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
 		return new Cohort(criteria.list());
+	}
+
+	@Override
+	public Cohort getAdultMOHRegisterCohort() throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -61,6 +61,7 @@ public class CTXTreatmentRule extends EvaluableRule {
 
 		Result result = new Result();
 		// check if the caller already pass encounter list object in the parameter
+		try{
 		Object encounters = parameters.get(EvaluableConstants.OBS_ENCOUNTER);
 		if (encounters == null) {
 			EncounterWithRestrictionRule encounterWithRestrictionRule = new EncounterWithStringRestrictionRule();
@@ -81,7 +82,7 @@ public class CTXTreatmentRule extends EvaluableRule {
 			
 			Result ctxDatesResults = obsWithRestrictionRule.eval(context, patientId, parameters);
 				//check wether we have the  dates from the obs it should not be empty
-			if (CollectionUtils.isNotEmpty(ctxResults)) {
+			if (CollectionUtils.isNotEmpty(ctxDatesResults)) {
 				result.addAll(ctxDatesResults);
 			}
 			else{
@@ -125,6 +126,11 @@ public class CTXTreatmentRule extends EvaluableRule {
 			parameters.put(EvaluableConstants.OBS_VALUE_CODED, Arrays.asList(EvaluableNameConstants.TRIMETHOPRIM_AND_SULFAMETHOXAZOLE));
 			Result currentResults = obsWithRestrictionRule.eval(context, patientId, parameters);
 			result.addAll(currentResults);
+		}
+		}
+		catch (NullPointerException nullPointerException) {
+			// TODO: handle exception
+			nullPointerException.toString();
 		}
 		return result;
 	}

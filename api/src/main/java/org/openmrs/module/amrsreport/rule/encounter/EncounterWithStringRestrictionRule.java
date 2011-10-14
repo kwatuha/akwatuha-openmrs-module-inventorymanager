@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.amrsreport.rule;
+package org.openmrs.module.amrsreport.rule.encounter;
 
 
 import org.apache.commons.collections.CollectionUtils;

@@ -37,6 +37,12 @@ import java.util.Map;
 @Transactional(readOnly = true)
 public interface CoreService extends OpenmrsService {
 
+	Cohort getChildMOHRegisterCohortWithAge();
+		
+	Cohort getAdultMOHRegisterCohort();
+	
+	Cohort getChildMOHRegisterCohortBasedOnObservation();
+	
 	/**
 	 * Get all patient id attached to a certain location on their observations where the observations are created between the start
 	 * date and end date

@@ -12,7 +12,7 @@
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
-package org.openmrs.module.amrsreport.rule;
+package org.openmrs.module.amrsreport.rule.medication;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,7 +47,7 @@ public class TuberculosisTreatmentStartStopDateRule extends EvaluableRule {
 
 	private static final Log log = LogFactory.getLog(TuberculosisTreatmentStartStopDateRule.class);
 
-	public static final String TOKEN = "Tuberculosis Treatment Start Stop Date";
+	public static final String TOKEN = "MOH Tuberculosis Treatment Start Stop Date";
 
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
@@ -56,6 +56,7 @@ public class TuberculosisTreatmentStartStopDateRule extends EvaluableRule {
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 		Result result = new Result();
 		// check if the caller already pass encounter list object in the parameter
+		try{
 		Object encounters = parameters.get(EvaluableConstants.OBS_ENCOUNTER);
 		if (encounters == null) {
 			EncounterWithRestrictionRule encounterWithRestrictionRule = new EncounterWithStringRestrictionRule();
@@ -144,7 +145,11 @@ public class TuberculosisTreatmentStartStopDateRule extends EvaluableRule {
 
 			result.addAll(addedResults);
 		}
-
+		}
+		catch (NullPointerException nullPointerException) {
+			// TODO: handle exception
+		nullPointerException.toString();
+		}
 		return result;
 	}
 

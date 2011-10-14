@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.amrsreport.rule;
+package org.openmrs.module.amrsreport.rule.encounter;
 
 import java.util.Map;
 
@@ -21,6 +21,7 @@ import org.openmrs.Patient;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.result.Result;
+import org.openmrs.module.amrsreport.rule.EvaluableRule;
 
 /**
  *

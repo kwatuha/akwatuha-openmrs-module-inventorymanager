@@ -14,6 +14,12 @@
 package org.openmrs.module.amrsreport.rule;
 
 
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -22,11 +28,6 @@ import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.AbstractRule;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public abstract class EvaluableRule extends AbstractRule {
 
@@ -38,12 +39,18 @@ public abstract class EvaluableRule extends AbstractRule {
 	 * @param parameters
 	 * @return
 	 */
+	
 	private Map<String, Object> getEffectiveParameters(Map<String, Object> parameters) {
 		Map<String, Object> effectiveParameters = new HashMap<String, Object>();
+		try{
 		for (EvaluableParameter parameter : getEvaluationParameters()) {
 			Object o = parameters.get(parameter.getName());
 			if (o != null)
 				effectiveParameters.put(parameter.getName(), o);
+		}
+		}
+		catch(NullPointerException nullPointerException){
+			nullPointerException.toString();
 		}
 		return effectiveParameters;
 	}
@@ -148,17 +155,26 @@ public abstract class EvaluableRule extends AbstractRule {
 	 * @throws LogicException when any of the parameter definition is not satisfied by the parameters
 	 * @see EvaluableParameter
 	 */
-	protected void validateParameters(final Map<String, Object> parameters) throws LogicException {
+	protected void validateParameters(final Map<String, Object> parameters) throws LogicException{
 		for (EvaluableParameter evaluableParameter : getEvaluationParameters()) {
-			Object o = parameters.get(evaluableParameter.getName());
+			
 			// if object for the parameter is not found and the parameter is required, then throw missing parameter exception
-			if (o == null && evaluableParameter.isRequired())
-				throw new LogicException("Insufficient parameter to execute rule. Missing parameter: " + evaluableParameter.getName());
-			// if the object is found but the type is different, then throw invalid parameter type exception
-			if (o != null && !ClassUtils.isAssignable(o.getClass(), evaluableParameter.getParameterClass()))
-				throw new LogicException("Invalid parameter type to execute rule. " +
-						"Expecting " + evaluableParameter.getParameterClass().getName() + " for " + evaluableParameter.getName() +
-						", but getting " + o.getClass().getName() + " instead.");
+			try {
+				Object o = parameters.get(evaluableParameter.getName());
+				if (o != null && evaluableParameter.isRequired())
+					throw new LogicException("Insufficient parameter to execute rule. Missing parameter: " + evaluableParameter.getName());
+				// if the object is found but the type is different, then throw invalid parameter type exception
+				if (o != null && !ClassUtils.isAssignable(o.getClass(), evaluableParameter.getParameterClass()))
+					throw new LogicException("Invalid parameter type to execute rule. " +
+							"Expecting " + evaluableParameter.getParameterClass().getName() + " for " + evaluableParameter.getName() +
+							", but getting " + o.getClass().getName() + " instead.");
+				
+			} catch (NullPointerException nullPointerException) {
+				// TODO: handle exception
+				nullPointerException.toString();
+			}
+			
+			
 		}
 	}
 

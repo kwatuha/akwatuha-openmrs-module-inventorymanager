@@ -10,9 +10,9 @@
  * under the License.
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
- */
+ *//*
 
-package org.openmrs.module.amrsreport.rule.adherence;
+package org.openmrs.module.amrsreport.rule;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -44,17 +44,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- */
+*//**
+ *//*
 public class EntryPointRule extends EvaluableRule {
 
-	private static final Log log = LogFactory.getLog(DrugAdherenceRule.class);
+	private static final Log log = LogFactory.getLog(EntryPointRule.class);
 
 	public static final String TOKEN = "MOH Point Of Entry";
 
-	/**
+	*//**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
-	 */
+	 *//*
 	@Override
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 
@@ -125,19 +125,19 @@ public class EntryPointRule extends EvaluableRule {
 		}
 	}
 
-	/**
+	*//**
 	 * @see org.openmrs.logic.Rule#getDependencies()
-	 */
+	 *//*
 	@Override
 	public String[] getDependencies() {
 		return new String[]{ObsWithStringRestrictionRule.TOKEN, EncounterWithStringRestrictionRule.TOKEN};
 	}
 
-	/**
+	*//**
 	 * Get the definition of each parameter that should be passed to this rule execution
 	 *
 	 * @return all parameter that applicable for each rule execution
-	 */
+	 *//*
 	@Override
 	public Set<EvaluableParameter> getEvaluationParameters() {
 		Set<EvaluableParameter> evaluableParameters = new HashSet<EvaluableParameter>();
@@ -145,13 +145,14 @@ public class EntryPointRule extends EvaluableRule {
 		return evaluableParameters;
 	}
 
-	/**
+	*//**
 	 * Get the token name of the rule that can be used to reference the rule from LogicService
 	 *
 	 * @return the token name
-	 */
+	 *//*
 	@Override
 	protected String getEvaluableToken() {
 		return TOKEN;
 	}
 }
+*/

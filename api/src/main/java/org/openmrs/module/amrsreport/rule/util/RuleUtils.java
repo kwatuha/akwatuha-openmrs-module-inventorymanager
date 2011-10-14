@@ -13,6 +13,10 @@
  */
 package org.openmrs.module.amrsreport.rule.util;
 
+import java.text.ParseException;
+import java.util.Collection;
+import java.util.Date;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
@@ -22,10 +26,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.amrsreport.util.FetchOrdering;
-
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.Date;
 
 /**
  */

@@ -12,7 +12,7 @@
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
-package org.openmrs.module.amrsreports.rule;
+package org.openmrs.module.amrsreport.rule;
 
 public interface EvaluableNameConstants {
 
@@ -122,6 +122,8 @@ public interface EvaluableNameConstants {
 
 	String PATIENT_REPORTED_PROBLEM_ADDED = "PATIENT REPORTED PROBLEM ADDED";
 	
+	String CONTINUE_REGIMEN="CONTINUE REGIMEN";
+	
 //constants for CTX startdate and stopdate
 	
 	String 	PCP_PROPHYLAXIS_STARTED = "PCP PROPHYLAXIS STARTED";
@@ -136,6 +138,7 @@ public interface EvaluableNameConstants {
 	
 	String PATIENT_REPORTED_CURRENT_PCP_PROPHYLAXIS ="PATIENT REPORTED CURRENT PCP PROPHYLAXIS";
 	
+	String TUBERCULOSIS_TREATMENT_COMPLETED_DATE="TUBERCULOSIS TREATMENT COMPLETED DATE";
 	//String ENCOUNTER_FETCH_SIZE="ENCOUNTER FETCH SIZE";
 	
 	//String OBS_ENCOUNTER="OBS ENCOUNTER";
