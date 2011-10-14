@@ -161,7 +161,7 @@ public abstract class EvaluableRule extends AbstractRule {
 			// if object for the parameter is not found and the parameter is required, then throw missing parameter exception
 			try {
 				Object o = parameters.get(evaluableParameter.getName());
-				if (o != null && evaluableParameter.isRequired())
+				if (o == null && evaluableParameter.isRequired())
 					throw new LogicException("Insufficient parameter to execute rule. Missing parameter: " + evaluableParameter.getName());
 				// if the object is found but the type is different, then throw invalid parameter type exception
 				if (o != null && !ClassUtils.isAssignable(o.getClass(), evaluableParameter.getParameterClass()))
