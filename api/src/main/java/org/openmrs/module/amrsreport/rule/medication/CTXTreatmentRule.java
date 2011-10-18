@@ -14,12 +14,16 @@
 
 package org.openmrs.module.amrsreport.rule.medication;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.Obs;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.result.Result;
@@ -34,16 +38,6 @@ import org.openmrs.module.amrsreport.rule.observation.ObsWithRestrictionRule;
 import org.openmrs.module.amrsreport.rule.observation.ObsWithStringRestrictionRule;
 import org.openmrs.util.OpenmrsUtil;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * Author ningosi
  */
@@ -57,11 +51,18 @@ public class CTXTreatmentRule extends EvaluableRule {
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
 	 */
 	@Override
-	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
+	protected Result evaluate(final LogicContext context, final Integer patientId,  Map<String, Object> parameters) throws LogicException {
 
 		Result result = new Result();
 		// check if the caller already pass encounter list object in the parameter
-		
+		 if(parameters==null)
+         {
+                 log.info("Parameter is null");
+                 parameters=new HashMap<String, Object>(); 
+         }
+         
+         log.info("constant:"+ EvaluableConstants.OBS_ENCOUNTER);
+		//////////////////////////////////////////////////////////////////////////
 		Object encounters = parameters.get(EvaluableConstants.OBS_ENCOUNTER);
 		if (encounters == null) {
 			EncounterWithRestrictionRule encounterWithRestrictionRule = new EncounterWithStringRestrictionRule();
