@@ -15,10 +15,12 @@ package org.openmrs.module.amrsreport.db;
 
 
 import org.openmrs.Cohort;
+import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.api.APIException;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.amrsreport.util.FetchRestriction;
 
@@ -37,9 +39,15 @@ public interface CoreDAO {
 	
 	Cohort getChildMOHRegisterCohortBasedOnObservation() throws DAOException;
 	
+	Cohort getDateCreatedCohort(final Location location, final Date startDate, Date endDate) throws DAOException;
+
+	Cohort getReturnDateCohort(final Location location, final Date startDate, final Date endDate) throws DAOException;
+
+	Cohort getObservationCohort(List<Concept> concepts, Date startDate, Date endDate) throws DAOException;
 	
-	List<Encounter> getPatientEncounters(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
-	                                     final FetchRestriction fetchRestriction) throws DAOException;
+	Cohort getCohort(Location location, Date startDate, Date endDate) throws APIException ;
+	
+	List<Encounter> getPatientEncounters(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,final FetchRestriction fetchRestriction) throws DAOException;
 
 	List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                 final FetchRestriction fetchRestriction) throws DAOException;

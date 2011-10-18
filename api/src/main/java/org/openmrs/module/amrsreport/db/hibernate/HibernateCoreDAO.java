@@ -64,7 +64,7 @@ public class HibernateCoreDAO implements CoreDAO {
 	 *
 	 * @param sessionFactory the session factory to be injected
 	 */
-	public void setSessionFactory(SessionFactory sessionFactory) {
+	public void setSessionFactory(final SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 	
@@ -92,7 +92,7 @@ public class HibernateCoreDAO implements CoreDAO {
 
 	}
 
-	public Cohort getObservationCohort() throws DAOException {
+	public Cohort getAdultMOHRegisterCohort() throws DAOException {
 		
 		EncounterType adultInitialEncounter=Context.getEncounterService().getEncounterType("ADULTINITIAL");
 		EncounterType adultReturnEncounter=Context.getEncounterService().getEncounterType("ADULTRETURN");
@@ -290,8 +290,29 @@ public class HibernateCoreDAO implements CoreDAO {
 	}
 
 	@Override
-	public Cohort getAdultMOHRegisterCohort() throws DAOException {
+	public Cohort getDateCreatedCohort(Location location, Date startDate,
+			Date endDate) throws DAOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Cohort getReturnDateCohort(Location location, Date startDate,
+			Date endDate) throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Cohort getObservationCohort(List<Concept> concepts, Date startDate,
+			Date endDate) throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*@Override
+	public Cohort getAdultMOHRegisterCohort() throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
 }

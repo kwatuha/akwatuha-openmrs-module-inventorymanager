@@ -27,4 +27,27 @@
 
 	<context:component-scan base-package="@MODULE_PACKAGE@.web.controller" />
 
+<bean parent="serviceContext">
+		<property name="moduleService">
+			<list>
+				<value>org.openmrs.module.amrsreport.service.CoreService</value>
+				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+					<property name="transactionManager" ref="transactionManager"/>
+					<property name="target">
+						<bean class="org.openmrs.module.amrsreport.service.impl.CoreServiceImpl">
+							<property name="coreDAO">
+								<bean class="org.openmrs.module.amrsreport.db.hibernate.HibernateCoreDAO">
+									<property name="sessionFactory" ref="sessionFactory"/>
+								</bean>
+							</property>
+						</bean>
+					</property>
+					<property name="preInterceptors" ref="serviceInterceptors"/>
+					<property name="transactionAttributeSource">
+						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
 </beans>

@@ -20,6 +20,7 @@ import org.openmrs.module.Activator;
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
+@SuppressWarnings("deprecation")
 public class AmrsReportModuleActivator implements Activator {
 	
 	private Log log = LogFactory.getLog(this.getClass());

@@ -32,6 +32,7 @@ import org.openmrs.module.amrsreport.rule.observation.ObsWithRestrictionRule;
 import org.openmrs.module.amrsreport.rule.observation.ObsWithStringRestrictionRule;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -49,11 +50,21 @@ public class CryptococcalRule extends EvaluableRule {
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
 	 */
 	@Override
-	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
+	protected Result evaluate(final LogicContext context, final Integer patientId, Map<String, Object> parameters) throws LogicException {
 		Result result = new Result();
 		// check if the caller already pass encounter list object in the parameter
+		if(parameters==null)
+		{
+			log.info("Parameter is null");
+			parameters=new HashMap<String, Object>(); 
+		}
+		
+		log.info("constant:"+ EvaluableConstants.OBS_ENCOUNTER);
+		
 		Object encounters = parameters.get(EvaluableConstants.OBS_ENCOUNTER);
+		
 		if (encounters == null) {
+			
 			EncounterWithRestrictionRule encounterWithRestrictionRule = new EncounterWithStringRestrictionRule();
 			parameters.put(EvaluableConstants.ENCOUNTER_FETCH_SIZE, 1);
 			Result encounterResults = encounterWithRestrictionRule.eval(context, patientId, parameters);

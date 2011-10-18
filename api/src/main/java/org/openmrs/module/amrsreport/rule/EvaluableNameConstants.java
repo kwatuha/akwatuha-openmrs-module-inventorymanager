@@ -231,7 +231,7 @@ public interface EvaluableNameConstants {
 	//Additional concepts for cryptococcal rule
 	String ITRACONAZOLE ="ITRACONAZOLE";
 	
-	//Additional concenpts for Entry Point rule
+	//Additional concepts for Entry Point rule
 	String MOBILE_VOLUNTARY_COUNSELING_AND_TESTING = "MOBILE_VOLUNTARY_COUNSELING_AND_TESTING";
 
 	String MATERNAL_CHILD_HEALTH_PROGRAM = "MATERNAL CHILD HEALTH PROGRAM";
