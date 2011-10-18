@@ -56,7 +56,6 @@ public class TuberculosisTreatmentStartStopDateRule extends EvaluableRule {
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 		Result result = new Result();
 		// check if the caller already pass encounter list object in the parameter
-		try{
 		Object encounters = parameters.get(EvaluableConstants.OBS_ENCOUNTER);
 		if (encounters == null) {
 			EncounterWithRestrictionRule encounterWithRestrictionRule = new EncounterWithStringRestrictionRule();
@@ -145,11 +144,7 @@ public class TuberculosisTreatmentStartStopDateRule extends EvaluableRule {
 
 			result.addAll(addedResults);
 		}
-		}
-		catch (NullPointerException nullPointerException) {
-			// TODO: handle exception
-		nullPointerException.toString();
-		}
+		
 		return result;
 	}
 

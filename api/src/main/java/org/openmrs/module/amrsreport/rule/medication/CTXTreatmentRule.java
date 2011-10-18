@@ -61,7 +61,7 @@ public class CTXTreatmentRule extends EvaluableRule {
 
 		Result result = new Result();
 		// check if the caller already pass encounter list object in the parameter
-		try{
+		
 		Object encounters = parameters.get(EvaluableConstants.OBS_ENCOUNTER);
 		if (encounters == null) {
 			EncounterWithRestrictionRule encounterWithRestrictionRule = new EncounterWithStringRestrictionRule();
@@ -127,11 +127,7 @@ public class CTXTreatmentRule extends EvaluableRule {
 			Result currentResults = obsWithRestrictionRule.eval(context, patientId, parameters);
 			result.addAll(currentResults);
 		}
-		}
-		catch (NullPointerException nullPointerException) {
-			// TODO: handle exception
-			nullPointerException.toString();
-		}
+		
 		return result;
 	}
 

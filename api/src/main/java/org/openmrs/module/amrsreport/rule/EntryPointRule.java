@@ -10,7 +10,7 @@
  * under the License.
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
- *//*
+ */
 
 package org.openmrs.module.amrsreport.rule;
 
@@ -44,17 +44,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-*//**
- *//*
+
+ 
 public class EntryPointRule extends EvaluableRule {
 
 	private static final Log log = LogFactory.getLog(EntryPointRule.class);
 
 	public static final String TOKEN = "MOH Point Of Entry";
 
-	*//**
+	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
-	 *//*
+	 */
 	@Override
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 
@@ -75,7 +75,7 @@ public class EntryPointRule extends EvaluableRule {
 		Concept allConcept = CacheUtils.getConcept(EvaluableNameConstants.ALL);
 
 		for (Result encounterResult : encounterResults) {
-
+			
 			if (encounterResult.getResultDate().after(sixMonthsAgo)) {
 				ObsWithRestrictionRule obsWithRestrictionRule = new ObsWithStringRestrictionRule();
 
@@ -92,52 +92,53 @@ public class EntryPointRule extends EvaluableRule {
 					Concept entryPointConcept = entryPointResult.toConcept();
 					if (OpenmrsUtil.nullSafeEquals(pointOfHIVTestingConcept, obs.getConcept())
 							&& !OpenmrsUtil.nullSafeEquals(entryPointConcept, allConcept)){
-						entryPoint = obs.getConcept().getName();
+						entryPoint = obs.getConcept().getName().toString();
 					}
 				}
 
 				if (CollectionUtils.isEmpty(entryPointResults) || CollectionUtils.size(entryPointResults) < 2){
 					dates.add(encounterResult.getResultDate());
-					if (entryPoint.equal(EvaluableNameConstants.MOBILE_VOLUNTARY_COUNSELING_AND_TESTING))
+					if (entryPoint.equals(EvaluableNameConstants.MOBILE_VOLUNTARY_COUNSELING_AND_TESTING))
 						return new Result("MVCT");
-					else if (entryPoint.equal(EvaluableNameConstants.MATERNAL_CHILD_HEALTH_PROGRAM))
+					else if (entryPoint.equals(EvaluableNameConstants.MATERNAL_CHILD_HEALTH_PROGRAM))
 						return new Result("MCH");
-					else if (entryPoint.equal(EvaluableNameConstants.PREVENTION_OF_MOTHER_TO_CHILD_TRANSMISSION_OF_HIV))
+					else if (entryPoint.equals(EvaluableNameConstants.PREVENTION_OF_MOTHER_TO_CHILD_TRANSMISSION_OF_HIV))
 						return new Result("PMTCT");
-					else if (entryPoint.equal(EvaluableNameConstants.VOLUNTARY_COUNSELING_AND_TESTING_CENTER))
+					else if (entryPoint.equals(EvaluableNameConstants.VOLUNTARY_COUNSELING_AND_TESTING_CENTER))
 						return new Result("VCT");
-					else if (entryPoint.equal(EvaluableNameConstants.TUBERCULOSIS))
+					else if (entryPoint.equals(EvaluableNameConstants.TUBERCULOSIS))
 						return new Result("TB");
-					else if (entryPoint.equal(EvaluableNameConstants.HOME_BASED_TESTING_PROGRAM))
+					else if (entryPoint.equals(EvaluableNameConstants.HOME_BASED_TESTING_PROGRAM))
 						return new Result("HCT");
-					else if (entryPoint.equal(EvaluableNameConstants.OTHER_NON_CODED))
+					else if (entryPoint.equals(EvaluableNameConstants.OTHER_NON_CODED))
 						return new Result("Other");
-					else if (entryPoint.equal(EvaluableNameConstants.INPATIENT_CARE_OR_HOSPITALIZATION))
+					else if (entryPoint.equals(EvaluableNameConstants.INPATIENT_CARE_OR_HOSPITALIZATION))
 						return new Result("IPD");
-					else if (entryPoint.equal(EvaluableNameConstants.PROVIDER_INITIATED_TESTING_AND_COUNSELING))
+					else if (entryPoint.equals(EvaluableNameConstants.PROVIDER_INITIATED_TESTING_AND_COUNSELING))
 						return new Result("PITC");
-					else if (entryPoint.equal(EvaluableNameConstants.PEDIATRIC_OUTPATIENT_CLINIC))
+					else if (entryPoint.equals(EvaluableNameConstants.PEDIATRIC_OUTPATIENT_CLINIC))
 						return new Result("POC");
 				}else {
 					return new Result("Other");
 				}
 			}
 		}
+		return encounterResults;
 	}
 
-	*//**
+	/**
 	 * @see org.openmrs.logic.Rule#getDependencies()
-	 *//*
+	 */
 	@Override
 	public String[] getDependencies() {
 		return new String[]{ObsWithStringRestrictionRule.TOKEN, EncounterWithStringRestrictionRule.TOKEN};
 	}
 
-	*//**
+	/**
 	 * Get the definition of each parameter that should be passed to this rule execution
 	 *
 	 * @return all parameter that applicable for each rule execution
-	 *//*
+	 */
 	@Override
 	public Set<EvaluableParameter> getEvaluationParameters() {
 		Set<EvaluableParameter> evaluableParameters = new HashSet<EvaluableParameter>();
@@ -145,14 +146,13 @@ public class EntryPointRule extends EvaluableRule {
 		return evaluableParameters;
 	}
 
-	*//**
+	/**
 	 * Get the token name of the rule that can be used to reference the rule from LogicService
 	 *
 	 * @return the token name
-	 *//*
+	 */
 	@Override
 	protected String getEvaluableToken() {
 		return TOKEN;
 	}
 }
-*/
