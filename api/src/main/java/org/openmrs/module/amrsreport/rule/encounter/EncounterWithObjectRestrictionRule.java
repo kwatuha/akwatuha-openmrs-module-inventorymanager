@@ -56,6 +56,7 @@ public class EncounterWithObjectRestrictionRule extends EncounterWithRestriction
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 
@@ -120,6 +121,7 @@ public class EncounterWithObjectRestrictionRule extends EncounterWithRestriction
 	 *
 	 * @return all parameter that applicable for each rule execution
 	 */
+	@Override
 	public Set<EvaluableParameter> getEvaluationParameters() {
 		Set<EvaluableParameter> evaluableParameters = new HashSet<EvaluableParameter>();
 		evaluableParameters.add(EvaluableConstants.OPTIONAL_ENCOUNTER_TYPE_PARAMETER_DEFINITION);
@@ -134,15 +136,9 @@ public class EncounterWithObjectRestrictionRule extends EncounterWithRestriction
 	 *
 	 * @return the token name
 	 */
+	@Override
 	protected String getEvaluableToken() {
 		return TOKEN;
 	}
 
-	/**
-     * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient, java.util.Map)
-     */
-    public Result eval(LogicContext arg0, Patient arg1, Map<String, Object> arg2) throws LogicException {
-	    // TODO Auto-generated method stub
-	    return null;
-    }
 }

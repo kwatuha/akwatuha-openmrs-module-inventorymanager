@@ -16,8 +16,6 @@ package org.openmrs.module.amrsreport.db.hibernate;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -38,14 +36,13 @@ import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
-import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.OpenmrsObject;
-import org.openmrs.Person;
-import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.module.amrsreport.cache.CacheUtils;
 import org.openmrs.module.amrsreport.db.CoreDAO;
+import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
 import org.openmrs.module.amrsreport.util.FetchOrdering;
 import org.openmrs.module.amrsreport.util.FetchRestriction;
 import org.openmrs.util.OpenmrsUtil;
@@ -67,89 +64,11 @@ public class HibernateCoreDAO implements CoreDAO {
 	public void setSessionFactory(final SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
-	public Cohort getChildMOHRegisterCohortWithAge()
-	{
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MONTH, -18);
-		Date eighteenMonthsAgo = calendar.getTime();
-
-		calendar = Calendar.getInstance();
-		calendar.add(Calendar.YEAR, -14);
-		Date fourteenYearsAgo = calendar.getTime();
-		
-		Concept childCurrentHivStatusPositiveConcept = Context.getConceptService().getConcept("CHILD'S CURRENT HIV STATUS POSITIVE");
-
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Person.class);
-		criteria.add(Restrictions.ge("birthdate", fourteenYearsAgo));
-		criteria.add(Restrictions.le("birthdate", eighteenMonthsAgo));
-		
-
-		criteria.setProjection(Projections.property("personId"));
-		criteria.add(Restrictions.eq("valueCoded", childCurrentHivStatusPositiveConcept));
-		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
-		return new Cohort(criteria.list());
-
-	}
-
-	public Cohort getAdultMOHRegisterCohort() throws DAOException {
-		
-		EncounterType adultInitialEncounter=Context.getEncounterService().getEncounterType("ADULTINITIAL");
-		EncounterType adultReturnEncounter=Context.getEncounterService().getEncounterType("ADULTRETURN");
-		
-		List<EncounterType> encounterTypes = Arrays.asList(adultInitialEncounter,adultReturnEncounter);
-		
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Encounter.class);
-		// put restrictions on the encounter type
-
-		
-		
-		criteria.add(Restrictions.in("encounterType", encounterTypes));
-
-		criteria.setProjection(Projections.property("patient.personId"));
-		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
-		Cohort enrolledAdultsCohort= new Cohort(criteria.list());
-		
-		return enrolledAdultsCohort;
-
-		
-	}
-	
-	public Cohort getChildMOHRegisterCohortBasedOnObservation(){
-		
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Encounter.class);
-		//--> put restrictions on the encounter type
-				
-		 return new Cohort(criteria.list());
-	}
-
-	
-	
-	
-	/*public Cohort getObservationCohort() throws DAOException {
-			
-			
-			Concept firstRapidConcept = Context.getConceptService().getConcept("HIV RAPID TEST, QUALITATIVE");
-			Concept secondRapidConcept = Context.getConceptService().getConcept("HIV RAPID TEST 2, QUALITATIVE"); 
-			
-			List<Concept> concepts = Arrays.asList(firstRapidConcept, secondRapidConcept);
-			
-			Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
-			criteria.add(Restrictions.in("concept", concepts));
-			
-			Concept positiveConcept = Context.getConceptService().getConcept("POSITIVE");
-			criteria.add(Restrictions.eq("valueCoded", positiveConcept));
-
-			criteria.setProjection(Projections.property("patient.personId"));
-			criteria.add(Restrictions.eq("voided", Boolean.FALSE));
-			return new Cohort(criteria.list());
-		}
-
-		*/
 
 	/**
-	 * @see CoreDAO#getPatientObservations(Integer, java.util.Map, org.openmrs.module.clinicalsummary.util.FetchRestriction)
+	 * @see CoreDAO#getPatientObservations(Integer, java.util.Map, org.openmrs.module.amrsreport.util.FetchRestriction)
 	 */
+	@Override
 	public List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                        final FetchRestriction fetchRestriction) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
@@ -206,8 +125,9 @@ public class HibernateCoreDAO implements CoreDAO {
 	}
 
 	/**
-	 * @see CoreDAO#getPatientEncounters(Integer, java.util.Map, org.openmrs.module.clinicalsummary.util.FetchRestriction)
+	 * @see CoreDAO#getPatientEncounters(Integer, java.util.Map, org.openmrs.module.amrsreport.util.FetchRestriction)
 	 */
+	@Override
 	public List<Encounter> getPatientEncounters(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                            final FetchRestriction fetchRestriction) throws DAOException {
 		// create a hibernate criteria on the encounter object
@@ -253,9 +173,6 @@ public class HibernateCoreDAO implements CoreDAO {
 		// exclude all voided encounters
 		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
 
-		// mysql optimization to stream the result set instead of buffering all result sets to the memory
-		criteria.setFetchSize(Integer.MIN_VALUE);
-
 		List<Encounter> encounters = new ArrayList<Encounter>();
 
 		// scroll the results and add them to the above list of encounter
@@ -268,9 +185,10 @@ public class HibernateCoreDAO implements CoreDAO {
 	}
 
 	/**
-	 * @see CoreDAO#getCohort(org.openmrs.Location, java.util.Date, java.util.Date)
+	 * @see CoreDAO#getDateCreatedCohort(org.openmrs.Location, java.util.Date, java.util.Date)
 	 */
-	public Cohort getCohort(final Location location, final Date startDate, final Date endDate) throws DAOException {
+	@Override
+	public Cohort getDateCreatedCohort(final Location location, final Date startDate, final Date endDate) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
 
 		if (location != null)
@@ -289,30 +207,46 @@ public class HibernateCoreDAO implements CoreDAO {
 		return new Cohort(criteria.list());
 	}
 
+	/**
+	 * @see CoreDAO#getDateCreatedCohort(org.openmrs.Location, java.util.Date, java.util.Date)
+	 */
 	@Override
-	public Cohort getDateCreatedCohort(Location location, Date startDate,
-			Date endDate) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+	public Cohort getReturnDateCohort(final Location location, final Date startDate, final Date endDate) throws DAOException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
+		criteria.add(Restrictions.eq("concept", CacheUtils.getConcept(EvaluableNameConstants.RETURN_VISIT_DATE)));
+
+		if (location != null)
+			criteria.add(Restrictions.eq("location", location));
+		else
+			criteria.add(Restrictions.isNull("location"));
+
+		if (startDate != null)
+			criteria.add(Restrictions.ge("valueDatetime", startDate));
+
+		if (endDate != null)
+			criteria.add(Restrictions.le("valueDatetime", endDate));
+
+		criteria.setProjection(Projections.property("person.personId"));
+		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+		return new Cohort(criteria.list());
 	}
 
+	/**
+	 * @see CoreDAO#getObservationCohort(java.util.List, java.util.Date, java.util.Date)
+	 */
 	@Override
-	public Cohort getReturnDateCohort(Location location, Date startDate,
-			Date endDate) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Cohort getObservationCohort(final List<Concept> concepts, final Date startDate, final Date endDate) throws DAOException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
+		criteria.add(Restrictions.in("concept", concepts));
 
-	@Override
-	public Cohort getObservationCohort(List<Concept> concepts, Date startDate,
-			Date endDate) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		if (startDate != null)
+			criteria.add(Restrictions.ge("dateCreated", startDate));
 
-	/*@Override
-	public Cohort getAdultMOHRegisterCohort() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
+		if (endDate != null)
+			criteria.add(Restrictions.le("dateCreated", endDate));
+
+		criteria.setProjection(Projections.property("person.personId"));
+		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+		return new Cohort(criteria.list());
+	}
 }

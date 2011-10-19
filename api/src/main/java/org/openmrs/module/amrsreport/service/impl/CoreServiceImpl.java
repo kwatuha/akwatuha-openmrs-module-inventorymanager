@@ -1,3 +1,17 @@
+/**
+ * The contents of this file are subject to the OpenMRS Public License
+ * Version 1.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://license.openmrs.org
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+ */
+
 package org.openmrs.module.amrsreport.service.impl;
 
 import java.util.Collection;
@@ -37,7 +51,6 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 	public void setCoreDAO(final CoreDAO coreDAO) {
 		if (log.isDebugEnabled())
 			log.debug("Wiring up CoreDAO with CoreService ...");
-		
 
 		this.coreDAO = coreDAO;
 	}
@@ -45,6 +58,7 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 	/**
 	 * @see CoreService#getDateCreatedCohort(org.openmrs.Location, java.util.Date, java.util.Date)
 	 */
+	@Override
 	public Cohort getDateCreatedCohort(final Location location, final Date startDate, final Date endDate) throws APIException {
 		return coreDAO.getDateCreatedCohort(location, startDate, endDate);
 	}
@@ -52,6 +66,7 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 	/**
 	 * @see CoreService#getReturnDateCohort(org.openmrs.Location, java.util.Date, java.util.Date)
 	 */
+	@Override
 	public Cohort getReturnDateCohort(final Location location, final Date startDate, final Date endDate) throws APIException {
 		return coreDAO.getReturnDateCohort(location, startDate, endDate);
 	}
@@ -59,6 +74,7 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 	/**
 	 * @see CoreService#getObservationCohort(java.util.List, java.util.Date, java.util.Date)
 	 */
+	@Override
 	public Cohort getObservationCohort(final List<Concept> concepts, final Date startDate, final Date endDate) throws APIException {
 		return coreDAO.getObservationCohort(concepts, startDate, endDate);
 	}
@@ -71,38 +87,13 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 	                                            final FetchRestriction fetchRestriction) throws APIException {
 		return coreDAO.getPatientEncounters(patientId, restrictions, fetchRestriction);
 	}
+
 	/**
-	 * @see CoreService#getPatientObservations(Integer, java.util.Map, org.openmrs.module.a.util.FetchRestriction)
+	 * @see CoreService#getPatientObservations(Integer, java.util.Map, org.openmrs.module.amrsreport.util.FetchRestriction)
 	 */
 	@Override
 	public List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                        final FetchRestriction fetchRestriction) throws APIException {
 		return coreDAO.getPatientObservations(patientId, restrictions, fetchRestriction);
-	}
-
-	@Override
-	public Cohort getChildMOHRegisterCohortWithAge() {
-		// TODO Auto-generated method stub
-		return coreDAO.getChildMOHRegisterCohortBasedOnObservation();
-	}
-
-	@Override
-
-	public Cohort getAdultMOHRegisterCohort() {
-		// TODO Auto-generated method stub
-		return coreDAO.getAdultMOHRegisterCohort();
-	}
-
-	@Override
-	public Cohort getChildMOHRegisterCohortBasedOnObservation() {
-		// TODO Auto-generated method stub
-		return coreDAO.getChildMOHRegisterCohortBasedOnObservation();
-	}
-
-	@Override
-	public Cohort getCohort(Location location, Date startDate, Date endDate)
-			throws APIException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

@@ -42,15 +42,10 @@ public abstract class EvaluableRule extends AbstractRule {
 	
 	private Map<String, Object> getEffectiveParameters(Map<String, Object> parameters) {
 		Map<String, Object> effectiveParameters = new HashMap<String, Object>();
-		try{
 		for (EvaluableParameter parameter : getEvaluationParameters()) {
 			Object o = parameters.get(parameter.getName());
 			if (o != null)
 				effectiveParameters.put(parameter.getName(), o);
-		}
-		}
-		catch(NullPointerException nullPointerException){
-			nullPointerException.toString();
 		}
 		return effectiveParameters;
 	}
@@ -159,8 +154,7 @@ public abstract class EvaluableRule extends AbstractRule {
 		for (EvaluableParameter evaluableParameter : getEvaluationParameters()) {
 			
 			// if object for the parameter is not found and the parameter is required, then throw missing parameter exception
-			try {
-				Object o = parameters.get(evaluableParameter.getName());
+			Object o = parameters.get(evaluableParameter.getName());
 				if (o == null && evaluableParameter.isRequired())
 					throw new LogicException("Insufficient parameter to execute rule. Missing parameter: " + evaluableParameter.getName());
 				// if the object is found but the type is different, then throw invalid parameter type exception
@@ -168,13 +162,6 @@ public abstract class EvaluableRule extends AbstractRule {
 					throw new LogicException("Invalid parameter type to execute rule. " +
 							"Expecting " + evaluableParameter.getParameterClass().getName() + " for " + evaluableParameter.getName() +
 							", but getting " + o.getClass().getName() + " instead.");
-				
-			} catch (NullPointerException nullPointerException) {
-				// TODO: handle exception
-				nullPointerException.toString();
-			}
-			
-			
 		}
 	}
 

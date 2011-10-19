@@ -11,55 +11,24 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.amrsreport.rule.encounter;
 
-import java.util.Map;
+package org.openmrs.module.amrsreport.rule.encounter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
-import org.openmrs.logic.LogicContext;
-import org.openmrs.logic.LogicException;
-import org.openmrs.logic.result.Result;
 import org.openmrs.module.amrsreport.rule.EvaluableRule;
 
 /**
- *
  */
-public class EncounterWithRestrictionRule extends EvaluableRule{
-	
+public abstract class EncounterWithRestrictionRule extends EvaluableRule {
+
 	private static final Log log = LogFactory.getLog(EncounterWithRestrictionRule.class);
 
 	/**
 	 * @see org.openmrs.logic.Rule#getDependencies()
 	 */
+	@Override
 	public String[] getDependencies() {
 		return new String[]{};
 	}
-
-	/**
-     * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient, java.util.Map)
-     */
-    public Result eval(LogicContext arg0, Patient arg1, Map<String, Object> arg2) throws LogicException {
-	    // TODO Auto-generated method stub
-	    return null;
-    }
-
-	/**
-     * @see org.openmrs.module.amrsreport.rule.EvaluableRule#evaluate(org.openmrs.logic.LogicContext, java.lang.Integer, java.util.Map)
-     */
-    @Override
-    protected Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) {
-	    // TODO Auto-generated method stub
-	    return null;
-    }
-
-	/**
-     * @see org.openmrs.module.amrsreport.rule.EvaluableRule#getEvaluableToken()
-     */
-    @Override
-    protected String getEvaluableToken() {
-	    // TODO Auto-generated method stub
-	    return null;
-    }
 }

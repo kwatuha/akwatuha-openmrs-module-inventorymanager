@@ -11,10 +11,16 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
+
 package org.openmrs.module.amrsreport.service;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Cohort;
+import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -26,57 +32,66 @@ import org.openmrs.module.amrsreport.util.FetchRestriction;
 import org.openmrs.util.PrivilegeConstants;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Service contract for the core layer of OpenMRS
  */
 @Transactional(readOnly = true)
 public interface CoreService extends OpenmrsService {
 
-	Cohort getChildMOHRegisterCohortWithAge();
-		
-	Cohort getAdultMOHRegisterCohort();
-	
-	Cohort getChildMOHRegisterCohortBasedOnObservation();
-	
 	/**
 	 * Get all patient id attached to a certain location on their observations where the observations are created between the start
 	 * date and end date
 	 *
-	 * @param location
-	 * 		location id of the patient observation
-	 * @param startDate
-	 * 		min date of the observation created date
-	 * @param endDate
-	 * 		max date of the observation created date
-	 *
+	 * @param location  location of the patient observation
+	 * @param startDate min date of the observation created date
+	 * @param endDate   max date of the observation created date
 	 * @return cohort of patient with observation in from a certain location that fall between the date range. Return empty cohort
 	 *         when no patient id match the criteria.
-	 *
 	 * @throws APIException
 	 * @should return all patient id with certain location on their observations between certain date
 	 * @should return empty cohort when no patient match the criteria
 	 */
-	@Authorized
-	({PrivilegeConstants.VIEW_LOCATIONS, PrivilegeConstants.VIEW_PATIENTS})
-	Cohort getCohort(final Location location, final Date startDate, final Date endDate) throws APIException;
+	@Authorized({PrivilegeConstants.VIEW_LOCATIONS, PrivilegeConstants.VIEW_PATIENTS})
+	Cohort getDateCreatedCohort(final Location location, final Date startDate, final Date endDate) throws APIException;
+
+	/**
+	 * Get all patient id attached to a certain location on their observations where the observations are created between the start
+	 * date and end date
+	 *
+	 * @param location  location of the patient observation
+	 * @param startDate min date of the observation created date
+	 * @param endDate   max date of the observation created date
+	 * @return cohort of patient with observation in from a certain location that fall between the date range. Return empty cohort
+	 *         when no patient id match the criteria.
+	 * @throws APIException
+	 * @should return all patient id with certain location on their observations between certain date
+	 * @should return empty cohort when no patient match the criteria
+	 */
+	Cohort getReturnDateCohort(final Location location, final Date startDate, final Date endDate) throws APIException;
+
+
+	/**
+	 * Get all patient id attached to a certain concepts on their observations where the observations are created between the start
+	 * date and end date
+	 *
+	 * @param concepts  concepts in question of the patient observation
+	 * @param startDate min date of the observation created date
+	 * @param endDate   max date of the observation created date
+	 * @return cohort of patient with observation from list of concepts that fall between the date range. Return empty cohort
+	 *         when no patient id match the criteria.
+	 * @throws APIException
+	 * @should return all patient id with certain location on their observations between certain date
+	 * @should return empty cohort when no patient match the criteria
+	 */
+	Cohort getObservationCohort(List<Concept> concepts, Date startDate, Date endDate) throws APIException;
 
 	/**
 	 * Get all patient encounters that match the encounter types, locations and providers criteria
 	 *
-	 * @param patientId
-	 * 		the patient
-	 * @param restrictions
-	 * 		list of all possible restrictions for encounters
-	 * @param fetchRestriction
-	 * 		additional parameters for fetching encounters
-	 *
+	 * @param patientId        the patient
+	 * @param restrictions     list of all possible restrictions for encounters
+	 * @param fetchRestriction additional parameters for fetching encounters
 	 * @return all encounters that match the criteria or empty list when no encounters match the criteria
-	 *
 	 * @throws APIException
 	 * @should return all encounters that match the search criteria
 	 * @should return empty list when no encounter match the criteria
@@ -88,15 +103,10 @@ public interface CoreService extends OpenmrsService {
 	/**
 	 * Get all patient observations that match the encounter , locations , concept and value coded criteria
 	 *
-	 * @param patientId
-	 * 		the patient
-	 * @param restrictions
-	 * 		list of all possible restrictions for observations
-	 * @param fetchRestriction
-	 * 		additional parameters for fetching observations
-	 *
+	 * @param patientId        the patient
+	 * @param restrictions     list of all possible restrictions for observations
+	 * @param fetchRestriction additional parameters for fetching observations
 	 * @return all observations that match the criteria or empty list when no observations match the criteria
-	 *
 	 * @throws APIException
 	 * @should return all observations that match the search criteria
 	 * @should return empty list when no observation match the criteria

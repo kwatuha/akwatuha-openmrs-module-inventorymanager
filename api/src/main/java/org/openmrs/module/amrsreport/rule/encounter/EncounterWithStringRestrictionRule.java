@@ -11,8 +11,8 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.amrsreport.rule.encounter;
 
+package org.openmrs.module.amrsreport.rule.encounter;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
@@ -23,7 +23,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.Rule;
 import org.openmrs.module.amrsreport.cache.CacheUtils;
 import org.openmrs.module.amrsreport.rule.EvaluableConstants;
 import org.openmrs.module.amrsreport.rule.EvaluableParameter;
@@ -43,7 +42,7 @@ public class EncounterWithStringRestrictionRule extends EncounterWithRestriction
 
 	private static final Log log = LogFactory.getLog(EncounterWithStringRestrictionRule.class);
 
-	public static final String TOKEN = "Encounter String Restrictions";
+	public static final String TOKEN = "MOH Encounter String Restrictions";
 
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
