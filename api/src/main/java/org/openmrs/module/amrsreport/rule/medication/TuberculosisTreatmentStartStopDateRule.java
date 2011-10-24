@@ -13,36 +13,33 @@
  */
 
 package org.openmrs.module.amrsreport.rule.medication;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
-import org.openmrs.ConceptSet;
-import org.openmrs.logic.LogicContext;
-import org.openmrs.logic.LogicException;
-import org.openmrs.logic.result.Result;
-import org.openmrs.module.amrsreport.cache.CacheUtils;
-import org.openmrs.module.amrsreport.rule.EvaluableConstants;
-import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
-import org.openmrs.module.amrsreport.rule.EvaluableParameter;
-import org.openmrs.module.amrsreport.rule.EvaluableRule;
-import org.openmrs.module.amrsreport.rule.encounter.EncounterWithRestrictionRule;
-import org.openmrs.module.amrsreport.rule.encounter.EncounterWithStringRestrictionRule;
-import org.openmrs.module.amrsreport.rule.observation.ObsWithObjectRestrictionRule;
-import org.openmrs.module.amrsreport.rule.observation.ObsWithRestrictionRule;
-import org.openmrs.module.amrsreport.rule.observation.ObsWithStringRestrictionRule;
-import org.openmrs.util.OpenmrsUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.Obs;
+import org.openmrs.Patient;
+import org.openmrs.api.context.Context;
+import org.openmrs.logic.LogicContext;
+import org.openmrs.logic.LogicException;
+import org.openmrs.logic.Rule;
+import org.openmrs.logic.result.Result;
+import org.openmrs.logic.result.Result.Datatype;
+import org.openmrs.logic.rule.RuleParameterInfo;
+import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
+
+/**
+ * Author ningosi
+ */
 /**
  * Parameters: <ul> <li>[Optional] encounterType: list of all applicable encounter types </ul>
  */
+
 public class TuberculosisTreatmentStartStopDateRule implements Rule {
 
 	private static final Log log = LogFactory.getLog(TuberculosisTreatmentStartStopDateRule.class);
@@ -52,17 +49,40 @@ public class TuberculosisTreatmentStartStopDateRule implements Rule {
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
 	 */
-	@Override
-	protected Result eval(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
+	//@Override
+	public Result eval(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
+		
 		Result result = new Result();
 		//get concepts to use here
 		Concept TBStartDate=Context.getConceptService().getConcept(EvaluableNameConstants.TUBERCULOSIS_DRUG_TREATMENT_START_DATE);
-		Concept TBStopDate=Context.getConceptService().getConcept(EvaluableNameConstants.TUBERCULOSIS_DRUG_TREATMENT_START_DATE);
+		Concept TBStopDate=Context.getConceptService().getConcept(EvaluableNameConstants.TUBERCULOSIS_TREATMENT_COMPLETED_DATE);
 		
+		//find the patient
+		Patient patient = context.getPatient(patientId);
+		//find obs based on the start and stop dates
+		List<Obs> obsTBStart=Context.getObsService().getObservationsByPersonAndConcept(patient, TBStartDate);
+		List<Obs> obsTBStop=Context.getObsService().getObservationsByPersonAndConcept(patient, TBStopDate);
+		
+		//loop through the obsTBStart
+		for(Obs observations:obsTBStart){
+			Date tbStart=observations.getObsDatetime();
+		    Result tbStartResult = new Result(tbStart);
+			result.add(tbStartResult);
+		}
+		
+		//loop through the obsTBStop
+		
+		for(Obs observation:obsTBStop){
+			Date tbStop=observation.getObsDatetime();
+			Result tbStoptResult = new Result(tbStop);
+			result.add(tbStoptResult);
+		}
 		
 		return result;
 	}
 
+	
+	//return the tokens
 	protected String getEvaluableToken() {
 		return TOKEN;
  	}
