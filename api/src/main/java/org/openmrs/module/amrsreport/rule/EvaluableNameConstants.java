@@ -260,5 +260,7 @@ public interface EvaluableNameConstants {
         
         //Confirmed HIV date
         String HIV_ENZYME_IMMUNOASSAY_QUALITATIVE = "HIV ENZYME IMMUNOASSAY, QUALITATIVE";
+
+		String CRYPTOCOSSUS_TREATMENT_STARTED = "CRYPTOCOSSUS TREATMENT STARTED";
 	
 	}
