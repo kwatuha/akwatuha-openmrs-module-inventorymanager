@@ -33,7 +33,7 @@ import org.openmrs.logic.rule.RuleParameterInfo;
 
 
  
-public class AgeAtEnrolment implements Rule {
+public class AgeAtEnrolment extends EvaluableRule {
 
 	private static final Log log = LogFactory.getLog(AgeAtEnrolment.class);
 
@@ -44,7 +44,7 @@ public class AgeAtEnrolment implements Rule {
 	 *      java.util.Map)
 	 */
     @Override
-    public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+    public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		
         double age = 0.0;
         Date dob =  null;
@@ -52,11 +52,6 @@ public class AgeAtEnrolment implements Rule {
             Patient patient = Context.getPatientService().getPatient(patientId);
             dob = patient.getBirthdate();
             
-            //List<EncounterType> et = null;
-            //et.add(Context.getEncounterService().getEncounterType(EvaluableNameConstants.ENCOUNTER_TYPE_ADULT_INITIAL));
-            /*et.add(Context.getEncounterService().getEncounterType(EvaluableNameConstants.ENCOUNTER_TYPE_ADULT_RETURN));
-            et.add(Context.getEncounterService().getEncounterType(EvaluableNameConstants.ENCOUNTER_TYPE_PEDIATRIC_INITIAL));
-            et.add(Context.getEncounterService().getEncounterType(EvaluableNameConstants.ENCOUNTER_TYPE_PEDIATRIC_RETURN));*/
             List<Encounter> e = Context.getEncounterService().getEncountersByPatient(patient);//, null, null, null, null, et, null, true);
             //Iterate though encounters for the patient
             Date encounterDate = null;

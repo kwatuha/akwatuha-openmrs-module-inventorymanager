@@ -22,13 +22,12 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
-import org.openmrs.logic.Rule;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 
  
-public class EntryPointRule implements Rule {
+public class EntryPointRule extends EvaluableRule {
 
 	private static final Log log = LogFactory.getLog(EntryPointRule.class);
 
@@ -39,7 +38,7 @@ public class EntryPointRule implements Rule {
 	 *      java.util.Map)
 	 */
     @Override
-	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+	public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		
 		try {
 			Patient patient = Context.getPatientService().getPatient(patientId);

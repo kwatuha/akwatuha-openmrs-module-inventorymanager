@@ -34,7 +34,7 @@ import org.openmrs.logic.rule.RuleParameterInfo;
 
 
  
-public class ConfirmedHivPositiveDate implements Rule {
+public class ConfirmedHivPositiveDate extends EvaluableRule {
 
 	private static final Log log = LogFactory.getLog(ConfirmedHivPositiveDate.class);
 
@@ -45,7 +45,7 @@ public class ConfirmedHivPositiveDate implements Rule {
 	 *      java.util.Map)
 	 */
     @Override
-    public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+    public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		
         double age = 0.0;
         Date confirmedDate =  null;

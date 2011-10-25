@@ -27,11 +27,11 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
-import org.openmrs.logic.Rule;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
+import org.openmrs.module.amrsreport.rule.EvaluableRule;
 
 /**
  * Author ningosi
@@ -40,44 +40,44 @@ import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
  * Parameters: <ul> <li>[Optional] encounterType: list of all applicable encounter types </ul>
  */
 
-public class TuberculosisTreatmentStartStopDateRule implements Rule {
+public class TBStartDateRule extends EvaluableRule {
 
-	private static final Log log = LogFactory.getLog(TuberculosisTreatmentStartStopDateRule.class);
+	private static final Log log = LogFactory.getLog(TBStartDateRule.class);
 
-	public static final String TOKEN = "MOH TB Start Stop Dates";
+	public static final String TOKEN = "MOH TB Start Date";
 
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, java.util.Map)
 	 */
 	//@Override
-	public Result eval(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
+	public Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 		
 		Result result = new Result();
-		//get concepts to use here
-		Concept TBStartDate=Context.getConceptService().getConcept(EvaluableNameConstants.TUBERCULOSIS_DRUG_TREATMENT_START_DATE);
-		Concept TBStopDate=Context.getConceptService().getConcept(EvaluableNameConstants.TUBERCULOSIS_TREATMENT_COMPLETED_DATE);
+		Date startDate=null;
+		
+		//get concepts to use here plan, start and stop
+		Concept TBPlan=Context.getConceptService().getConcept(EvaluableNameConstants.TUBERCULOSIS_TREATMENT_PLAN);
+		Concept TBStartDate=Context.getConceptService().getConcept(EvaluableNameConstants.START_DRUGS);
+		
 		
 		//find the patient
 		Patient patient = context.getPatient(patientId);
-		//find obs based on the start and stop dates
-		List<Obs> obsTBStart=Context.getObsService().getObservationsByPersonAndConcept(patient, TBStartDate);
-		List<Obs> obsTBStop=Context.getObsService().getObservationsByPersonAndConcept(patient, TBStopDate);
 		
-		//loop through the obsTBStart
+		//find obs based on plan and the start dates 
+		List<Obs> obsTBStart=Context.getObsService().getObservationsByPersonAndConcept(patient, TBPlan);
+		
+		
+		//loop through the obsTBStart list of obs
 		for(Obs observations:obsTBStart){
-			Date tbStart=observations.getObsDatetime();
-		    Result tbStartResult = new Result(tbStart);
+			if(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(TBStartDate))
+				
+				startDate=observations.getObsDatetime();
+			
+		    Result tbStartResult = new Result(startDate);
 			result.add(tbStartResult);
 		}
 		
-		//loop through the obsTBStop
-		
-		for(Obs observation:obsTBStop){
-			Date tbStop=observation.getObsDatetime();
-			Result tbStoptResult = new Result(tbStop);
-			result.add(tbStoptResult);
-		}
-		
+		log.info(result);
 		return result;
 	}
 
@@ -96,11 +96,7 @@ public class TuberculosisTreatmentStartStopDateRule implements Rule {
  	public String[] getDependencies() {
 		return new String[]{};
  	}
- 	/**
- 	 * Get the definition of each parameter that should be passed to this rule execution
- 	 *
- 	 * @return all parameter that applicable for each rule execution
- 	 */
+ 	
 	
  	@Override
 	public Datatype getDefaultDatatype() {
@@ -116,5 +112,7 @@ public class TuberculosisTreatmentStartStopDateRule implements Rule {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
 	
 }
