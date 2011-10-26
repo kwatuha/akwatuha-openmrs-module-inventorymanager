@@ -20,9 +20,7 @@ import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
 import org.openmrs.module.amrsreport.rule.EvaluableRule;
  
- /**
-  * Author ningosi
-  */
+ 
 public class CryptococcalStartDateRule  extends EvaluableRule {
  
  	private static final Log log = LogFactory.getLog(CryptococcalStartDateRule.class);
