@@ -42,17 +42,15 @@
 	 /Required Privileges -->
 
 
-	<!-- Required Global Properties 
+	<!-- Required Global Properties -->
 	<globalProperty>
-		<property>@MODULE_ID@.someProperty</property>
-		<defaultValue></defaultValue>
+		<property>@MODULE_ID@.MOHFacilityCode</property>
+		<defaultValue>15204</defaultValue>
 		<description>
-			A description of the global property goes here.  The description
-			should explain enough for administrators to understand the purpose
-			and possible values for the global property.
+			Site specific Master facility code that is available on http://www.ehealth.or.ke/facilities/
 		</description>
 	</globalProperty>
-	/Required Global Properties -->
+	<!-- /Required Global Properties -->
 	
 	<!--
 	<dwr>

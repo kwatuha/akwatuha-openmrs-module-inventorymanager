@@ -1,18 +1,5 @@
-package org.openmrs.module.amrsreport.rule;
-/**
- * The contents of this file are subject to the OpenMRS Public License
- * Version 1.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://license.openmrs.org
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- *
- * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
- */
-
+package org.openmrs.module.amrsreport.rule.collection;
+ 
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -27,28 +14,29 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
-import org.openmrs.logic.Rule;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
-
-
+import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
+import org.openmrs.module.amrsreport.rule.EvaluableRule;
  
-public class ConfirmedHivPositiveDate extends EvaluableRule {
+ /**
+  * Author jmwogi
+  */
+public class ConfirmedHivPositiveDateRule  extends EvaluableRule {
+ 
+ 	private static final Log log = LogFactory.getLog(ConfirmedHivPositiveDateRule.class);
+ 
+ 	public static final String TOKEN = "MOH Confirmed HIV Positive Date";
 
-	private static final Log log = LogFactory.getLog(ConfirmedHivPositiveDate.class);
+ 	
+ 	/**
 
-	public static final String TOKEN = "MOH Confirmed HIV Positive Date";
-
-	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
 	 *      java.util.Map)
-	 */
-    @Override
-    public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
-		
-        double age = 0.0;
-        Date confirmedDate =  null;
+ 	 */
+	public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+		Date confirmedDate =  null;
         Date firstEncounterDate = null;
         try {
             Patient patient = Context.getPatientService().getPatient(patientId);
@@ -83,41 +71,35 @@ public class ConfirmedHivPositiveDate extends EvaluableRule {
             }
         } catch (Exception e) {}
         return new Result(firstEncounterDate);
-    }
-    protected String getEvaluableToken() {
-            return TOKEN;
-    }
-
-    /**
-     * @see org.openmrs.logic.Rule#getParameterList()
-     */
-    @Override
-    public Set<RuleParameterInfo> getParameterList() {
-            return null;
-    }
-
-    /**
-     * @see org.openmrs.logic.Rule#getDependencies()
-     */
-    @Override
-    public String[] getDependencies() {
-            return new String[] {};
-    }
-
-    /**
-     * @see org.openmrs.logic.Rule#getTTL()
-     */
-    @Override
-    public int getTTL() {
-            return 60 * 60 * 24; // 1 day
-    }
-
-    /**
-     * @see org.openmrs.logic.Rule#getDefaultDatatype()
-     */
-    @Override
-    public Datatype getDefaultDatatype() {
-            return Datatype.DATETIME;
-    }
+ 	}
 	
-}
+	protected String getEvaluableToken() {
+		return TOKEN;
+ 	}
+	
+	/**
+ 	 * @see org.openmrs.logic.Rule#getDependencies()
+ 	 */
+	@Override
+ 	public String[] getDependencies() {
+		return new String[]{};
+ 	}
+ 	/**
+ 	 * Get the definition of each parameter that should be passed to this rule execution
+ 	 *
+ 	 * @return all parameter that applicable for each rule execution
+ 	 */
+	
+ 	@Override
+	public Datatype getDefaultDatatype() {
+		return Datatype.TEXT;
+ 	}
+	public Set<RuleParameterInfo> getParameterList() {
+		return null;
+ 	}
+	@Override
+	public int getTTL() {
+		return 0;
+	}
+	
+ }
