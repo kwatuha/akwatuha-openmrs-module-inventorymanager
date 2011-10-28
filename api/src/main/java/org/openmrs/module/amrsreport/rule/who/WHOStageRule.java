@@ -2,6 +2,7 @@
  package org.openmrs.module.amrsreport.rule.who;
  
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -19,11 +21,12 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.EvaluableNameConstants;
 import org.openmrs.module.amrsreport.rule.EvaluableRule;
- 
+ //ningosi
  
 public class WHOStageRule  extends EvaluableRule {
  
- 	private static final Log log = LogFactory.getLog( WHOStageRule.class);
+ 	@SuppressWarnings("unused")
+	private static final Log log = LogFactory.getLog( WHOStageRule.class);
  
  	public static final String TOKEN = "MOH WHO Stage";
 
@@ -35,21 +38,14 @@ public class WHOStageRule  extends EvaluableRule {
  	 */
 			
 	@Override
-	public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+	protected Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		Result result=new Result();
 		
 		//find the patient
 		Patient patient = context.getPatient(patientId);
-		Date WHOStage1AdultDate=null;
-		Date WHOStage2AdultDate=null;
-		Date WHOStage3AdultDate=null;
-		Date WHOStage4AdultDate=null;
 		
-		//find all the encounters for a given patient
-		//List<Encounter> encounters=Context.getEncounterService().getEncountersByPatient(patient);
 		
-		Concept FluconazolePlan=Context.getConceptService().getConcept(EvaluableNameConstants.CRYPTOCOCCAL_TREATMENT_PLAN);
-		Concept StopDrugs=Context.getConceptService().getConcept(EvaluableNameConstants.STOP_ALL);
+		
 		//Concepts instantiation
 		Concept WHOStage1Adult=Context.getConceptService().getConcept(EvaluableNameConstants.WHO_STAGE_1_ADULT);
 		Concept WHOStage2Adult=Context.getConceptService().getConcept(EvaluableNameConstants.WHO_STAGE_2_ADULT);
@@ -70,7 +66,6 @@ public class WHOStageRule  extends EvaluableRule {
 		Concept ConfirmedHivStagingTuberculosisPulmonary=Context.getConceptService().getConcept(EvaluableNameConstants.CONFIRMED_HIV_STAGING_TUBERCULOSIS_PULMONARY);
 		Concept ConfirmedHivStagingSevereBacterialInfections=Context.getConceptService().getConcept(EvaluableNameConstants.CONFIRMED_HIV_STAGING_SEVERE_BACTERIAL_INFECTIONS);
 		Concept ConfirmedHivStagingUnexplainedAnemiaNeutripaenia=Context.getConceptService().getConcept(EvaluableNameConstants.CONFIRMED_HIV_STAGING_UNEXPLAINED_ANAEMIA_NEUTROPAENIA);
-		Concept ChronicThrombocytopaenia=Context.getConceptService().getConcept(EvaluableNameConstants.CHRONIC_THROMBOCYTOPAENIA);
 		Concept ConfirmedHivStagingAcuteNecrotizingStomatitisGingitivitis=Context.getConceptService().getConcept(EvaluableNameConstants.CONFIRMED_HIV_STAGING_ACUTE_NECROTIZING_STOMATITIS_GINGIVITIS);
 		Concept WHOStage4Adult=Context.getConceptService().getConcept(EvaluableNameConstants.WHO_STAGE_4_ADULT);
 		Concept HivStagingDisseminatedEndemicMycosis=Context.getConceptService().getConcept(EvaluableNameConstants.HIV_STAGING_DISSEMINATED_ENDEMIC_MYCOSIS);
@@ -161,95 +156,259 @@ public class WHOStageRule  extends EvaluableRule {
 		Concept MycobacteriumTuberculosisExtrapulmonary=Context.getConceptService().getConcept(EvaluableNameConstants.MYCOBACTERIUM_TUBERCULOSIS_EXTRAPULMONARY);
 		Concept HivStagingChronicIsisporiasis=Context.getConceptService().getConcept(EvaluableNameConstants.HIV_STAGING_CHRONIC_ISOSPORIASIS);
 		Concept HivStagingCerebralBCellNonHodgkinLymphoma=Context.getConceptService().getConcept(EvaluableNameConstants.HIV_STAGING_CEREBRAL_B_CELL_NON_HODGKIN_LYMPHOMA);
+		Concept PresumptiveHivStagingTuberculosisPulmorary=Context.getConceptService().getConcept(EvaluableNameConstants.PRESUMPTIVE_HIV_STAGING_TUBERCULOSIS_PULMONARY);
+		Concept OtitisMedia=Context.getConceptService().getConcept(EvaluableNameConstants.OTITIS_MEDIA);
 		
 		//End of Concepts instantiation
-		
-		
-		//Using WHO STAGE 1 ADULT 
-		Result WHOStage1AdultResult=null;
-		
-		List<Obs> WHOStage1Adultobs=Context.getObsService().getObservationsByPersonAndConcept(patient, WHOStage1Adult);
-		
-		for(Obs observations:WHOStage1Adultobs){
-			if(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(AsymptomaticHivInfection)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingPersistentGenerelizedLymphadenopathy))
-			WHOStage1AdultDate=observations.getObsDatetime();
-			WHOStage1AdultResult = new Result(WHOStage1AdultDate);
-			result.add(WHOStage1AdultResult);
-			break;
-		}
-	// End of WHO STAGE 1 ADULT
-		
-		
-		//Using WHO STAGE 2 ADULT 
-		Result WHOstage2AdultResult=null;
-		
-		List<Obs> WHOStage2Adultobs=Context.getObsService().getObservationsByPersonAndConcept(patient, WHOStage2Adult);
-		
-		for(Obs observations:WHOStage2Adultobs){
-			if(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingAdultHerpesZoster)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingMinorMucocutaneousManifestations)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingRecurrentUpperRespiratoryInfection)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingWeightLossLessThanTenPercent)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(AngularCheilitis)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(RecurrentOralUlceration)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(PapularPruriticEruption)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(SeborrheicDermatitis)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(FungalNailInfection)	)
-			WHOStage2AdultDate=observations.getObsDatetime();
-			WHOstage2AdultResult = new Result(WHOStage2AdultDate);
-			result.add(WHOstage2AdultResult);
-			break;
-		}
-	// End of WHO STAGE 2 ADULT
-		
-		
-		//Using WHO STAGE 3 ADULT 
-		Result WHOStage3AdultResult=null;
-		
-		List<Obs> WHOStage3Adultobs=Context.getObsService().getObservationsByPersonAndConcept(patient, WHOStage3Adult);
-		
-		for(Obs observations:WHOStage3Adultobs){
-			if(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(CandidiasisOral)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(DiarrheaChronic)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingPersistentFever)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingSeriousBacterialInfections)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingTuberculosisWithinYear)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingWeightLossGreaterThanTenPercent)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(OralHairyLeukoplakia)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingWeightLossGreaterThanTenPercent)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingDiarrheaChronic)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingPersistentCandidiasisOral)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingPersistentFever)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedWhoStagingOralHairyLeukoplakia)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingTuberculosisPulmonary)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingSevereBacterialInfections)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingUnexplainedAnemiaNeutripaenia)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(ConfirmedHivStagingAcuteNecrotizingStomatitisGingitivitis)
+		//find all encounters per the patient
+		List<Encounter> allEncounters=Context.getEncounterService().getEncountersByPatient(patient);
+		//loop through all the encounters to only pick the initial encounters
+		for(Encounter enc:allEncounters){
+			//only pick the adult initial 
+			if(enc.getEncounterType() ==(Context.getEncounterService().getEncounterType(EvaluableNameConstants.ENCOUNTER_TYPE_ADULT_INITIAL))){
+				
+				//loop through the obs based on concepts
+				
+				
+				
+				@SuppressWarnings("deprecation")
+				Set<Obs> WHOStageAdultobs=Context.getObsService().getObservations(enc);
+				
+				for (@SuppressWarnings("rawtypes")
+				Iterator iterator = WHOStageAdultobs.iterator(); iterator.hasNext();) {
+					Obs obs = (Obs) iterator.next();
 					
-			)
-			WHOStage3AdultDate=observations.getObsDatetime();
-			WHOStage3AdultResult = new Result(WHOStage3AdultDate);
-			result.add(WHOStage3AdultResult);
-			break;
+						if((obs.getConcept()==WHOStage1Adult) && (obs.getValueCoded()== AsymptomaticHivInfection)
+							||(obs.getConcept()==WHOStage1Adult) && (obs.getValueCoded()== AsymptomaticHivInfection)
+							){
+							
+							String stage1="WHO STAGE 1 ADULT";
+							Date stageDate1=obs.getObsDatetime();
+							String stageDateCombined1=stage1 +"-"+stageDate1;
+							Result WHOStage1AdultResult = new Result(stageDateCombined1);
+							result.add(WHOStage1AdultResult);
+							
+						}
+						else if((obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== HivStagingAdultHerpesZoster)
+								||(obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== HivStagingMinorMucocutaneousManifestations)
+								||(obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== HivStagingRecurrentUpperRespiratoryInfection)
+								||(obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== HivStagingWeightLossLessThanTenPercent)
+								||(obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== AngularCheilitis)
+								||(obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== PapularPruriticEruption)
+								||(obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== SeborrheicDermatitis)
+								||(obs.getConcept()==WHOStage2Adult) && (obs.getValueCoded()== FungalNailInfection)
+								){
+								
+								String stage2="WHO STAGE 2 ADULT";
+								Date stageDate2=obs.getObsDatetime();
+								String stageDateCombined2=stage2 +"-"+stageDate2;
+								Result WHOStage2AdultResult = new Result(stageDateCombined2);
+								result.add(WHOStage2AdultResult);
+								
+							}
+						else if((obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== CandidiasisOral)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== DiarrheaChronic)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== HivStagingPersistentFever)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== HivStagingSeriousBacterialInfections)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== HivStagingTuberculosisWithinYear)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== HivStagingWeightLossGreaterThanTenPercent)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== OralHairyLeukoplakia)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()== ConfirmedHivStagingWeightLossGreaterThanTenPercent)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedHivStagingDiarrheaChronic)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedHivStagingPersistentCandidiasisOral)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedHivStagingPersistentFever)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedWhoStagingOralHairyLeukoplakia)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  PresumptiveHivStagingTuberculosisPulmorary)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedHivStagingTuberculosisPulmonary)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedHivStagingSevereBacterialInfections)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedHivStagingUnexplainedAnemiaNeutripaenia)
+								||(obs.getConcept()==WHOStage3Adult) && (obs.getValueCoded()==  ConfirmedHivStagingAcuteNecrotizingStomatitisGingitivitis)
+								){
+								
+								String stage3="WHO STAGE 3 ADULT";
+								Date stageDate3=obs.getObsDatetime();
+								String stageDateCombined3=stage3 +"-"+stageDate3;
+								Result WHOStage3AdultResult = new Result(stageDateCombined3);
+								result.add(WHOStage3AdultResult);
+								
+							}
+						else if((obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== Encephalopathy)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== DiarrheaChronic)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingCandidiasisOroresperatoryTract)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingCryptococcosisExtraPulmonary)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingCryptospoidiosis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingCytomegalovirusDisease)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingDisseminatedEndemicMycosis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingLymphoma)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingMucocutaneousHerpesSimplex)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingMycobacteriumOther)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== HivStagingSalmonellaSepticemia)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== KaposiSarcoma)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== MycobacteriumTuberculosisExtrapulmonary)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== PneumocysticCariniiPneumonia)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ProgressiveMultifocalLeukoencephalopathy)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== WastingSyndrome)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ToxoplasmosisCentralNervousSystem)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingHivWastingSyndrome)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingPneumocysticPneumonia)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingRecurrentSevereBacterialPneumoia)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingChronicHerpesSimplex)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingCandidiasis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingExtrapulmonaryTuberculosis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingKaposiSarcomaKs)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingCytomegalovirusDisease)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingToxoplasmosisCns)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingHivEncephalopathy)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingCryptococcossosExtraPulmonary)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingDisseminatedNonTuberculosisMyobacterialInfection)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingProgressiveMultifocalLeukoencephalopathy)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingChronicCryptosporidiosis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingChronicIsosporiasis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingDisseminatedMycosis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingRecurrentSepticemia)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingLymphoma)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingInvasiveCervicalCarcinoma)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingAtypicalDisseminatedLeishmaniasis)
+								||(obs.getConcept()==WHOStage4Adult) && (obs.getValueCoded()== ConfirmedHivStagingSymptomaticHivAssociatedNephoropathy)
+								){
+								
+								String stage4="WHO STAGE 4 ADULT";
+								Date stageDate4=obs.getObsDatetime();
+								String stageDateCombined4=stage4 +"-"+stageDate4;
+								Result WHOStage4AdultResult = new Result(stageDateCombined4);
+								result.add(WHOStage4AdultResult);
+								
+							}
+						else{
+							//add information to capture adults who are not falling in any stage
+						}
+					
+					
+				}
+			}
+			//checking if the encounter is paeds initial
+			if(enc.getEncounterType() ==(Context.getEncounterService().getEncounterType(EvaluableNameConstants.ENCOUNTER_TYPE_PEDIATRIC_INITIAL))){
+				
+				@SuppressWarnings("deprecation")
+				Set<Obs> WHOStagePaedsobs=Context.getObsService().getObservations(enc);
+				
+				for (@SuppressWarnings("rawtypes")
+				Iterator iterator = WHOStagePaedsobs.iterator(); iterator.hasNext();) {
+					Obs obsPaeds = (Obs) iterator.next();
+					
+					if((obsPaeds.getConcept()==WHOStage1Peds) && (obsPaeds.getValueCoded()== AsymptomaticHivInfection)
+							||(obsPaeds.getConcept()==WHOStage1Peds) && (obsPaeds.getValueCoded()== Hepatpsplenomegaly)
+							||(obsPaeds.getConcept()==WHOStage1Peds) && (obsPaeds.getValueCoded()== HivStagingPersistentGenerelizedLymphadenopathy)
+							){
+							
+							String stagePaeds1="WHO STAGE 1 PEDS";
+							Date stageDatePaeds1=obsPaeds.getObsDatetime();
+							String stageDateCombinedPaeds1=stagePaeds1 +"-"+stageDatePaeds1;
+							Result WHOStage1PaedsResult = new Result(stageDateCombinedPaeds1);
+							result.add(WHOStage1PaedsResult);
+							
+						}
+					else if((obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== Dermatitis)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== HerpesZoster)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== HivStagingHsvStomatitis)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== HivStagingRecurrentUpperRespiratoryInfection)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== HivStagingSteroidResistantThrombocytopenia)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== HumanPapillomavirus)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== MolluscumContagiosum)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== OtitisMedia)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== ParotidEnlargement)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== VerrucaPlanus)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== Hepatpsplenomegaly)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== RecurrentOralUlceration)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== PapularPruriticEruption)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== FungalNailInfection)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== LinearGingivalErythema)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== WartsGenital)
+							||(obsPaeds.getConcept()==WHOStage2Peds) && (obsPaeds.getValueCoded()== ChronicUpperRespiratoryTractInfections)
+							 
+							){
+							
+							String stagePaeds2="WHO STAGE 2 PEDS";
+							Date stageDatePaeds2=obsPaeds.getObsDatetime();
+							String stageDateCombinedPaeds2=stagePaeds2 +"-"+stageDatePaeds2;
+							Result WHOStage2PaedsResult = new Result(stageDateCombinedPaeds2);
+							result.add(WHOStage2PaedsResult);
+							
+							}
+					else if((obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== DiarrheaChronic)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== FailureToThrive)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingCandidiasisOroresperatoryTract)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingLymphoidInterstitialPneumonia)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingNonResponsiveHerpesSimplexVirus)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingPedsHerpesZoster)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingRecurrentBActerialPneumonia)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingRefractoryAnemia)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingVaricellaDisseminated)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== PneumoniaTuberculosis)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== RectovaginalFistula)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingModerateMalnutrition)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingPersistentFever)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== CandidiasisOral)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== OralHairyLeukoplakia)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== LymphNodeTuberculosis)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingChronicHivAssociatedLungDisease)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingUnexplainedAnemiaNeutropenia)
+							||(obsPaeds.getConcept()==WHOStage3peds) && (obsPaeds.getValueCoded()== HivStagingAcuteNecrotizingUlcerativeGingitivitisPeriodontis)
+							
+							 
+							){
+							
+							String stagePaeds3="WHO STAGE 3 PEDS";
+							Date stageDatePaeds3=obsPaeds.getObsDatetime();
+							String stageDateCombinedPaeds3=stagePaeds3 +"-"+stageDatePaeds3;
+							Result WHOStage3PaedsResult = new Result(stageDateCombinedPaeds3);
+							result.add(WHOStage3PaedsResult);
+							
+							}
+					else if((obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== Candidiasis)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== CARDIOMYOPATHY)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== Cryptococcosis)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== Encephalopathy)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingCoccidiodomycosisDisseminated)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingCryptococcosisExtraPulmonary)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingCryptospoidiosis)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingCytomegalovirusDisease)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingHistoplasmosisDisseminated)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingMycobacteriumOther)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingNonResponsiveHerpesSimplexVirus)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingSevereBacterialInfection)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingPersistentFever)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== KaposiSarcoma)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== Nephropathy)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== PneumocysticCariniiPneumonia)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== ProgressiveMultifocalLeukoencephalopathy)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== Toxoplasmosis)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== WastingSyndrome)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== CandidiasisOesophageal)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== MycobacteriumTuberculosisExtrapulmonary)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingChronicIsisporiasis)
+							||(obsPaeds.getConcept()==WHOStage4Peds) && (obsPaeds.getValueCoded()== HivStagingCerebralBCellNonHodgkinLymphoma)
+							
+							 
+							){
+							
+							String stagePaeds4="WHO STAGE 4 PEDS";
+							Date stageDatePaeds4=obsPaeds.getObsDatetime();
+							String stageDateCombinedPaeds4=stagePaeds4 +"-"+stageDatePaeds4;
+							Result WHOStage4PaedsResult = new Result(stageDateCombinedPaeds4);
+							result.add(WHOStage4PaedsResult);
+							
+							}
+					else{
+						//add some code to be evaluated just in case all fails
+					}
+					
+				}
+			}
+				
 		}
-	// End of WHO STAGE 3 ADULT
 		
 		
-		//Using WHO STAGE 4 ADULT 
-		Result WHOStage4AdultResult=null;
-		
-		List<Obs> WHOStage4Adultobs=Context.getObsService().getObservationsByPersonAndConcept(patient, WHOStage4Adult);
-		
-		for(Obs observations:WHOStage4Adultobs){
-			if(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(AsymptomaticHivInfection)||
-					Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(HivStagingPersistentGenerelizedLymphadenopathy))
-			WHOStage4AdultDate=observations.getObsDatetime();
-			WHOStage4AdultResult = new Result(WHOStage4AdultDate);
-			result.add(WHOStage4AdultResult);
-			break;
-		}
-	// End of WHO STAGE 4 ADULT
 			
  		return result;
  	}
@@ -288,11 +447,5 @@ public class WHOStageRule  extends EvaluableRule {
 		return 0;
 	}
 
-	/*@Override
-	protected Result evaluate(LogicContext context, Integer patientId,
-			Map<String, Object> parameters) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
 	
  }
