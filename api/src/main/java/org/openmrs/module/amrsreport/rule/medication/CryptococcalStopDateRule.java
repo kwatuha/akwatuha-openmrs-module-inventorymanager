@@ -35,7 +35,7 @@ public class CryptococcalStopDateRule  extends EvaluableRule {
  	 */
 			//get ctx stop date
 	@Override
-	public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+	protected Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		Result result=new Result();
 		
 		//find the patient
@@ -106,11 +106,6 @@ public class CryptococcalStopDateRule  extends EvaluableRule {
 		return 0;
 	}
 
-	/*@Override
-	protected Result evaluate(LogicContext context, Integer patientId,
-			Map<String, Object> parameters) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
+	
 	
  }

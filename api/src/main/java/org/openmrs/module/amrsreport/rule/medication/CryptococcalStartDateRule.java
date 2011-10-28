@@ -33,9 +33,9 @@ public class CryptococcalStartDateRule  extends EvaluableRule {
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
 	 *      java.util.Map)
  	 */
-			//get ctx stop dateimplements
-	//@Override
-	public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+			
+	@Override
+	protected Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		Result result=new Result();
 		
 		//find the patient
