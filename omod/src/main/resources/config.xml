@@ -17,7 +17,10 @@
 	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
 	<!-- /Base Module Properties -->
 	
-	<require_version>1.7.0</require_version>
+	<require_modules>
+		<require_module version="0.6">org.openmrs.module.reporting</require_module>
+	</require_modules>
+	<require_version>1.8.0</require_version>
 	
 	<!-- Extensions -->
 	<extension>
