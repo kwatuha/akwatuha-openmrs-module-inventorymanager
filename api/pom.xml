@@ -20,11 +20,6 @@
 			<artifactId>library-name</artifactId>
 		</dependency>
 		-->
-		<dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>reporting</artifactId>
-			<type>jar</type>
-		</dependency>
 		
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
@@ -56,6 +51,13 @@
 			<artifactId>logic-api</artifactId>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>reporting</artifactId>
+				<version>0.7.0.DEV</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>
 	</dependencies>
 
 </project>

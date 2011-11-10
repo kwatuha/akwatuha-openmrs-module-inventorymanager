@@ -62,10 +62,12 @@ public class CTXStartTreatmentRule  extends EvaluableRule {
 			List<Obs> obs=Context.getObsService().getObservationsByPersonAndConcept(patient, CTXStartDate);
 			
 			for(Obs observations:obs){
-				if(!(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(null)))
+				if(!(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(null))){
 				ctxStart=observations.getObsDatetime();
 			    ctxStartResult = new Result(ctxStart);
 				result.add(ctxStartResult);
+				break;
+				}
 			}
 			/**/
 			

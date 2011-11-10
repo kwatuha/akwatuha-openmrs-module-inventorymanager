@@ -48,12 +48,15 @@ public class TBStopDateRule extends EvaluableRule {
 		//loop through the obsTBStart list of obs
 		for(Obs observations:obsTBStop){
 			if(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(TBStopDate))
+			{
 				
 				stopDate=observations.getObsDatetime();
-			
-		    Result tbStartResult = new Result(stopDate);
-		    
-			result.add(tbStartResult);
+				
+			    Result tbStartResult = new Result(stopDate);
+			    
+				result.add(tbStartResult);
+				break;
+			}
 		}
 		
 		

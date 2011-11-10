@@ -124,7 +124,6 @@ public class WHOStageRule  extends EvaluableRule {
 		Concept HivStagingChronicHivAssociatedLungDisease=Context.getConceptService().getConcept(EvaluableNameConstants.HIV_STAGING_CHRONIC_HIV_ASSOCIATED_LUNG_DISEASE);
 		Concept HivStagingUnexplainedAnemiaNeutropenia=Context.getConceptService().getConcept(EvaluableNameConstants.HIV_STAGING_UNEXAPLINED_ANEMIA_NEUTROPENIA);
 		Concept HivStagingAcuteNecrotizingUlcerativeGingitivitisPeriodontis=Context.getConceptService().getConcept(EvaluableNameConstants.HIV_STAGING_ACUTE_NECROTIZING_ULCERATIVE_GINGIVITIS_PERIODONTIS);
-		Concept WHOStage4Peds=Context.getConceptService().getConcept(EvaluableNameConstants.WHO_STAGE_4_PEDS);
 		Concept Candidiasis=Context.getConceptService().getConcept(EvaluableNameConstants.CANDIDIASIS);
 		Concept CARDIOMYOPATHY=Context.getConceptService().getConcept(EvaluableNameConstants.CARDIOMYOPATHY);
 		Concept Cryptococcosis=Context.getConceptService().getConcept(EvaluableNameConstants.CRYPTOCOCCOSIS);
@@ -267,9 +266,9 @@ public class WHOStageRule  extends EvaluableRule {
 						else{
 							//do nothing here or add information not falling anywhere above
 						}
-						
+						break;
 						}
-			break;
+			
 			
 		}
 		//checking for paeds based on any encounter type
@@ -287,7 +286,7 @@ public class WHOStageRule  extends EvaluableRule {
 								String stageDateCombinedPaeds1=stagePaeds1 +"\n"+stageDatePaeds1;
 								Result WHOStage1PaedsResult = new Result(stageDateCombinedPaeds1.substring(0, 27));
 								result.add(WHOStage1PaedsResult);
-				
+								break;
 						}
 			else if((Context.getConceptService().getConcept(obspaeds.getValueCoded().getConceptId())==Dermatitis)
 					||(Context.getConceptService().getConcept(obspaeds.getValueCoded().getConceptId())==HerpesZoster)
@@ -313,7 +312,7 @@ public class WHOStageRule  extends EvaluableRule {
 								String stageDateCombinedPaeds2=stagePaeds2 +"\n"+stageDatePaeds2;
 								Result WHOStage2PaedsResult = new Result(stageDateCombinedPaeds2.substring(0, 27));
 								result.add(WHOStage2PaedsResult);
-				
+								break;
 					}
 			else if(
 					(Context.getConceptService().getConcept(obspaeds.getValueCoded().getConceptId())==DiarrheaChronic)
@@ -342,7 +341,7 @@ public class WHOStageRule  extends EvaluableRule {
 								String stageDateCombinedPaeds3=stagePaeds3 +"\n"+stageDatePaeds3;
 								Result WHOStage3PaedsResult = new Result(stageDateCombinedPaeds3.substring(0, 27));
 								result.add(WHOStage3PaedsResult);
-				
+								break;
 					 }
 			else if(
 					(Context.getConceptService().getConcept(obspaeds.getValueCoded().getConceptId())==Candidiasis)
@@ -375,12 +374,12 @@ public class WHOStageRule  extends EvaluableRule {
 								String stageDateCombinedPaeds4=stagePaeds4 +"\n"+stageDatePaeds4;
 								Result WHOStage4PaedsResult = new Result(stageDateCombinedPaeds4.substring(0, 27));
 								result.add(WHOStage4PaedsResult);
-				
+								break;
 					 }
 			else{
 				//add inforamtion relevant for other info
 			}
-			break;
+			
 			
 			
 		}

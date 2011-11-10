@@ -70,11 +70,13 @@ public class TBStartDateRule extends EvaluableRule {
 		//loop through the obsTBStart list of obs
 		for(Obs observations:obsTBStart){
 			if(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(TBStartDate))
+			{
 				
-				startDate=observations.getObsDatetime();
-			
+			startDate=observations.getObsDatetime();
 		    Result tbStartResult = new Result(startDate);
 			result.add(tbStartResult);
+			break;
+			}
 		}
 		
 		log.info(result);
