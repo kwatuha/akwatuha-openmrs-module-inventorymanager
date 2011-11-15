@@ -47,7 +47,7 @@
 			<type>pom</type>
 		</dependency>
 		<dependency>
-			<groupId>org.openmrs.module.logic</groupId>
+			<groupId>org.openmrs.module</groupId>
 			<artifactId>logic-api</artifactId>
 			<type>jar</type>
 		</dependency>

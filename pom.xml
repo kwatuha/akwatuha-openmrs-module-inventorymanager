@@ -80,7 +80,7 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.openmrs.module.logic</groupId>
+				<groupId>org.openmrs.module</groupId>
 				<artifactId>logic-api</artifactId>
 				<version>0.5-SNAPSHOT</version>
 				<type>jar</type>
