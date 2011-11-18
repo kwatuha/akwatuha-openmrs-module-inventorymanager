@@ -108,8 +108,8 @@ public class MOHCohortDefinitionEvaluator implements CohortDefinitionEvaluator {
 		AgeCohortDefinition ageCohortDefinition = new AgeCohortDefinition();
 		ageCohortDefinition.setMinAge(18);
 		ageCohortDefinition.setMinAgeUnit(DurationUnit.MONTHS);
-		ageCohortDefinition.setMinAge(14);
-		ageCohortDefinition.setMinAgeUnit(DurationUnit.YEARS);
+		ageCohortDefinition.setMaxAge(14);
+		ageCohortDefinition.setMaxAgeUnit(DurationUnit.YEARS);
 
 		Concept elisaConcept = conceptService.getConcept(HIV_ENZYME_IMMUNOASSAY_QUALITATIVE_CONCEPT);
 
