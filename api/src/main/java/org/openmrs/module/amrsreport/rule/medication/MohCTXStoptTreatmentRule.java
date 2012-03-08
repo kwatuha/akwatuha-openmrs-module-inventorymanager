@@ -23,7 +23,7 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 
 	private static final Log log = LogFactory.getLog(MohCTXStartTreatmentRule.class);
 	 
- 	public static final String TOKEN = "MOH CTX Stop Rule";
+ 	public static final String TOKEN = "MOH CTX Stop date";
 
  	
  	/**
