@@ -83,7 +83,7 @@ public class MohLostToFollowUpRule  extends MohEvaluableRule {
 				if((encTpInit == encounter.getEncounterType()) || (encounter.getEncounterType() == encTpRet)){
 					if(ob.getConcept().getConceptId() == Context.getConceptService().getConcept(MohEvaluableNameConstants.RETURN_VISIT_DATE).getConceptId()){
 						if(sdf.format(ob.getObsDatetime()) != null){
-							long requiredTimeToShowup = (ob.getValueDatetime().getTime()) - (ob.getObsDatetime().getTime());
+							long requiredTimeToShowup = ((ob.getValueDatetime().getTime()) - (ob.getObsDatetime().getTime())) + (long)(1000 * 60 * 60 * 24 * 30.4375 * 3);
 							long todayTimeFromSchedule = (new Date()).getTime() - (ob.getObsDatetime().getTime());
 							if( requiredTimeToShowup < todayTimeFromSchedule ){
 								return new Result("LTFU | " + sdf.format(ob.getValueDatetime()));
