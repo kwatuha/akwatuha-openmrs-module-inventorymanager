@@ -92,7 +92,7 @@ public class MohLostToFollowUpRule  extends MohEvaluableRule {
 					}
 					if(ob.getConcept() == Context.getConceptService().getConcept("RETURN VISIT DATE, EXPRESS CARE NURSE")){
 						if(sdf.format(ob.getObsDatetime()) != null){
-							long requiredTimeToShowup = (ob.getValueDatetime().getTime()) - (ob.getObsDatetime().getTime());
+							long requiredTimeToShowup = ((ob.getValueDatetime().getTime()) - (ob.getObsDatetime().getTime())) + (long)(1000 * 60 * 60 * 24 * 30.4375 * 3);
 							long todayTimeFromSchedule = (new Date()).getTime() - (ob.getObsDatetime().getTime());
 							if( requiredTimeToShowup < todayTimeFromSchedule ){
 								return new Result("LTFU | " + sdf.format(ob.getValueDatetime()));

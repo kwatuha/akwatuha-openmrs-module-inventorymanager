@@ -81,8 +81,11 @@ public interface MohEvaluableNameConstants {
 	public static final String PATIENT_REPORTED_CURRENT_PCP_PROPHYLAXIS = "PATIENT REPORTED CURRENT PCP PROPHYLAXIS";
 	public static final String TUBERCULOSIS_TREATMENT_COMPLETED_DATE = "TUBERCULOSIS TREATMENT COMPLETED DATE";
 	public static final String TUBERCULOSIS_DRUG_TREATMENT_START_DATE = "TUBERCULOSIS DRUG TREATMENT START DATE";
-	//String ENCOUNTER_FETCH_SIZE="ENCOUNTER FETCH SIZE";
-	//String OBS_ENCOUNTER="OBS ENCOUNTER";
+	public static final String CD4_COUNT_GREATER_THAN_15 = "CD4 COUNT GREATER THAN 15%";
+	public static final String WEIGHT_CHANGE = "WEIGHT CHANGE";
+	public static final String CD4_COUNT_GREATER_THAN_200 = "CD4 COUNT GREATER THAN 200";
+	public static final String TOXICITY_DRUG = "TOXICITY, DRUG";
+	//public static final String OTHER_NON_CODED = "OTHER NON-CODED";
 	//end of constants for CTX startdate and stopdate
 	
 	public static final String PCP_PROPHYLAXIS_PLAN = "PCP PROPHYLAXIS PLAN";
