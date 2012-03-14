@@ -56,7 +56,6 @@ public class MohCryptococcalStartDateRule  extends MohEvaluableRule {
 	 *      java.util.Map)
  	 */
 			
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		

@@ -2,6 +2,8 @@ package org.openmrs.module.amrsreport.rule.medication;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +35,18 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 	private List<Concept> cachedQuestions = null;
 	private List<Concept> cachedAnswers = null;
 
- 	
+	/**
+	 * comparator for sorting observations
+	 */
+	private static class SortByDateComparator implements Comparator<Object>{
+
+		@Override
+		public int compare(Object a, Object b) {
+			Obs ao = (Obs) a;
+			Obs bo = (Obs) b;
+			return ao.getObsDatetime().compareTo(bo.getObsDatetime());
+		}
+	}
  	/**
 
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
@@ -57,7 +70,7 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 		
 		
 		
-		//Collections.sort(obs);
+		Collections.sort(obs,new SortByDateComparator());
 		for (Obs o : obs) {
 			List<Concept> answerList=getCachedAnswers();
 			

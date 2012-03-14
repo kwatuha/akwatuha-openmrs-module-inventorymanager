@@ -3,6 +3,8 @@
  
  import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +38,19 @@ public class MohCTXStartTreatmentRule  extends MohEvaluableRule {
  	private Map<String, Concept> cachedConcepts = null;
 	private List<Concept> cachedQuestions = null;
 	private List<Concept> cachedAnswers = null;
+	
+	/**
+	 * comparator for sorting observations
+	 */
+	private static class SortByDateComparator implements Comparator<Object>{
+
+		@Override
+		public int compare(Object a, Object b) {
+			Obs ao = (Obs) a;
+			Obs bo = (Obs) b;
+			return ao.getObsDatetime().compareTo(bo.getObsDatetime());
+		}
+	}
 
  	
  	/**
@@ -59,8 +74,8 @@ public class MohCTXStartTreatmentRule  extends MohEvaluableRule {
 		List<Obs> obs=Context.getObsService().getObservations(
 				Arrays.asList(new Person[]{patient}), null, getQuestionConcepts(),
 				null, null, null, null, null, null, null, null, false);
-		
-		
+
+		Collections.sort(obs, new SortByDateComparator());
 		Result ctxStartResult=null;
 		
 		
