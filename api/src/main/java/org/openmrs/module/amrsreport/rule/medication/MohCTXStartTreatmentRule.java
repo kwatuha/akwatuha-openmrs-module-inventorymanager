@@ -60,10 +60,7 @@ public class MohCTXStartTreatmentRule  extends MohEvaluableRule {
 				Arrays.asList(new Person[]{patient}), null, getQuestionConcepts(),
 				null, null, null, null, null, null, null, null, false);
 		
-		//Concept CTXStartDate=Context.getConceptService().getConcept(MohEvaluableNameConstants.PCP_PROPHYLAXIS_STARTED);
-		//
 		
-		//two dates declared here
 		Result ctxStartResult=null;
 		
 		
@@ -143,14 +140,13 @@ public class MohCTXStartTreatmentRule  extends MohEvaluableRule {
 		}
 		return cachedQuestions;
 		
-		
 	
- }
+	}
 	private List<Concept> getCachedAnswers() {
 		if (cachedAnswers == null) {
 			cachedAnswers = new ArrayList<Concept>();
 			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.TRIMETHOPRIM_AND_SULFAMETHOXAZOLE));
-			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.DAPSONE));
+			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.DAPSONE));
 		}
 		return cachedAnswers;
 	}	

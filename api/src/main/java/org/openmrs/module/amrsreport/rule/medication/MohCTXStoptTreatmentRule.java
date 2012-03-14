@@ -132,10 +132,10 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 		if (cachedAnswers == null) {
 			cachedAnswers = new ArrayList<Concept>();
 			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.CD4_COUNT_GREATER_THAN_15));
-			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.WEIGHT_CHANGE));
-			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.CD4_COUNT_GREATER_THAN_200));
-			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.TOXICITY_DRUG));
-			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.OTHER_NON_CODED));
+			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.WEIGHT_CHANGE));
+			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.CD4_COUNT_GREATER_THAN_200));
+			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.TOXICITY_DRUG));
+			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.OTHER_NON_CODED));
 		}
 		return cachedAnswers;
 	}	
