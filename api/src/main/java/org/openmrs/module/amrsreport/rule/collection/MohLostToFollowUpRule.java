@@ -106,7 +106,7 @@ public class MohLostToFollowUpRule  extends MohEvaluableRule {
 		for (Iterator<Encounter> it = e.iterator(); it.hasNext();) {
 		    Encounter encounter = it.next();
 		    if((encTpInit == encounter.getEncounterType()) || (encounter.getEncounterType() == encTpRet)){
-		    	int requiredTimeToShowup = (int) (1000 * 60 * 60 * 24 * 30.4375 * 3);
+		    	int requiredTimeToShowup = (int) (1000 * 60 * 60 * 24 * 30.4375 * 6);
 				int todayTimeFromEncounter = (int) ((new Date()).getTime() - (encounter.getEncounterDatetime().getTime()));
 				if(!(requiredTimeToShowup >= todayTimeFromEncounter)){
 					return new Result("LTFU | " + sdf.format(encounter.getEncounterDatetime()));
