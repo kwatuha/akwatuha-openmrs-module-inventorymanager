@@ -1,13 +1,12 @@
 package org.openmrs.module.amrsreport.rule.medication;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.Collections;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,8 +53,7 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 		List<Obs> obs=Context.getObsService().getObservations(
 				Arrays.asList(new Person[]{patient}), null, getQuestionConcepts(),
 				null, null, null, null, null, null, null, null, false);
-				//getConceptService().getConcept(MohEvaluableNameConstants.REASON_PCP_PROPHYLAXIS_STOPPED);
-		//find a list of obs in the Obs instance
+				
 		
 		
 		
@@ -63,8 +61,9 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 		for (Obs o : obs) {
 			List<Concept> answerList=getCachedAnswers();
 			
-			for(Concept c:answerList){
-				if((Context.getConceptService().getConcept(o.getValueCoded().getConceptId()).equals(c))){
+			for(Concept obans:answerList){
+				
+				if(o.getValueCoded().getConceptId().equals(obans.getConceptId())){
 					
 					ctxStop=o.getObsDatetime();
 					ctxStopResult = new Result(ctxStop);
@@ -75,16 +74,7 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 			
 		}
 		
-		/*List<Obs> obsz=Context.getObsService().getObservationsByPersonAndConcept(patient, CTXStopDate);
-		for(Obs observation:obsz){
-			if(!(Context.getConceptService().getConcept(observation.getValueCoded().getConceptId()).equals(null))){
-			ctxStop=observation.getObsDatetime();
-			ctxStopResult = new Result(ctxStop);
-			result.add(ctxStopResult);
-			break;
-			}
-		}*/
-		
+			
 		
 		return result;
 }
@@ -147,7 +137,7 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.TOXICITY_DRUG));
 			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.OTHER_NON_CODED));
 		}
-		return cachedQuestions;
+		return cachedAnswers;
 	}	
 	
 
