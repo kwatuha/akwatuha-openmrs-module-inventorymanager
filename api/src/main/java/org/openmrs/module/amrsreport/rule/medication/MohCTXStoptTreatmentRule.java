@@ -49,7 +49,7 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 		Result ctxStopResult=null;
 		//find the patient
 		Patient patient = Context.getPatientService().getPatient(patientId);
-		//find the concept
+		//find the obs for this patient by the concept question
 		List<Obs> obs=Context.getObsService().getObservations(
 				Arrays.asList(new Person[]{patient}), null, getQuestionConcepts(),
 				null, null, null, null, null, null, null, null, false);
@@ -63,7 +63,7 @@ public class MohCTXStoptTreatmentRule extends MohEvaluableRule {
 			
 			for(Concept obans:answerList){
 				
-				if(o.getValueCoded().getConceptId().equals(obans.getConceptId())){
+				if((o.getValueCoded().getConceptId())==(obans.getConceptId())){
 					
 					ctxStop=o.getObsDatetime();
 					ctxStopResult = new Result(ctxStop);

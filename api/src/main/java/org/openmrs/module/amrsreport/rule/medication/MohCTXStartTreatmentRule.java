@@ -1,7 +1,10 @@
  
  package org.openmrs.module.amrsreport.rule.medication;
  
- import java.util.Date;
+ import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
@@ -28,6 +32,10 @@ public class MohCTXStartTreatmentRule  extends MohEvaluableRule {
  	private static final Log log = LogFactory.getLog(MohCTXStartTreatmentRule.class);
  
  	public static final String TOKEN = "MOH CTX Start date";
+ 	
+ 	private Map<String, Concept> cachedConcepts = null;
+	private List<Concept> cachedQuestions = null;
+	private List<Concept> cachedAnswers = null;
 
  	
  	/**
@@ -43,30 +51,36 @@ public class MohCTXStartTreatmentRule  extends MohEvaluableRule {
 		Date ctxStart=null;
 		//Date ctxStop=null;
 		
-		//find the patient
-		Patient patient = context.getPatient(patientId);
+		//find the patient using the patient id
+		Patient patient = Context.getPatientService().getPatient(patientId);
 		
 		
-		//find all the encounters for a given patient
-		//List<Encounter> encounters=Context.getEncounterService().getEncountersByPatient(patient);
+		//find the observation based on the patient and the concept question required
+		List<Obs> obs=Context.getObsService().getObservations(
+				Arrays.asList(new Person[]{patient}), null, getQuestionConcepts(),
+				null, null, null, null, null, null, null, null, false);
 		
-		Concept CTXStartDate=Context.getConceptService().getConcept(MohEvaluableNameConstants.PCP_PROPHYLAXIS_STARTED);
+		//Concept CTXStartDate=Context.getConceptService().getConcept(MohEvaluableNameConstants.PCP_PROPHYLAXIS_STARTED);
 		//
 		
 		//two dates declared here
 		Result ctxStartResult=null;
-		//Result ctxStoptResult=null;
+		
 		
 		
  			
-			List<Obs> obs=Context.getObsService().getObservationsByPersonAndConcept(patient, CTXStartDate);
-			
+			//List<Obs> obs=Context.getObsService().getObservationsByPersonAndConcept(patient, CTXStartDate);
+			List<Concept> answerList=getCachedAnswers();
 			for(Obs observations:obs){
-				if(!(Context.getConceptService().getConcept(observations.getValueCoded().getConceptId()).equals(null))){
-				ctxStart=observations.getObsDatetime();
-			    ctxStartResult = new Result(ctxStart);
-				result.add(ctxStartResult);
-				break;
+				for(Concept an:answerList){
+					
+					if((observations.getValueCoded().getConceptId())==(an.getConceptId())){
+						
+						ctxStart=observations.getObsDatetime();
+					    ctxStartResult = new Result(ctxStart);
+						result.add(ctxStartResult);
+						//break;
+				}
 				}
 			}
 			/**/
@@ -111,4 +125,33 @@ public class MohCTXStartTreatmentRule  extends MohEvaluableRule {
 		return 0;
 	}
 	
+	private Concept getCachedConcept(String name) {
+		
+		if (cachedConcepts == null) {
+			cachedConcepts = new HashMap<String, Concept>();
+		}
+		if (!cachedConcepts.containsKey(name)) {
+			cachedConcepts.put(name, Context.getConceptService().getConcept(name));
+		}
+		return cachedConcepts.get(name);
+		
+	}
+	private List<Concept> getQuestionConcepts() {
+		if (cachedQuestions == null) {
+			cachedQuestions = new ArrayList<Concept>();
+			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.PCP_PROPHYLAXIS_STARTED));
+		}
+		return cachedQuestions;
+		
+		
+	
  }
+	private List<Concept> getCachedAnswers() {
+		if (cachedAnswers == null) {
+			cachedAnswers = new ArrayList<Concept>();
+			cachedAnswers.add(getCachedConcept(MohEvaluableNameConstants.TRIMETHOPRIM_AND_SULFAMETHOXAZOLE));
+			cachedQuestions.add(getCachedConcept(MohEvaluableNameConstants.DAPSONE));
+		}
+		return cachedAnswers;
+	}	
+}

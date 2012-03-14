@@ -305,6 +305,7 @@ public interface MohEvaluableNameConstants {
 	public static final String PEDS_CDC_SPECIFIC_CONDITION_QUERY = "PEDS CDC SPECIFIC CONDITION QUERY";
 	public static final String PED_SCDC_CATEGORY_QUERY = "PEDS CDC CATEGORY QUERY";
 	public static final String PEDS_WHO_SPECIFIC_CONDITION_QUERY = "PEDS WHO SPECIFIC CONDITION QUERY";
+	public static final String DAPSONE = "DAPSONE";
 
 	// Age group for use in some rules
 	public static enum AgeGroup {
