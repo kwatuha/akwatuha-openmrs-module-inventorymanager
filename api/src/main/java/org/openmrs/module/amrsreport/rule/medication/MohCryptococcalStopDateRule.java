@@ -25,7 +25,7 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.MohEvaluableNameConstants;
 import org.openmrs.module.amrsreport.rule.MohEvaluableRule;
-import org.openmrs.module.amrsreport.rule.medication.MohCryptococcalStartDateRule.SortByDateComparator;
+
  
  
 public class MohCryptococcalStopDateRule  extends MohEvaluableRule {
