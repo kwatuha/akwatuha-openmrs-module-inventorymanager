@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -90,15 +89,13 @@ public class MohPregnancyPMTCReferralRule extends MohEvaluableRule {
 	@Override
 	protected Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) {
 
-		Result result = new Result();
-
-		ConceptService conceptService = Context.getConceptService();
 		ObsService obsService = Context.getObsService();
 
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		List<Obs> observations = obsService.getObservations(Arrays.<Person>asList(patient), null, getQuestionConcepts(),
 				null, null, null, null, null, null, null, null, false);
-
+		
+		String isPreg = "";
 		for (Obs observation : observations) {
 			Date dueDate = null;
 
@@ -108,12 +105,13 @@ public class MohPregnancyPMTCReferralRule extends MohEvaluableRule {
 				dueDate = observation.getValueDatetime();
 
 			if (isPregnant(observation))
-				result = new Result(new Date(), Result.Datatype.BOOLEAN, Boolean.TRUE, null, dueDate, null, "PMTCT", null);
+				isPreg += "Yes - Due: " + dueDate + " - PMTCT, ";
+				/*result = new Result(new Date(), Result.Datatype.BOOLEAN, Boolean.TRUE, null, dueDate, null, "PMTCT", null);
 			else
-				result = new Result(new Date(), Result.Datatype.BOOLEAN, Boolean.FALSE, null, null, null, StringUtils.EMPTY, null);
+				result = new Result(new Date(), Result.Datatype.BOOLEAN, Boolean.FALSE, null, null, null, StringUtils.EMPTY, null);*/
 		}
 
-		return result;
+		return new Result(isPreg);
 	}
 
 	private Boolean isPregnant(Obs obs) {

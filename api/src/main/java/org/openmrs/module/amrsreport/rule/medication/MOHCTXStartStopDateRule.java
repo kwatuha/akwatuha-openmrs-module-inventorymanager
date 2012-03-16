@@ -63,12 +63,9 @@ public class MOHCTXStartStopDateRule extends MohEvaluableRule{
 	public Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 		//find the patient based on the patient id
 		Patient patient = Context.getPatientService().getPatient(patientId);
-		log.error("sasasa   hi ni jina         i   "+patient.getGivenName());
 		//find the observation based on the patient and a set of  concept question required
 		List<Obs> ctxObs=Context.getObsService().getObservations(Arrays.<Person>asList(patient), null, getQuestionConcepts(),
 				null, null, null, null, null, null, null, null, false);
-		
-		log.error("This is the size  "+ctxObs.size());
 		
 		Collections.sort(ctxObs, new SortByDateComparator());
 		

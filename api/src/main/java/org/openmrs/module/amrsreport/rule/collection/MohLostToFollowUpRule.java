@@ -29,7 +29,7 @@ public class MohLostToFollowUpRule  extends MohEvaluableRule {
  
  	private static final Log log = LogFactory.getLog(MohLostToFollowUpRule.class);
  
- 	public static final String TOKEN = "MOH Lost_To_Follow_Up";
+ 	public static final String TOKEN = "MOH LTFU-TO-DEAD";
  	
  	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
