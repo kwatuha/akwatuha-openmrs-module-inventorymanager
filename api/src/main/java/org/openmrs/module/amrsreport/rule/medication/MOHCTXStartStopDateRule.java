@@ -48,23 +48,27 @@ public class MOHCTXStartStopDateRule extends MohEvaluableRule{
 		public int compare(Object a, Object b) {
 			Obs ao = (Obs) a;
 			Obs bo = (Obs) b;
-			return ao.getValueDatetime().compareTo(bo.getValueDatetime());
+			return ao.getObsDatetime().compareTo(bo.getObsDatetime());
 		}
 	}
 	////////////////////////////////////////////////////////////////////////////////////////
-	//List of concepts to be used in comparison
-	Concept TRIMETHOPRIM_AND_SULFAMETHOXAZOLE=Context.getConceptService().getConcept(MohEvaluableNameConstants.TRIMETHOPRIM_AND_SULFAMETHOXAZOLE);
+	//List of concepts to be used in comparison as for start dates
+	Concept PCP_PROPHYLAXIS_STARTED=Context.getConceptService().getConcept(MohEvaluableNameConstants.PCP_PROPHYLAXIS_STARTED);
+	Concept REASON_PCP_PROPHYLAXIS_STOPPED=Context.getConceptService().getConcept(MohEvaluableNameConstants.REASON_PCP_PROPHYLAXIS_STOPPED);
+	////////////////////////////////////////////////.if////////////////////////////////////////
+	//concepts to be used for stop dates
 	Concept DAPSONE=Context.getConceptService().getConcept(MohEvaluableNameConstants.DAPSONE);
-	////////////////////////////////////////////////////////////////////////////////////////
 	//The real method that does the magic comes here
+	
 	public Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
 		//find the patient based on the patient id
 		Patient patient = Context.getPatientService().getPatient(patientId);
-		
+		log.error("sasasa   hi ni jina         i   "+patient.getGivenName());
 		//find the observation based on the patient and a set of  concept question required
-		List<Obs> ctxObs=Context.getObsService().getObservations(
-				Arrays.asList(new Person[]{patient}), null, getQuestionConcepts(),
+		List<Obs> ctxObs=Context.getObsService().getObservations(Arrays.<Person>asList(patient), null, getQuestionConcepts(),
 				null, null, null, null, null, null, null, null, false);
+		
+		log.error("This is the size  "+ctxObs.size());
 		
 		Collections.sort(ctxObs, new SortByDateComparator());
 		
@@ -74,34 +78,35 @@ public class MOHCTXStartStopDateRule extends MohEvaluableRule{
 		
 		for(Obs o:uniqueCTXObs){
 			
-			if((o.getConcept().equals(TRIMETHOPRIM_AND_SULFAMETHOXAZOLE))||(o.getConcept().equals(DAPSONE))){
+			if((o.getConcept().equals(PCP_PROPHYLAXIS_STARTED))){
 				if(isStart){
 					if(strRtn.equals(""))
-						strRtn += (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getValueDatetime()) + " - ");
+						strRtn += (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime()) + " - ");
 					else
-						strRtn += (", " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getValueDatetime())) + " - ");
+						strRtn += (", " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + " - ");
 					
 				}
 				else{
-					strRtn += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getValueDatetime())) + " - ");
+					strRtn += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + " - ");
 				}
 				isStart = true;
 				
 			}
 			else{
 				if(strRtn.equals("")){
-					strRtn += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getValueDatetime())) + ", ");
+					strRtn += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + ", ");
 				}
 				else{
 					if (isStart) {
-						strRtn += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getValueDatetime())) + ", ");
+						strRtn += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + ", ");
                     }else{
-                    	strRtn += (", - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getValueDatetime())) + ", ");
+                    	strRtn += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + ", ");
                     }
 					
 				}
 				isStart = false;
 			}
+			
 			
 		}
 		return new Result(strRtn);
@@ -134,8 +139,8 @@ public class MOHCTXStartStopDateRule extends MohEvaluableRule{
 		List<Obs> retObs = new ArrayList<Obs>();
 		
 		for (Obs obs2 : listObs) {
-	        if (!setObs.contains(obs2.getValueDatetime())){
-	        	setObs.add(obs2.getValueDatetime());
+	        if (!setObs.contains(obs2.getObsDatetime())){
+	        	setObs.add(obs2.getObsDatetime());
 	        	retObs.add(obs2);
 	        }
         }
