@@ -106,7 +106,7 @@ public class MohTBStartStopDateRule extends MohEvaluableRule {
 					if (wasStart) {
 						ret += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + ", ");
                     }else{
-                    	ret += (", - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + ", ");
+                    	ret += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + ", ");
                     }
 				}
 				wasStart = false;
