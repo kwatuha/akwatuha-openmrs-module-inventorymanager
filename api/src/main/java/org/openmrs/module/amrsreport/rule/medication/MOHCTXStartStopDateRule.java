@@ -55,9 +55,9 @@ public class MOHCTXStartStopDateRule extends MohEvaluableRule{
 	//List of concepts to be used in comparison as for start dates
 	Concept PCP_PROPHYLAXIS_STARTED=Context.getConceptService().getConcept(MohEvaluableNameConstants.PCP_PROPHYLAXIS_STARTED);
 	Concept REASON_PCP_PROPHYLAXIS_STOPPED=Context.getConceptService().getConcept(MohEvaluableNameConstants.REASON_PCP_PROPHYLAXIS_STOPPED);
-	////////////////////////////////////////////////.if////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////
 	//concepts to be used for stop dates
-	Concept DAPSONE=Context.getConceptService().getConcept(MohEvaluableNameConstants.DAPSONE);
+	//Concept DAPSONE=Context.getConceptService().getConcept(MohEvaluableNameConstants.DAPSONE);
 	//The real method that does the magic comes here
 	
 	public Result evaluate(final LogicContext context, final Integer patientId, final Map<String, Object> parameters) throws LogicException {
@@ -73,43 +73,34 @@ public class MOHCTXStartStopDateRule extends MohEvaluableRule{
 		Collections.sort(ctxObs, new SortByDateComparator());
 		
 		List<Obs> uniqueCTXObs =  popObs(ctxObs);
-		String strRtn=""; //used to hold whatever will be returned for the result
-		boolean isStart = true; // denotes either start or stop
+		String ret = "";
+		boolean wasStart = true;
 		
-		for(Obs o:uniqueCTXObs){
-			
-			if((o.getConcept().equals(PCP_PROPHYLAXIS_STARTED))){
-				if(isStart){
-					if(strRtn.equals(""))
-						strRtn += (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime()) + " - ");
+		for(Obs observations:uniqueCTXObs){
+			if(observations.getConcept().equals(PCP_PROPHYLAXIS_STARTED)){
+				if(wasStart){
+					if(ret.equals(""))
+						ret += (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime()) + " - ");
 					else
-						strRtn += (", " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + " - ");
-					
+						ret += (", " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + " - ");
+				}else{
+					ret += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + " - ");
 				}
-				else{
-					strRtn += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + " - ");
-				}
-				isStart = true;
-				
-			}
-			else{
-				if(strRtn.equals("")){
-					strRtn += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + ", ");
-				}
-				else{
-					if (isStart) {
-						strRtn += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + ", ");
+				wasStart = true;
+			}else{
+				if(ret.equals("")){
+					ret += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + ", ");
+				}else{
+					if (wasStart) {
+						ret += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + ", ");
                     }else{
-                    	strRtn += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(o.getObsDatetime())) + ", ");
+                    	ret += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + ", ");
                     }
-					
 				}
-				isStart = false;
+				wasStart = false;
 			}
-			
-			
 		}
-		return new Result(strRtn);
+		return new Result(ret);
 		
 	}
 	///////////////////////////////////////////////////////////////////////////////////////
