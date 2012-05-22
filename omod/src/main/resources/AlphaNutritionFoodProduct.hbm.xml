@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+<class name="org.openmrs.module.alphanutrition.model.AlphaNutritionFoodProduct" table="alphaNutrition_foodProduct">
+ <cache usage="read-write"/>
+
+		<id name="id" type="int"  column="location_id"  unsaved-value="0">
+		<generator class="org.openmrs.api.db.hibernate.NativeIfNotAssignedIdentityGenerator" />
+		</id>
+		
+<property name="foodproductName" type="java.lang.String"	column="foodproduct_name" length="255" />
+
+<property name="otherinfo" type="java.lang.String"	column="otherinfo" length="255" />
+
+<property name="foodproductDescription" type="java.lang.String"	column="foodproduct_description" length="255" />
+
+			<many-to-one name="creator" class="org.openmrs.User"
+			column="creator" not-null="true" />
+
+		<property name="dateCreated" type="java.util.Date" column="datecreated"
+			not-null="true" />
+
+		<property name="voided" type="boolean" not-null="true" />
+
+    <many-to-one name="voidedBy" class="org.openmrs.User"
+			column="voided_by" />
+
+		<property name="dateVoided" type="java.util.Date" column="date_voided" />
+		<property name="voidReason" type="java.lang.String" column="void_reason"
+			length="255" />
+			
+<property name="uuid" type="java.lang.String" length="38" not-null="true" unique="true" /></class>
+</hibernate-mapping>

@@ -1,0 +1,128 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+ 
+    <!--
+    	See http://wiki.openmrs.org/display/docs/Module+liquibase+File for 
+    	documentation on this file.
+    
+        See http://www.liquibase.org/manual/home#available_database_refactorings
+        for a list of supported elements and attributes
+    -->
+ 
+ <changeSet id="alphaNutritionAllocation 2012-03-09" author="akwatuha">
+		<preConditions onFail="MARK_RAN">
+			<not><tableExists tableName="alphaNutrition_allocation"/></not>
+		</preConditions>
+		<comment>
+			Creating the alphaNutrition_allocation table
+		</comment>
+		
+  <createTable tableName="alphaNutrition_allocation">
+		
+	<column name="allocation_id" type="int(11)">
+	    <constraints primaryKey="true" nullable="false"/>
+    </column>
+<column name="address" type="varchar(100)"/>
+<column name="foodProduct_uuid" type="varchar(38)"/>
+<column name="allocation_name" type="varchar(100)"/>
+<column name="creator" type="int(11)" defaultValue="0">
+<constraints nullable="false" /></column>
+<column name="datecreated" type="datetime">
+				<constraints nullable="true" />
+</column>
+<column name="voided" type="smallint(6)" defaultValue="0">
+				<constraints nullable="false" />
+</column>
+<column name="voided_by" type="int(11)">
+				<constraints nullable="true" />
+</column>
+<column name="date_voided" type="datetime">
+				<constraints nullable="true" />
+</column>
+<column name="void_reason" type="varchar(255)">
+				<constraints nullable="true" />
+</column>
+<column name="uuid" type="char(38)">
+<constraints nullable="false" /></column></createTable>
+
+<createIndex tableName="alphaNutrition_allocation" indexName="uuid">
+			<column name="uuid" />
+		</createIndex>
+</changeSet>
+<changeSet id="alphaNutritionAllocationautoicrement  2012-03-09" author="akwatuha">
+    <addAutoIncrement tableName="alphaNutrition_allocation" columnName="allocation_id" columnDataType="int"/>
+</changeSet>
+<changeSet id="alphaNutritionAllocation-2012-03-09 alphaNutrition_allocation uuid " author="kwatuha">
+		<preConditions onFail="MARK_RAN">
+		<dbms type="mysql" />
+	</preConditions>
+<comment>Generating UUID row in alphaNutrition_allocation table via built in uuid function.</comment>
+		<update tableName="alphaNutrition_allocation">
+			<column name="uuid" valueNumeric="name-of-uuid-function" />
+			<where>uuid is null</where>
+		</update>
+		<modifySql dbms="mysql">
+			<replace replace="name-of-uuid-function" with="UUID()" />
+		</modifySql>
+	</changeSet>
+	
+ <changeSet id="alphaNutritionFoodProduct 2012-03-09" author="akwatuha">
+		<preConditions onFail="MARK_RAN">
+			<not><tableExists tableName="alphaNutrition_foodProduct"/></not>
+		</preConditions>
+		<comment>
+			Creating the alphaNutrition_foodProduct table
+		</comment>
+		
+  <createTable tableName="alphaNutrition_foodProduct">
+		
+	<column name="location_id" type="int(11)">
+	    <constraints primaryKey="true" nullable="false"/>
+    </column>
+<column name="foodproduct_name" type="varchar(100)"/>
+<column name="otherinfo" type="varchar(100)"/>
+<column name="foodproduct_description" type="varchar(100)"/>
+<column name="creator" type="int(11)" defaultValue="0">
+<constraints nullable="false" /></column>
+<column name="datecreated" type="datetime">
+				<constraints nullable="true" />
+</column>
+<column name="voided" type="smallint(6)" defaultValue="0">
+				<constraints nullable="false" />
+</column>
+<column name="voided_by" type="int(11)">
+				<constraints nullable="true" />
+</column>
+<column name="date_voided" type="datetime">
+				<constraints nullable="true" />
+</column>
+<column name="void_reason" type="varchar(255)">
+				<constraints nullable="true" />
+</column>
+<column name="uuid" type="char(38)">
+<constraints nullable="false" /></column></createTable>
+
+<createIndex tableName="alphaNutrition_foodProduct" indexName="uuid">
+			<column name="uuid" />
+		</createIndex>
+</changeSet>
+<changeSet id="alphaNutritionFoodProductautoicrement  2012-03-09" author="akwatuha">
+    <addAutoIncrement tableName="alphaNutrition_foodProduct" columnName="location_id" columnDataType="int"/>
+</changeSet>
+<changeSet id="alphaNutritionFoodProduct-2012-03-09 alphaNutrition_foodProduct uuid " author="kwatuha">
+		<preConditions onFail="MARK_RAN">
+		<dbms type="mysql" />
+	</preConditions>
+<comment>Generating UUID row in alphaNutrition_foodProduct table via built in uuid function.</comment>
+		<update tableName="alphaNutrition_foodProduct">
+			<column name="uuid" valueNumeric="name-of-uuid-function" />
+			<where>uuid is null</where>
+		</update>
+		<modifySql dbms="mysql">
+			<replace replace="name-of-uuid-function" with="UUID()" />
+		</modifySql>
+	</changeSet>
+	
+</databaseChangeLog>

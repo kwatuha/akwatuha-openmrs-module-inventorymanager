@@ -1,0 +1,213 @@
+/*--------------------*/
+/*     C O M M O N    */
+/*--------------------*/
+
+
+/*body, p, h1, h2, h3 {        
+	margin:0px;
+	padding:0px;
+	font-family:helvetica,arial, sans-serif;
+}*/
+
+img 
+{
+	border:0;
+}
+
+/*body {
+	font-size:13px;
+	font-family:helvetica,arial,sans-serif;
+}*/
+
+/*h1, h2, h3, p, a {
+	font-family: "helvetica",arial,sans-serif;	
+}*/
+
+a {
+	text-decoration:none;
+	outline:none;
+	font-weight:normal;
+}
+
+a:hover{
+	text-decoration:underline;
+	  text-align:center;
+}
+
+.clear {
+	clear:both;
+}
+
+/*-----------------------*/
+/*     S H A R E D       */
+/*    OVERRIDE OPENMRS   */
+/*-----------------------*/
+
+
+#content1{
+    margin-top: 30px;
+}
+
+#userBar{
+    margin-top: -30px;
+}
+
+/*#pageBody {
+	position: relative;
+}
+
+#footerInnernut{
+	float: left;
+	padding: 2px 0 0 4px;
+}
+#footernut{
+	margin-bottom:0px;
+	border-top: 1px solid #bbbbbb;
+}
+#poweredBy {
+	float: right;
+	color: #000000;
+}*/
+
+/*--------------------------*/
+/*       B U T T O N S      */
+/*--------------------------*/
+
+
+.app_info  {
+	
+	color:#515151;
+	border-top:1px solid #ededed;
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc;
+	border-bottom:1px solid #b7b7b7;
+	text-shadow:0px 1px 0px #fff;
+	box-shadow:0px 1px 2px #515151;
+	-moz-box-shadow:0px 1px 2px #515151;
+	-webkit-box-shadow:0px 1px 2px #515151;
+      text-align:center;
+}
+
+
+.grey_button:active, .app_info a:active {
+	background-image: -moz-linear-gradient(top, #bebebe, #d1d2d4);
+	background-image: -webkit-gradient(linear, center top, center bottom, from(#bebebe), to(#d1d2d4));
+	background-image: -o-linear-gradient(top, #bebebe, #d1d2d4);
+	
+	background-image: linear-gradient(top, #bebebe, #d1d2d4);
+	  text-align:center;
+	  text-decoration:none;
+}
+
+
+
+/*-----------------------*/
+/*        A P P S        */
+/*-----------------------*/
+
+
+
+
+
+
+#apps_page_tools {
+	
+	/*background-color:#eef0f1;*/
+	padding-bottom:25px;
+}
+
+
+
+#apps_container {
+	width:1000px;
+	margin:0 auto;
+}
+
+
+.app {
+	float:left;
+	width:460px;
+	margin-bottom:35px;
+}
+
+
+.app_icon {
+	float:left;
+	margin-right:15px;
+}
+
+
+.app_name h3 {
+	font-family: 'Lato', sans-serif;
+	/*font-size:22px;*/
+	color:#333;
+	margin-bottom:5px;
+	text-shadow:0px 1px 0px #fff;
+}
+
+
+.app_description p {
+	/*font-size:15px;*/
+	line-height:28px;
+	text-shadow:0px 1px 0px #fff;
+}
+
+.app_description a {
+	color:#0477d8;
+	font-weight:bold;
+}
+
+
+
+
+
+
+.app_launch a, .app_info a {
+    color:#1aac9b;
+	width:140px;
+	padding-top:10px;
+	padding-bottom:10px;
+	display:block;
+	
+	/*font-size:14px;*/
+	font-weight:bold;
+}
+
+.app_launch {
+	float:left;
+	margin-right:15px;
+	margin-left:150px;
+}
+
+.app_launch a:active {
+	border-top:1px solid #007500;
+	border-left:1px solid #007500;
+	border-right:1px solid #007500;
+	border-bottom:1px solid #007500;
+}
+
+.app_info {
+	float:left;
+}
+
+#apps_holder {
+	padding-bottom:50px;
+}
+
+
+
+.app_divider {
+	
+	width:1000px;
+	height:45px;
+	margin-bottom:25px;
+}
+
+.app_line {
+	
+	width:3px;
+	height:210px;
+	float:left;
+	margin-left:35px;
+	margin-right:35px;
+}
