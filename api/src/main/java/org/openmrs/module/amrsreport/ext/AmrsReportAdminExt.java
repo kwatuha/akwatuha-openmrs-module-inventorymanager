@@ -1,5 +1,6 @@
 package org.openmrs.module.amrsreport.ext;
 
+import org.openmrs.module.Extension;
 import org.openmrs.module.web.extension.AdministrationSectionExt;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,6 +16,9 @@ public class AmrsReportAdminExt extends AdministrationSectionExt {
     /** Defines the privilege required to the see the Administration section for the module */
     public String getRequiredPrivilege() {
         return "";
+    }
+    public Extension.MEDIA_TYPE getMediaType(){
+        return Extension.MEDIA_TYPE.html;
     }
     /* (non-Javadoc)
       * @see org.openmrs.module.web.extension.AdministrationSectionExt#getLinks()
