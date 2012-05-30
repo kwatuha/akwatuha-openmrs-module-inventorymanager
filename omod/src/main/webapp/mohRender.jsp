@@ -23,7 +23,7 @@
             </select>
         </td>
         <td><b>Cohort Definition:</b></td>
-         <td><select name="cohort">
+         <td><select name="cohortdef">
              <c:forEach var="cohortdefinition" items="${cohortdefinitions}">
                  <option  value="${cohortdefinition.id}" >${cohortdefinition.name}</option>
              </c:forEach>
