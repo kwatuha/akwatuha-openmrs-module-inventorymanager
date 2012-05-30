@@ -95,7 +95,9 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.dbunit:dbunit:2.4.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: xmlunit:xmlunit:1.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:logic-api:0.5-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:reporting:0.7.0.DEV" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:reporting:0.7.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:serialization.xstream-api:0.2.6-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:htmlwidgets:1.6.0" level="project" />
   </component>
 </module>
 

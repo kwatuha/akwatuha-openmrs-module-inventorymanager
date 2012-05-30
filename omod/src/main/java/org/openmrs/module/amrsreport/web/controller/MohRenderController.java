@@ -9,6 +9,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
+
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +27,7 @@ public class MohRenderController {
 
     @RequestMapping(method=RequestMethod.GET, value="module/amrsreport/mohRender.form")
     public void preparePage(ModelMap map) {
+        CohortDefinitionService cohortDefinitionService = Context.getService(CohortDefinitionService.class);
 
     }
 

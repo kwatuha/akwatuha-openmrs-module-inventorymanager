@@ -51,13 +51,20 @@
 			<artifactId>logic-api</artifactId>
 			<type>jar</type>
 		</dependency>
-		<dependency>
-				<groupId>org.openmrs.module</groupId>
-				<artifactId>reporting</artifactId>
-				<version>0.7.0.DEV</version>
-				<type>jar</type>
-				<scope>provided</scope>
-			</dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>serialization.xstream-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>htmlwidgets</artifactId>
+        </dependency>
 	</dependencies>
 
 </project>

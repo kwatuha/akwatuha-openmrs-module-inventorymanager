@@ -24,25 +24,27 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!--
-			Libraries from lib to add as dependencies with compile or runtime scope:
-			
-				
-			Find matching dependencies in maven central repository.
-			<dependency>
-				<groupId>org.other.library</groupId>
-				<artifactId>library-name</artifactId>
-				<version>library.version</version>
-				<scope>compile</scope>
-			</dependency>
-			-->
-			<dependency>
-				<groupId>org.openmrs.module</groupId>
-				<artifactId>reporting</artifactId>
-				<version>0.7.0.DEV</version>
-				<type>jar</type>
-				<scope>provided</scope>
-			</dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>reporting</artifactId>
+                <version>0.7.0</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>serialization.xstream-api</artifactId>
+                <version>0.2.6-SNAPSHOT</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>htmlwidgets</artifactId>
+                <version>1.6.0</version>
+                <scope>provided</scope>
+            </dependency>
 			
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
