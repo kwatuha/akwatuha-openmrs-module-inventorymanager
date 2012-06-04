@@ -2,11 +2,21 @@ package org.openmrs.module.amrsreport.web.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Cohort;
 import org.openmrs.Location;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
+import org.openmrs.module.reporting.dataset.DataSetUtil;
+import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
+import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
+import org.openmrs.module.reporting.report.renderer.CsvReportRenderer;
+import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -16,7 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import  org.openmrs.reporting.data.DatasetDefinition;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -58,7 +72,54 @@ public class MohRenderController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="module/amrsreport/mohRender.form")
-    public void processForm(ModelMap map){
+    public void processForm(ModelMap map,
+                            @RequestParam(required=true, value="definition") String definitionuuid,
+                            @RequestParam(required=true, value="cohortdef") String cohortdefuuid,
+                            @RequestParam(required=true, value="location") Integer location,
+                            HttpServletResponse response
+                            ) {
+        Location loc=Context.getLocationService().getLocation(location);
+        ReportDefinition reportDefinition=Context.getService(ReportDefinitionService.class).getDefinitionByUuid(definitionuuid);
+        CohortDefinition cohortDefinition= Context.getService(CohortDefinitionService.class).getDefinitionByUuid(cohortdefuuid);
+       //here to allow the reloading of the screen
+        List<CohortDefinition> listOfCohorts=  Context.getService(CohortDefinitionService.class).getAllDefinitions(false);
+        List<ReportDefinition> reportDefinitions = Context.getService(ReportDefinitionService.class).getAllDefinitions(true);
+        List<Location> locationList=Context.getLocationService().getAllLocations();
+        //create a flat file here for storing our report data
+
+        try {
+            EvaluationContext evaluationContext = new EvaluationContext();
+            CohortDefinitionService cohortDefinitionService = Context.getService(CohortDefinitionService.class);
+
+            //evaluation
+            Cohort cohort = cohortDefinitionService.evaluate(cohortDefinition, evaluationContext);
+
+            evaluationContext.setBaseCohort(cohort);
+
+            Date d= Calendar.getInstance().getTime();
+
+
+            ReportDefinitionService reportDefinitionService = Context.getService(ReportDefinitionService.class);
+            ReportData reportData = reportDefinitionService.evaluate(reportDefinition, evaluationContext);
+
+            CsvReportRenderer csvReportRenderer= new CsvReportRenderer();
+
+            File amrsreport = File.createTempFile("MOH Register 361A",d.toString());
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(amrsreport));
+
+            csvReportRenderer.render(reportData,"Report information ", outputStream);
+
+        } catch (EvaluationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        //return the required map on the interface
+        map.addAttribute("reportDefinitions", reportDefinitions);
+        map.addAttribute("cohortdefinitions", listOfCohorts) ;
+        map.addAttribute("location",locationList);
+
+
 
     }
 }

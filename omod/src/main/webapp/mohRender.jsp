@@ -12,20 +12,20 @@
 
 <b class="boxHeader">Amrs Reports Settings</b>
 <div class="box">
-<form action="">
+<form method="POST" name="amrsreportrenderer">
  <table>
      <tr>
         <td><b>Dataset Definition:</b></td>
-         <td><select name="definitions">
-                <c:forEach var="definitions" items="${reportDefinitions}">
-                    <option  value="${definitions.id}" >${definitions.name}</option>
+         <td><select name="definition">
+                <c:forEach var="rptdefinition" items="${reportDefinitions}">
+                    <option  value="${rptdefinition.uuid}" >${rptdefinition.name}</option>
                 </c:forEach>
             </select>
         </td>
         <td><b>Cohort Definition:</b></td>
          <td><select name="cohortdef">
              <c:forEach var="cohortdefinition" items="${cohortdefinitions}">
-                 <option  value="${cohortdefinition.id}" >${cohortdefinition.name}</option>
+                 <option  value="${cohortdefinition.uuid}" >${cohortdefinition.name}</option>
              </c:forEach>
          </select>
          </td>

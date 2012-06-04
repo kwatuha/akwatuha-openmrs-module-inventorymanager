@@ -26,7 +26,7 @@ public class AmrsReportAdminExt extends AdministrationSectionExt {
     @Override
     public Map<String, String> getLinks() {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        map.put("module/amrsreport/mohRender.form", "Open the render");
+        map.put("module/amrsreport/mohRender.form", "Pre-ART 361A Register");
 
         return map;
     }
