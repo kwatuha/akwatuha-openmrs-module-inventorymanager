@@ -10,26 +10,32 @@
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables.css" />
 <link href="<openmrs:contextPath/>/scripts/jquery-ui/css/<spring:theme code='jqueryui.theme.name' />/jquery-ui.custom.css" type="text/css" rel="stylesheet" />
 
+<script type="text/javascript">
+    $j(document).ready(function(){
+        $j('#records').dataTable();
+    });
+</script>
+
 <b class="boxHeader">Amrs Reports Settings</b>
 <div class="box">
-<form method="POST" name="amrsreportrenderer">
+<form method="POST" name="amrsreportrenderer" action="mohRender.form">
  <table>
      <tr>
-        <td><b>Dataset Definition:</b></td>
+        <td><b>Reports:</b></td>
          <td><select name="definition">
                 <c:forEach var="rptdefinition" items="${reportDefinitions}">
                     <option  value="${rptdefinition.uuid}" >${rptdefinition.name}</option>
                 </c:forEach>
             </select>
         </td>
-        <td><b>Cohort Definition:</b></td>
+        <td><b>Cohorts:</b></td>
          <td><select name="cohortdef">
              <c:forEach var="cohortdefinition" items="${cohortdefinitions}">
                  <option  value="${cohortdefinition.uuid}" >${cohortdefinition.name}</option>
              </c:forEach>
          </select>
          </td>
-         <td><b>Location/Site:</b></td>
+         <td><b>Location:</b></td>
          <td><select name="location">
              <c:forEach var="location" items="${location}" >
                  <option  value="${location.locationId}" >${location.name}</option>
@@ -45,6 +51,22 @@
 </form>
 </div>
 <b class="boxHeader">Report Details</b>
-<div class="box"></div>
+<div class="box">
+    <table border="0" id="records">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="record" items="${records}">
+                <tr>
+                    <td>${record}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
+
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

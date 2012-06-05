@@ -17,6 +17,7 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.renderer.CsvReportRenderer;
 import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -28,10 +29,7 @@ import  org.openmrs.reporting.data.DatasetDefinition;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -75,8 +73,8 @@ public class MohRenderController {
     public void processForm(ModelMap map,
                             @RequestParam(required=true, value="definition") String definitionuuid,
                             @RequestParam(required=true, value="cohortdef") String cohortdefuuid,
-                            @RequestParam(required=true, value="location") Integer location,
-                            HttpServletResponse response
+                            @RequestParam(required=true, value="location") Integer location
+
                             ) {
         Location loc=Context.getLocationService().getLocation(location);
         ReportDefinition reportDefinition=Context.getService(ReportDefinitionService.class).getDefinitionByUuid(definitionuuid);
@@ -86,9 +84,15 @@ public class MohRenderController {
         List<ReportDefinition> reportDefinitions = Context.getService(ReportDefinitionService.class).getAllDefinitions(true);
         List<Location> locationList=Context.getLocationService().getAllLocations();
         //create a flat file here for storing our report data
+        map.addAttribute("reportDefinitions", reportDefinitions);
+        map.addAttribute("cohortdefinitions", listOfCohorts) ;
+        map.addAttribute("location",locationList);
 
         try {
             EvaluationContext evaluationContext = new EvaluationContext();
+
+            //add loctation to be displayed here
+            evaluationContext.addParameterValue("locationList", Arrays.asList(loc));
             CohortDefinitionService cohortDefinitionService = Context.getService(CohortDefinitionService.class);
 
             //evaluation
@@ -98,16 +102,72 @@ public class MohRenderController {
 
             Date d= Calendar.getInstance().getTime();
 
+            AdministrationService as = Context.getAdministrationService();
+            String folderName=as.getGlobalProperty("amrsreport.file_dir");
+
+            File loaddir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
 
             ReportDefinitionService reportDefinitionService = Context.getService(ReportDefinitionService.class);
             ReportData reportData = reportDefinitionService.evaluate(reportDefinition, evaluationContext);
 
             CsvReportRenderer csvReportRenderer= new CsvReportRenderer();
 
-            File amrsreport = File.createTempFile("MOH Register 361A",d.toString());
+            File amrsreport = new File(loaddir, loc.getName() + "-MOH-Register-361A.csv"+" "+d.toString());
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(amrsreport));
 
             csvReportRenderer.render(reportData,"Report information ", outputStream);
+
+            //normal file operations to follow here
+
+            //FileInputStream     fis =new FileInputStream(amrsreport);
+            //BufferedInputStream bis =new BufferedInputStream(fis);
+            //DataInputStream dis =new DataInputStream(bis);
+
+            StringBuffer contents = new StringBuffer();
+            BufferedReader input =  new BufferedReader(new FileReader(amrsreport));
+           // DataInputStream dis =new DataInputStream(input);
+
+            // dis.available() returns 0 if the file does not have more lines.
+            String line="";
+            List<String> records=new ArrayList<String>();
+            String [] linedata=null;
+            String first=null;
+            String second=null;
+            String third=null;
+            String fourth=null;
+            String [] firstwithouqoute=null;
+            String [] secondwithouqoute=null;
+
+
+            while (( line = input.readLine()) != null){
+                linedata=line.split(",");
+                first=linedata[0];
+                second=linedata[1];
+                third=linedata[2];
+                fourth=linedata[3];
+
+
+                //to remove all the quote
+
+                /*if(first !="" || second !=""){
+                    firstwithouqoute=first.split("\"");
+                    secondwithouqoute=second.split("\"");
+
+                    first=firstwithouqoute[1];
+                    second=secondwithouqoute[1];
+                }*/
+                //first=firstwithouqoute[0];
+                //second=secondwithouqoute[0];
+
+
+                records.add(first+"     "+second+"      "+third+"       "+fourth);
+
+
+            }
+            map.addAttribute("records",records);
+            input.close();
+            outputStream.close();
+
 
         } catch (EvaluationException e) {
             e.printStackTrace();
@@ -115,9 +175,7 @@ public class MohRenderController {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         //return the required map on the interface
-        map.addAttribute("reportDefinitions", reportDefinitions);
-        map.addAttribute("cohortdefinitions", listOfCohorts) ;
-        map.addAttribute("location",locationList);
+
 
 
 
