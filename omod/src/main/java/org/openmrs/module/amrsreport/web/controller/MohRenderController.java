@@ -112,18 +112,14 @@ public class MohRenderController {
 
             CsvReportRenderer csvReportRenderer= new CsvReportRenderer();
 
-            File amrsreport = new File(loaddir, loc.getName() + "-MOH-Register-361A.csv"+" "+d.toString());
+            File amrsreport = new File(loaddir, loc.getName() + "-MOH-Register-361A.csv");
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(amrsreport));
 
             csvReportRenderer.render(reportData,"Report information ", outputStream);
 
             //normal file operations to follow here
 
-            //FileInputStream     fis =new FileInputStream(amrsreport);
-            //BufferedInputStream bis =new BufferedInputStream(fis);
-            //DataInputStream dis =new DataInputStream(bis);
 
-            StringBuffer contents = new StringBuffer();
             BufferedReader input =  new BufferedReader(new FileReader(amrsreport));
            // DataInputStream dis =new DataInputStream(input);
 

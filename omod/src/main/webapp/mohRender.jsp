@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 
 <%@ include file="/WEB-INF/template/header.jsp"%>
+<%@ include file="localHeader.jsp"%>
 
 <openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.custom.min.js" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js" />
@@ -61,7 +62,8 @@
         <tbody>
             <c:forEach var="record" items="${records}">
                 <tr>
-                    <td>${record}</td>
+                    <a href="#"> ${fn:substring(record,0,10)}</a>
+                    ${record}
                 </tr>
             </c:forEach>
         </tbody>
