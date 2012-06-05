@@ -20,15 +20,17 @@ import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import  org.openmrs.reporting.data.DatasetDefinition;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -101,6 +103,11 @@ public class MohRenderController {
             evaluationContext.setBaseCohort(cohort);
 
             Date d= Calendar.getInstance().getTime();
+            String TIME;
+
+            Format formatter=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+
+            TIME=formatter.format(d);
 
             AdministrationService as = Context.getAdministrationService();
             String folderName=as.getGlobalProperty("amrsreport.file_dir");
@@ -112,7 +119,7 @@ public class MohRenderController {
 
             CsvReportRenderer csvReportRenderer= new CsvReportRenderer();
 
-            File amrsreport = new File(loaddir, loc.getName() + "-MOH-Register-361A.csv");
+            File amrsreport = new File(loaddir, loc.getName() +TIME+ "-MOH-Register-361A.csv");
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(amrsreport));
 
             csvReportRenderer.render(reportData,"Report information ", outputStream);
@@ -125,39 +132,22 @@ public class MohRenderController {
 
             // dis.available() returns 0 if the file does not have more lines.
             String line="";
-            List<String> records=new ArrayList<String>();
+            List<List<String>> records=new ArrayList<List<String>>();
             String [] linedata=null;
             String first=null;
             String second=null;
             String third=null;
             String fourth=null;
-            String [] firstwithouqoute=null;
-            String [] secondwithouqoute=null;
-
 
             while (( line = input.readLine()) != null){
+                List<String> intlist=new ArrayList<String>();
                 linedata=line.split(",");
-                first=linedata[0];
-                second=linedata[1];
-                third=linedata[2];
-                fourth=linedata[3];
+                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[0])));
+                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[1])));
+                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[2])));
+                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[3])));
 
-
-                //to remove all the quote
-
-                /*if(first !="" || second !=""){
-                    firstwithouqoute=first.split("\"");
-                    secondwithouqoute=second.split("\"");
-
-                    first=firstwithouqoute[1];
-                    second=secondwithouqoute[1];
-                }*/
-                //first=firstwithouqoute[0];
-                //second=secondwithouqoute[0];
-
-
-                records.add(first+"     "+second+"      "+third+"       "+fourth);
-
+                records.add(intlist) ;
 
             }
             map.addAttribute("records",records);
@@ -170,10 +160,18 @@ public class MohRenderController {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        //return the required map on the interface
 
-
-
-
+    }
+    static String stripLeadingAndTrailingQuotes(String str)
+    {
+        if (str.startsWith("\""))
+        {
+            str = str.substring(1, str.length());
+        }
+        if (str.endsWith("\""))
+        {
+            str = str.substring(0, str.length() - 1);
+        }
+        return str;
     }
 }

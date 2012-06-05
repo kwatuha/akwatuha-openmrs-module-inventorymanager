@@ -15,6 +15,19 @@
     $j(document).ready(function(){
         $j('#records').dataTable();
     });
+    function moreDetails(){
+        $j(function() {
+            $j( "#dialogDisplayMore" ).dialog({
+                modal: true,
+                show: 'slide',
+                height: 'auto',
+                hide: 'slide',
+                width: 750,
+                position: 'center'
+
+            });
+        });
+    }
 </script>
 
 <b class="boxHeader">Amrs Reports Settings</b>
@@ -62,13 +75,21 @@
         <tbody>
             <c:forEach var="record" items="${records}">
                 <tr>
-                    <a href="#"> ${fn:substring(record,0,10)}</a>
-                    ${record}
+                    <td><input type="button" value="View More" id="details" onclick="moreDetails()"> </td>
+                    <c:forEach var="rec" items="${record}">
+                        <td>
+                            ${rec}
+                        </td>
+                    </c:forEach>
+
                 </tr>
             </c:forEach>
         </tbody>
     </table>
 </div>
+<div id="dialogDisplayMore" title="More Patient Information Summary" style="display:none">
 
+
+</div>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>
