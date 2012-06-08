@@ -7,7 +7,7 @@
 	<name>@MODULE_NAME@</name>
 	<version>@MODULE_VERSION@</version>
 	<package>@MODULE_PACKAGE@</package>
-	<author>Oliver Mwalo</author>
+	<author>Oliver Mwalo and Nicholas Ingosi</author>
 	<description>
 			AMRS Reporting Module. MOH Pre-Register Reporting Module.
 	</description>
@@ -37,12 +37,11 @@
 	 /AOP -->
 	
 	
-	<!-- Required Privileges 
+	<!-- Required Privileges -->
 	<privilege>
-		<name>Form Entry</name>
-		<description>Allows user to access Form Entry pages/functions</description>
+		<name>Manage AMRSReports</name>
+		<description>Allows user to access Amrs reports pages/functions</description>
 	</privilege>
-	 /Required Privileges -->
 
 
 	<!-- Required Global Properties -->
@@ -60,23 +59,25 @@
     </globalProperty>
 	<!-- /Required Global Properties -->
 	
-	<!--
+
 	<dwr>
 		<allow>
-			<create creator="new" javascript="DWRFormEntryService">
-				<param name="class" value="org.openmrs.module.@MODULE_ID@.web.DWRFormEntryService"/>
-				<include method="enterForm"/>
+			<create creator="new" javascript="DWRAmrsReportService">
+				<param name="class" value="@MODULE_PACKAGE@.web.dwr.DWRAmrsReportService"/>
+				<include method="viewMoreDetails"/>
+                <include method="viewMoreDetailsRender"/>
 			</create>
 		</allow>
 
 		<signatures>
 			<![CDATA[
-			import @MODULE_PACKAGE@.web.DWRFormEntryService;
-			DWRFormEntryService.enterForm(Integer patientId, Integer formId, boolean useEncounter, List<String> fields);
+			import @MODULE_PACKAGE@.@MODULE_ID@.web.dwr.DWRAmrsReportService;
+			DWRAmrsReportService.viewMoreDetails(String file,String amrsid);
+			DWRAmrsReportService.viewMoreDetailsRender(BufferedReader bff,String id);
 			]]>
 		</signatures>	
 	</dwr>
-	-->
+
 	
 	<!-- Servlets -->
 	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> 

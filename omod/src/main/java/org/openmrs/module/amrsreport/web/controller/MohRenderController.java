@@ -119,7 +119,7 @@ public class MohRenderController {
 
             CsvReportRenderer csvReportRenderer= new CsvReportRenderer();
 
-            File amrsreport = new File(loaddir, loc.getName() +TIME+ "-MOH-Register-361A.csv");
+            File amrsreport = new File(loaddir, loc.getName()+"-" +TIME+ "-MOH-Register-361A.csv");
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(amrsreport));
 
             csvReportRenderer.render(reportData,"Report information ", outputStream);
@@ -129,6 +129,8 @@ public class MohRenderController {
 
             BufferedReader input =  new BufferedReader(new FileReader(amrsreport));
            // DataInputStream dis =new DataInputStream(input);
+
+            map.addAttribute("fileToManipulate",input);
 
             // dis.available() returns 0 if the file does not have more lines.
             String line="";
@@ -150,6 +152,7 @@ public class MohRenderController {
                 records.add(intlist) ;
 
             }
+            records.remove(0);
             map.addAttribute("records",records);
             input.close();
             outputStream.close();

@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 
 <%@ include file="/WEB-INF/template/header.jsp"%>
+<openmrs:require privilege="Manage AMRSReports" otherwise="/login.htm"
+                 redirect="/module/amrsreport/mohRender.form" />
 <%@ include file="localHeader.jsp"%>
 
 <openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.custom.min.js" />
@@ -13,21 +15,62 @@
 
 <script type="text/javascript">
     $j(document).ready(function(){
-        $j('#records').dataTable();
-    });
-    function moreDetails(){
-        $j(function() {
-            $j( "#dialogDisplayMore" ).dialog({
-                modal: true,
-                show: 'slide',
-                height: 'auto',
-                hide: 'slide',
-                width: 750,
-                position: 'center'
-
-            });
+        $j('#records').dataTable({
+            "bAutoWidth": true,
+            "bLengthChange": true,
+            "sPaginationType": "full_numbers"
         });
-    }
+        $j('#records').delegate('tbody tr','click', function() {
+            var aData2 = ti.fnGetData(this);
+            var amrsid=aData2[1].trim();
+            var  filename=${fileToManipulate};
+            DWRAmrsReportService.viewMoreDetailsRender(filename,amrsid,callback);
+
+        });
+        $j("#dlgData" ).dialog({
+            autoOpen:false,
+            modal: true,
+            show: 'slide',
+            height: 'auto',
+            hide: 'slide',
+            width:600,
+            cache: false,
+            position: 'top',
+            buttons: {
+                "Exit": function () { $j(this).dialog("close"); }
+            }
+
+        });
+        function callback(data){
+            $j("#dlgData").empty();
+            var listSplit=data.split(",");
+            var listWithin;
+            for(var i=0; i<listSplit.length; i++) {
+                var value = listSplit[i]+"\n";
+                var value2;
+
+                if(value.indexOf('#') !=0){
+                    listWithin=value.split("#");
+                    for(var f=0;f<listWithin.length;f++){
+                        value2= listWithin[f]+"\n";
+                        $j("<div>"+value2+"</div>").appendTo("#dlgData");
+                    }
+
+                }
+                else{
+
+                    $j("<div>"+value+"</div>").appendTo("#dlgData");
+                }
+            }
+
+            $j("#dlgData").dialog("open");
+
+
+        }
+        function clearDataTable(){
+            dwr.util.removeAllRows("tbodydata");
+        }
+    });
 </script>
 
 <b class="boxHeader">Amrs Reports Settings</b>
@@ -58,7 +101,7 @@
          </td>
          <td>&nbsp;</td>
          <td>
-             <input type="submit" value="Generate" />
+             <input type="submit" value="Run" />
          </td>
      </tr>
  </table>
@@ -69,13 +112,17 @@
     <table border="0" id="records">
         <thead>
             <tr>
-                <th></th>
+                <th>View</th>
+                <th>Amrs Identifier</th>
+                <th>Names</th>
+                <th>Unique Identifier</th>
+                <th>Age at Enrollment</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tbodydata">
             <c:forEach var="record" items="${records}">
                 <tr>
-                    <td><input type="button" value="View More" id="details" onclick="moreDetails()"> </td>
+                    <td><img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/format-indent-more.png" /></td>
                     <c:forEach var="rec" items="${record}">
                         <td>
                             ${rec}
@@ -87,8 +134,7 @@
         </tbody>
     </table>
 </div>
-<div id="dialogDisplayMore" title="More Patient Information Summary" style="display:none">
-
+<div id="dlgData" title="Patients More Information">
 
 </div>
 
