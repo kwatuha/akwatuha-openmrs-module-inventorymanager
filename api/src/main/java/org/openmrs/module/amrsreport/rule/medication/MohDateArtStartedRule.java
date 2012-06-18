@@ -70,7 +70,7 @@ public class MohDateArtStartedRule extends MohEvaluableRule{
 		String ret = "";
 		boolean wasStart = true;
 		for(Obs observations:uniqueObs){
-			ret += MohRuleUtils.formatdates(observations.getValueDatetime()) + ",";
+			ret += MohRuleUtils.formatdates(observations.getValueDatetime()) + "#";
 		}
 			
  		return new Result(ret);

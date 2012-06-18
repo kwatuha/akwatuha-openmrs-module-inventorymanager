@@ -80,19 +80,19 @@ public class MOHCTXStartStopDateRule extends MohEvaluableRule{
 					if(ret.equals(""))
 						ret += MohRuleUtils.formatdates(observations.getObsDatetime()) + " - ";
 					else
-						ret += (", " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
+						ret += ("#" + (MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
 				}else{
 					ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
 				}
 				wasStart = true;
 			}else{
 				if(ret.equals("")){
-					ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + ", ");
+					ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + "#");
 				}else{
 					if (wasStart) {
-						ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + ", ");
+						ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + "#");
                     }else{
-                    	ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + ", ");
+                    	ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + "#");
                     }
 				}
 				wasStart = false;

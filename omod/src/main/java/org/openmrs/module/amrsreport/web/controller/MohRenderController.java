@@ -6,12 +6,21 @@ import org.openmrs.Cohort;
 import org.openmrs.Location;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.amrsreport.render.AmrReportRender;
+import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
+import org.openmrs.module.reporting.dataset.DataSetRow;
 import org.openmrs.module.reporting.dataset.DataSetUtil;
+import org.openmrs.module.reporting.dataset.LazyPageableDataSet;
+import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
+import org.openmrs.module.reporting.dataset.definition.LogicDataSetDefinition;
+import org.openmrs.module.reporting.dataset.definition.service.DataSetDefinitionService;
+import org.openmrs.module.reporting.evaluation.Definition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
+import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
@@ -27,7 +36,9 @@ import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionSe
 import  org.openmrs.reporting.data.DatasetDefinition;
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -73,11 +84,13 @@ public class MohRenderController {
 
     @RequestMapping(method=RequestMethod.POST, value="module/amrsreport/mohRender.form")
     public void processForm(ModelMap map,
-                            @RequestParam(required=true, value="definition") String definitionuuid,
+                            @RequestParam(required=false, value="definition") String definitionuuid,
                             @RequestParam(required=true, value="cohortdef") String cohortdefuuid,
                             @RequestParam(required=true, value="location") Integer location
 
                             ) {
+
+
         Location loc=Context.getLocationService().getLocation(location);
         ReportDefinition reportDefinition=Context.getService(ReportDefinitionService.class).getDefinitionByUuid(definitionuuid);
         CohortDefinition cohortDefinition= Context.getService(CohortDefinitionService.class).getDefinitionByUuid(cohortdefuuid);
@@ -105,7 +118,7 @@ public class MohRenderController {
             Date d= Calendar.getInstance().getTime();
             String TIME;
 
-            Format formatter=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+            Format formatter=new SimpleDateFormat("yyyy:MM:dd hh:mm:ss a");
 
             TIME=formatter.format(d);
 
@@ -117,42 +130,68 @@ public class MohRenderController {
             ReportDefinitionService reportDefinitionService = Context.getService(ReportDefinitionService.class);
             ReportData reportData = reportDefinitionService.evaluate(reportDefinition, evaluationContext);
 
-            CsvReportRenderer csvReportRenderer= new CsvReportRenderer();
-
-            File amrsreport = new File(loaddir, loc.getName()+"-" +TIME+ "-MOH-Register-361A.csv");
+            AmrReportRender amrReportRender= new AmrReportRender();
+            String fileURL=loc.getName()+"-" +TIME+ "-MOH-Register-361A.csv";
+            File amrsreport = new File(loaddir,fileURL );
+            log.info("This is the file "+fileURL);
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(amrsreport));
 
-            csvReportRenderer.render(reportData,"Report information ", outputStream);
+            amrReportRender.render(reportData,"Report information ", outputStream);
 
             //normal file operations to follow here
 
 
             BufferedReader input =  new BufferedReader(new FileReader(amrsreport));
-           // DataInputStream dis =new DataInputStream(input);
 
-            map.addAttribute("fileToManipulate",input);
+            map.addAttribute("fileToManipulate",fileURL);
 
-            // dis.available() returns 0 if the file does not have more lines.
-            String line="";
+            //add the splitted one per the credentials
+            String [] splitFileLocTime=fileURL.split("-");
+            String loci= splitFileLocTime[0];
+            String time= splitFileLocTime[1];
+
+            map.addAttribute("loci",loci);
+            map.addAttribute("time",time);
+
+
+
+                        String line="";
             List<List<String>> records=new ArrayList<List<String>>();
+            List<String> columnHeaders=new ArrayList<String>();
             String [] linedata=null;
-            String first=null;
-            String second=null;
-            String third=null;
-            String fourth=null;
 
-            while (( line = input.readLine()) != null){
-                List<String> intlist=new ArrayList<String>();
-                linedata=line.split(",");
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[0])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[1])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[2])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[3])));
 
-                records.add(intlist) ;
+            String lineColumn=input.readLine();
+            String [] lineColumnArray=lineColumn.split(",");
+
+
+
+            //add the columns on the jsp
+            for(int p=0;p<lineColumnArray.length;p++){
+                columnHeaders.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(lineColumnArray[p])));
+            }
+
+
+            map.addAttribute("columnHeaders",columnHeaders);
+
+
+           while (( line = input.readLine()) != null){
+               List<String> intlist=new ArrayList<String>();
+                linedata=line.split(",");// values of every row in an array
+
+
+               /////////////////////////////////////////////////////////////////////////////////////////
+               for(int pp=0;pp<linedata.length;pp++){
+
+                   intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[pp])));
+
+
+               }
+               records.add(intlist) ;
 
             }
-            records.remove(0);
+            //records.remove(0);
+
             map.addAttribute("records",records);
             input.close();
             outputStream.close();
@@ -163,6 +202,9 @@ public class MohRenderController {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        catch (ClassCastException ex) {
+            ex.printStackTrace();
+          }
 
     }
     static String stripLeadingAndTrailingQuotes(String str)
@@ -177,4 +219,6 @@ public class MohRenderController {
         }
         return str;
     }
+
+
 }

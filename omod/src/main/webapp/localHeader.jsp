@@ -15,5 +15,10 @@
                 Report History
             </a>
         </li>
+        <%--<li <c:if test='<%= request.getRequestURI().contains("mohtest") %>'>class="active"</c:if>>
+        <a href="${pageContext.request.contextPath}/module/amrsreport/mohtest.form">
+            Report Test
+        </a>
+        </li>--%>
     </openmrs:hasPrivilege>
 </ul>

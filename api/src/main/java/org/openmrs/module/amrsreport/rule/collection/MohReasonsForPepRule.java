@@ -78,7 +78,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                     pepReason= SEXUAL_ASSAULT;
                 }
                 else{
-                    pepReason +=","+ SEXUAL_ASSAULT;
+                    pepReason +="#"+ SEXUAL_ASSAULT;
                 }
 
 
@@ -88,7 +88,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                     pepReason= SPOUSES_PARTNER_SUSPECTED_HIV;
                 }
                 else{
-                    pepReason +=","+ SPOUSES_PARTNER_SUSPECTED_HIV;
+                    pepReason +="#"+ SPOUSES_PARTNER_SUSPECTED_HIV;
                 }
                 //return new Result(SPOUSES_PARTNER_SUSPECTED_HIV);
 
@@ -97,7 +97,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                      pepReason= OCCUPATIONAL_EXPOSURE;
                  }
                  else{
-                     pepReason +=","+ OCCUPATIONAL_EXPOSURE;
+                     pepReason +="#"+ OCCUPATIONAL_EXPOSURE;
                  }
                // return new Result(OCCUPATIONAL_EXPOSURE);
 
@@ -106,7 +106,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                     pepReason= PHYSICAL_ASSAULT;
                 }
                 else{
-                    pepReason +=","+ PHYSICAL_ASSAULT;
+                    pepReason +="#"+ PHYSICAL_ASSAULT;
                 }
                 //return new Result(PHYSICAL_ASSAULT);
 
@@ -115,7 +115,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                      pepReason= SUSPECTED_PAST_HIV_EXPOSURE;
                  }
                  else{
-                     pepReason +=","+ SUSPECTED_PAST_HIV_EXPOSURE;
+                     pepReason +="#"+ SUSPECTED_PAST_HIV_EXPOSURE;
                  }
                 //return new Result(SUSPECTED_PAST_HIV_EXPOSURE);
 
@@ -124,7 +124,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                      pepReason= CONTAMINATED_NEEDLE_STICK;
                  }
                  else{
-                     pepReason +=","+ CONTAMINATED_NEEDLE_STICK;
+                     pepReason +="#"+ CONTAMINATED_NEEDLE_STICK;
                  }
                 //return new Result(CONTAMINATED_NEEDLE_STICK);
 
@@ -134,7 +134,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                     pepReason= BLOOD_TRANSFUSION;
                 }
                 else{
-                    pepReason +=","+ BLOOD_TRANSFUSION;
+                    pepReason +="#"+ BLOOD_TRANSFUSION;
                 }
                 //return new Result(BLOOD_TRANSFUSION);
 
@@ -144,7 +144,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                      pepReason= INTRAVENOUS_DRUG_USE;
                  }
                  else{
-                     pepReason +=","+ INTRAVENOUS_DRUG_USE;
+                     pepReason +="#"+ INTRAVENOUS_DRUG_USE;
                  }
                 //return new Result(INTRAVENOUS_DRUG_USE);
 
@@ -153,7 +153,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                      pepReason= OTHER_NON_CODED;
                  }
                  else{
-                     pepReason +=","+ OTHER_NON_CODED;
+                     pepReason +="#"+ OTHER_NON_CODED;
                  }
                 //return new Result(OTHER_NON_CODED);
 
@@ -162,7 +162,7 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
                      pepReason= UNKNOWN;
                  }
                  else{
-                     pepReason +=","+ UNKNOWN;
+                     pepReason +="#"+ UNKNOWN;
                  }
 
 

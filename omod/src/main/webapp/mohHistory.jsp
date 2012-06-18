@@ -3,32 +3,59 @@
 <%@ include file="/WEB-INF/template/header.jsp"%>
 <openmrs:require privilege="Manage AMRSReports" otherwise="/login.htm"
                  redirect="/module/amrsreport/mohHistory.form" />
-<%@ include file="localHeader.jsp"%>
+
 <openmrs:htmlInclude file="/dwr/util.js"/>
-<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.custom.min.js" />
-<openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js" />
-<openmrs:htmlInclude file="/scripts/jquery/highlight/jquery.highlight-3.js" />
-<openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.filteringDelay.js" />
-<openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables_jui.css" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/jquery.dataTables.min.js" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/jquery.tools.min.js" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/TableTools/js/TableTools.min.js" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/TableTools/js/ZeroClipboard.js" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables.css" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/css/smoothness/jquery-ui-1.8.16.custom.css" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/css/dataTables_jui.css" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/TableTools/css/TableTools.css" />
+<openmrs:htmlInclude file="/moduleResources/amrsreport/TableTools/css/TableTools_JUI.css" />
 <openmrs:htmlInclude file="/dwr/interface/DWRAmrsReportService.js"/>
-<link href="<openmrs:contextPath/>/scripts/jquery-ui/css/<spring:theme code='jqueryui.theme.name' />/jquery-ui.custom.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
     $j(document).ready(function(){
+
         var ti = $j('#tablehistory').dataTable({
-            "bAutoWidth": true,
-            "bLengthChange": true,
-            "sPaginationType": "full_numbers"
+            "bJQueryUI":false,
+            "sPaginationType": "full_numbers",
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "sSwfPath": "${pageContext.request.contextPath}/moduleResources/amrsreport/media/swf/copy_csv_xls_pdf.swf",
+                "sRowSelect": "single",
+                "aButtons": [
+                     "copy",
+                     "print",
+                     "csv",
+                    {
+                        sExtends: "xls",
+                        sPdfOrientation: "landscape",
+                        sPdfMessage: "Developed by Ampath"
+                    },
+                    {
+                        sExtends: "pdf",
+                        sPdfOrientation: "landscape",
+                        sPdfMessage: "Developed by Ampath"
+                    }
+                ]
+
+            }
         });
 
-        $j('#tablehistory').delegate('tbody tr','click', function() {
-            var aData2 = ti.fnGetData(this);
-            var amrsid=aData2[1].trim();
-            var  filename=dwr.util.getValue("history");
-            DWRAmrsReportService.viewMoreDetails(filename,amrsid,callback);
+
+        $j('#tablehistory').delegate('tbody td #img','click', function() {
+
+           var trow=this.parentNode.parentNode;
+            var aData2 = ti.fnGetData(trow);
+            var amrsNumber=aData2[1].trim();
+            DWRAmrsReportService.viewMoreDetails("${historyURL}", amrsNumber,callback);
+            return false;
 
         });
+
         $j("#dlgData" ).dialog({
             autoOpen:false,
             modal: true,
@@ -45,6 +72,7 @@
         });
         function callback(data){
             $j("#dlgData").empty();
+            //alert(data)
             var listSplit=data.split(",");
             var listWithin;
             for(var i=0; i<listSplit.length; i++) {
@@ -55,7 +83,7 @@
                     listWithin=value.split("#");
                       for(var f=0;f<listWithin.length;f++){
                           value2= listWithin[f]+"\n";
-                          $j("<div>"+value2+"</div>").appendTo("#dlgData");
+                          $j("<table id='tbldata'><thead></t><tbody><tr><td>"+value2+"</td></tr></table>").appendTo("#dlgData");
                       }
 
                 }
@@ -69,51 +97,66 @@
 
 
         }
-        function clearDataTable(){
-            dwr.util.removeAllRows("tbodydata");
-        }
+
 
     });
+    function clearDataTable(){
+        //alert("on change has to take effect");
+        dwr.util.removeAllRows("tbodydata");
+    }
 
 
 
 </script>
+<c:if test="${not empty loci}">
+<table align="right">
+    <tr>
+        <td><b>History Report for:</b></td>
+        <td><u>${loci}</u></td>
+        <td><b>As at:</b></td>
+        <td><u>${time}</u></td>
+    </tr>
+</table>
+</c:if>
+
+<%@ include file="localHeader.jsp"%>
 <b class="boxHeader">Amrs Reports History</b>
-<div class="box">
+<div class="box" style=" width:99%; height:auto;  overflow-x: auto;">
  <form action="mohHistory.form" method="POST">
     <table>
         <tr>
             <td>Select file For location</td>
             <td>
-                <select name="history" id="history" onchange="clearDataTable()">
+                <select name="history" id="history"  onchange="clearDataTable()" >
                     <c:forEach var="rpthistory" items="${reportHistory}">
-                        <option  value="${rpthistory}" >${rpthistory}</option>
+                        <option  value="${rpthistory}">${rpthistory}</option>
                     </c:forEach>
                 </select>
             </td>
             <td>
-                <input type="submit" value="Run">
+                <input type="submit" value="View" id="collectFile">
             </td>
         </tr>
     </table>
  </form>
 </div>
+<c:if test="${not empty records}">
 <b class="boxHeader">Amrs Reports Details</b>
-<div  class="box">
+<div  class="box" style=" width:99%; height:auto;  overflow-x: auto;">
+
       <table id="tablehistory">
           <thead>
                 <tr>
                     <th>View</th>
-                    <th>Amrs Identifier</th>
-                    <th>Names</th>
-                    <th>Unique Identifier</th>
-                    <th>Age at Enrollment</th>
+                    <c:forEach var="col" items="${columnHeaders}">
+                        <th>${col}</th>
+                    </c:forEach>
                 </tr>
           </thead>
           <tbody id="tbodydata">
           <c:forEach var="record" items="${records}">
               <tr>
-                  <td><img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/format-indent-more.png" /></td>
+                  <td><img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/format-indent-more.png"  id="img" /></td>
                   <c:forEach var="rec" items="${record}">
 
                       <td>
@@ -128,7 +171,11 @@
 
           </tbody>
       </table>
+
     </div>
+</c:if>
 <div id="dlgData" title="Patients More Information">
 
 </div>
+
+

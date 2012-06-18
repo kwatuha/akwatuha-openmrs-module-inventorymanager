@@ -97,6 +97,7 @@ public class MohHistoryController {
 
         ///end of interface population after submitting
         List<List<String>> records=new ArrayList<List<String>>();
+        List<String> columnHeaders=new ArrayList<String>();
         String [] linedata=null;
         String first=null;
         String second=null;
@@ -108,23 +109,51 @@ public class MohHistoryController {
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
+             //get the columns to be used here
+            String lineColumn=br.readLine();
+            String [] lineColumnArray=lineColumn.split(",");
+
+
+            //loop through the columns for the data
+
+            for(int p=0;p<lineColumnArray.length;p++){
+                columnHeaders.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(lineColumnArray[p])));
+            }
+
+
+            map.addAttribute("columnHeaders",columnHeaders);
+
+
             while ((line = br.readLine()) != null)   {
 
                 List<String> intlist=new ArrayList<String>();
-                linedata=line.split(",");
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[0])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[1])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[2])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[3])));
+                linedata=line.split(",");// values of every row in an array
 
 
+                /////////////////////////////////////////////////////////////////////////////////////////
+                for(int pp=0;pp<linedata.length;pp++){
+
+                    intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[pp])));
+
+
+                }
                 records.add(intlist) ;
             }
-            records.remove(0);
+            //records.remove(0);
             map.addAttribute("records",records);
             fstream.close();
             in.close();
             br.close();
+            map.addAttribute("historyURL",history);
+
+            //add the splitted one per the credentials
+            String [] splitFileLocTime=history.split("-");
+            String loci= splitFileLocTime[0];
+            String time= splitFileLocTime[1];
+
+            map.addAttribute("loci",loci);
+            map.addAttribute("time",time);
+
         }
         catch (Exception e){
             e.printStackTrace();

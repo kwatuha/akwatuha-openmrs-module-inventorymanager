@@ -73,7 +73,7 @@
 			<![CDATA[
 			import @MODULE_PACKAGE@.@MODULE_ID@.web.dwr.DWRAmrsReportService;
 			DWRAmrsReportService.viewMoreDetails(String file,String amrsid);
-			DWRAmrsReportService.viewMoreDetailsRender(BufferedReader bff,String id);
+			DWRAmrsReportService.viewMoreDetailsRender(String bff,String id);
 			]]>
 		</signatures>	
 	</dwr>

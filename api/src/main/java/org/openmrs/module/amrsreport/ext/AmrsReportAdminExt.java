@@ -28,6 +28,7 @@ public class AmrsReportAdminExt extends AdministrationSectionExt {
         Map<String, String> map = new LinkedHashMap<String, String>();
         map.put("module/amrsreport/mohRender.form", "Pre-ART 361A Register");
         map.put("module/amrsreport/mohHistory.form", "Reports History");
+        /*map.put("module/amrsreport/mohtest.form", "Reports test");*/
 
         return map;
     }
