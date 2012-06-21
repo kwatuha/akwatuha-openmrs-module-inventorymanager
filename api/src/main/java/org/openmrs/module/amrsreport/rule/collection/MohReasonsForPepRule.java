@@ -73,98 +73,104 @@ public class MohReasonsForPepRule extends MohEvaluableRule {
 
 
 
-            if(obs.getValueCoded().equals(getCachedConcept(SEXUAL_ASSAULT)))
+            if(obs.getValueCoded().equals(getCachedConcept(SEXUAL_ASSAULT))){
                 if(pepReason ==""){
                     pepReason= SEXUAL_ASSAULT;
                 }
                 else{
-                    pepReason +="#"+ SEXUAL_ASSAULT;
+                    pepReason +=";"+ SEXUAL_ASSAULT;
                 }
+            }
 
 
-
-            if(obs.getValueCoded().equals(getCachedConcept(SPOUSES_PARTNER_SUSPECTED_HIV)))
+            if(obs.getValueCoded().equals(getCachedConcept(SPOUSES_PARTNER_SUSPECTED_HIV))) {
                 if(pepReason ==""){
                     pepReason= SPOUSES_PARTNER_SUSPECTED_HIV;
                 }
                 else{
-                    pepReason +="#"+ SPOUSES_PARTNER_SUSPECTED_HIV;
+                    pepReason +=";"+ SPOUSES_PARTNER_SUSPECTED_HIV;
                 }
-                //return new Result(SPOUSES_PARTNER_SUSPECTED_HIV);
+            }  //return new Result(SPOUSES_PARTNER_SUSPECTED_HIV);
 
-             if(obs.getValueCoded().equals(getCachedConcept(OCCUPATIONAL_EXPOSURE)))
+             if(obs.getValueCoded().equals(getCachedConcept(OCCUPATIONAL_EXPOSURE))){
                  if(pepReason ==""){
                      pepReason= OCCUPATIONAL_EXPOSURE;
                  }
                  else{
-                     pepReason +="#"+ OCCUPATIONAL_EXPOSURE;
+                     pepReason +=";"+ OCCUPATIONAL_EXPOSURE;
                  }
                // return new Result(OCCUPATIONAL_EXPOSURE);
+             }
 
-            if(obs.getValueCoded().equals(getCachedConcept(PHYSICAL_ASSAULT)))
+            if(obs.getValueCoded().equals(getCachedConcept(PHYSICAL_ASSAULT))) {
                 if(pepReason ==""){
                     pepReason= PHYSICAL_ASSAULT;
                 }
                 else{
-                    pepReason +="#"+ PHYSICAL_ASSAULT;
+                    pepReason +=";"+ PHYSICAL_ASSAULT;
                 }
                 //return new Result(PHYSICAL_ASSAULT);
+            }
 
-             if(obs.getValueCoded().equals(getCachedConcept(SUSPECTED_PAST_HIV_EXPOSURE)))
+             if(obs.getValueCoded().equals(getCachedConcept(SUSPECTED_PAST_HIV_EXPOSURE))){
                  if(pepReason ==""){
                      pepReason= SUSPECTED_PAST_HIV_EXPOSURE;
                  }
                  else{
-                     pepReason +="#"+ SUSPECTED_PAST_HIV_EXPOSURE;
+                     pepReason +=";"+ SUSPECTED_PAST_HIV_EXPOSURE;
                  }
                 //return new Result(SUSPECTED_PAST_HIV_EXPOSURE);
+             }
 
-             if(obs.getValueCoded().equals(getCachedConcept(CONTAMINATED_NEEDLE_STICK)))
+             if(obs.getValueCoded().equals(getCachedConcept(CONTAMINATED_NEEDLE_STICK))){
                  if(pepReason ==""){
                      pepReason= CONTAMINATED_NEEDLE_STICK;
                  }
                  else{
-                     pepReason +="#"+ CONTAMINATED_NEEDLE_STICK;
+                     pepReason +=";"+ CONTAMINATED_NEEDLE_STICK;
                  }
                 //return new Result(CONTAMINATED_NEEDLE_STICK);
+             }
 
-            if(obs.getValueCoded().equals(getCachedConcept(BLOOD_TRANSFUSION)))
+            if(obs.getValueCoded().equals(getCachedConcept(BLOOD_TRANSFUSION))) {
 
                 if(pepReason ==""){
                     pepReason= BLOOD_TRANSFUSION;
                 }
                 else{
-                    pepReason +="#"+ BLOOD_TRANSFUSION;
+                    pepReason +=";"+ BLOOD_TRANSFUSION;
                 }
                 //return new Result(BLOOD_TRANSFUSION);
+            }
 
-             if(obs.getValueCoded().equals(getCachedConcept(INTRAVENOUS_DRUG_USE)))
+             if(obs.getValueCoded().equals(getCachedConcept(INTRAVENOUS_DRUG_USE))){
 
                  if(pepReason ==""){
                      pepReason= INTRAVENOUS_DRUG_USE;
                  }
                  else{
-                     pepReason +="#"+ INTRAVENOUS_DRUG_USE;
+                     pepReason +=";"+ INTRAVENOUS_DRUG_USE;
                  }
                 //return new Result(INTRAVENOUS_DRUG_USE);
+             }
 
-             if(obs.getValueCoded().equals(getCachedConcept(OTHER_NON_CODED)))
+             if(obs.getValueCoded().equals(getCachedConcept(OTHER_NON_CODED))){
                  if(pepReason ==""){
                      pepReason= OTHER_NON_CODED;
                  }
                  else{
-                     pepReason +="#"+ OTHER_NON_CODED;
+                     pepReason +=";"+ OTHER_NON_CODED;
                  }
                 //return new Result(OTHER_NON_CODED);
-
-             if(obs.getValueCoded().equals(getCachedConcept(UNKNOWN)))
+             }
+             if(obs.getValueCoded().equals(getCachedConcept(UNKNOWN))) {
                  if(pepReason ==""){
                      pepReason= UNKNOWN;
                  }
                  else{
-                     pepReason +="#"+ UNKNOWN;
+                     pepReason +=";"+ UNKNOWN;
                  }
-
+             }
 
 
         }

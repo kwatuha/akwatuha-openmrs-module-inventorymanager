@@ -106,7 +106,7 @@ public class MohPEPStartStopDateRule extends MohEvaluableRule {
                        if(pepDates.equals(""))
                            pepDates += MohRuleUtils.formatdates(observation.getObsDatetime()) + " - ";
                        else
-                           pepDates +="#" + (MohRuleUtils.formatdates(observation.getObsDatetime())) + " - ";
+                           pepDates +=";" + (MohRuleUtils.formatdates(observation.getObsDatetime())) + " - ";
                    }
                    else{
                            pepDates += MohRuleUtils.formatdates(observation.getObsDatetime()) + " - " ;
@@ -130,14 +130,14 @@ public class MohPEPStartStopDateRule extends MohEvaluableRule {
 
                    startPep=false;
                    if(pepDates.equals("")) {
-                       pepDates += (" - " + (MohRuleUtils.formatdates(observation.getObsDatetime())) + "#");
+                       pepDates += (" - " + (MohRuleUtils.formatdates(observation.getObsDatetime())) + ";");
                    }
                    else{
                        if(startPep){
-                           pepDates += ((MohRuleUtils.formatdates(observation.getObsDatetime())) + "#");
+                           pepDates += ((MohRuleUtils.formatdates(observation.getObsDatetime())) + ";");
                        }
                        else{
-                           pepDates += (" - " + (MohRuleUtils.formatdates(observation.getObsDatetime())) + "#");
+                           pepDates += (" - " + (MohRuleUtils.formatdates(observation.getObsDatetime())) + ";");
                        }
 
                    }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import  org.openmrs.reporting.data.DatasetDefinition;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
@@ -114,7 +115,7 @@ public class MohHistoryController {
             String [] lineColumnArray=lineColumn.split(",");
 
 
-            //loop through the columns for the data
+           log.info("This the file to be displayed "+amrsFile);
 
             for(int p=0;p<lineColumnArray.length;p++){
                 columnHeaders.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(lineColumnArray[p])));
@@ -139,12 +140,17 @@ public class MohHistoryController {
                 }
                 records.add(intlist) ;
             }
-            //records.remove(0);
+            //process for downloading the csv
+
+
             map.addAttribute("records",records);
             fstream.close();
             in.close();
             br.close();
+           // bw.flush();
+            //bw.close();
             map.addAttribute("historyURL",history);
+            map.addAttribute("filetodownload",amrsFile);
 
             //add the splitted one per the credentials
             String [] splitFileLocTime=history.split("-");

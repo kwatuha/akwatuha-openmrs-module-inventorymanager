@@ -27,22 +27,9 @@
             "sPaginationType": "full_numbers",
             "sDom": 'T<"clear">lfrtip',
             "oTableTools": {
-                "sSwfPath": "${pageContext.request.contextPath}/moduleResources/amrsreport/media/swf/copy_csv_xls_pdf.swf",
                 "sRowSelect": "single",
                 "aButtons": [
-                    "copy",
-                    "print",
-                    "csv",
-                    {
-                        sExtends: "xls",
-                        sPdfOrientation: "landscape",
-                        sPdfMessage: "Developed by Ampath"
-                    },
-                    {
-                        sExtends: "pdf",
-                        sPdfOrientation: "landscape",
-                        sPdfMessage: "Developed by Ampath"
-                    }
+                    "print"
                 ]
 
             }
@@ -79,8 +66,8 @@
                 var value = listSplit[i]+"\n";
                 var value2;
 
-                if(value.indexOf('#') !=0){
-                    listWithin=value.split("#");
+                if(value.indexOf(';') !=0){
+                    listWithin=value.split(";");
                     for(var f=0;f<listWithin.length;f++){
                         value2= listWithin[f]+"\n";
                         $j("<div>"+value2+"</div>").appendTo("#dlgData");
@@ -100,9 +87,19 @@
 
     });
 
+    function clearDataTable(){
+        //alert("on change has to take effect");
+        var hidepic= document.getElementById("maindetails");
+        var titleheader=document.getElementById("titleheader");
+        hidepic.style.display='none';
+        titleheader.style.display='none';
+
+    }
+
 
 </script>
 <c:if test="${not empty loci}">
+ <div id="titleheader">
     <table align="right">
         <tr>
             <td><b>History Report for:</b></td>
@@ -111,6 +108,7 @@
             <td><u>${time}</u></td>
         </tr>
     </table>
+ </div>
 </c:if>
 <%@ include file="localHeader.jsp"%>
 <b class="boxHeader">Amrs Reports Settings</b>
@@ -119,21 +117,21 @@
  <table>
      <tr>
         <td><b>Reports:</b></td>
-         <td><select name="definition">
+         <td><select name="definition" onchange="clearDataTable()">
                 <c:forEach var="rptdefinition" items="${reportDefinitions}">
                     <option  value="${rptdefinition.uuid}" >${rptdefinition.name}</option>
                 </c:forEach>
             </select>
         </td>
         <td><b>Cohorts:</b></td>
-         <td><select name="cohortdef">
+         <td><select name="cohortdef" onchange="clearDataTable()">
              <c:forEach var="cohortdefinition" items="${cohortdefinitions}">
                  <option  value="${cohortdefinition.uuid}" >${cohortdefinition.name}</option>
              </c:forEach>
          </select>
          </td>
          <td><b>Location:</b></td>
-         <td><select name="location">
+         <td><select name="location" onchange="clearDataTable()">
              <c:forEach var="location" items="${location}" >
                  <option  value="${location.locationId}" >${location.name}</option>
              </c:forEach>
@@ -149,8 +147,11 @@
 </div>
 <c:if test="${not empty records}">
 <b class="boxHeader">Report Details</b>
-<div class="box" style=" width:99%; height:auto;  overflow-x: auto;">
-
+<div class="box" id="maindetails" style=" width:99%; height:auto;  overflow-x: auto;">
+    <div id="printbuttons">
+    <img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/pr_csv_file_document.png"  id="csvdownload" width="50" height="50" onclick="window.open('data:application/vnd.ms-excel,' + document.getElementById('tblMain').outerHTML.replace(/ /g, '%20'))"/>
+    <img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/pdf.png"  id="pdfdownload" width="50" height="50" />
+    </div>
 
     <table border="0" id="tblMain">
         <thead>

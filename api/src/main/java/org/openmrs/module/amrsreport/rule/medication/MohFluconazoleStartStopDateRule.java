@@ -83,19 +83,19 @@ public class MohFluconazoleStartStopDateRule  extends MohEvaluableRule {
 					if(ret.equals(""))
 						ret += (MohRuleUtils.formatdates(observations.getObsDatetime()) + " - ");
 					else
-						ret += ("#" + (MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
+						ret += (";" + (MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
 				}else{
 					ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
 				}
 				wasStart = true;
 			}else if(observations.getValueCoded().equals(StopDrugs)){
 				if(ret.equals("")){
-					ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + "#");
+					ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + ";");
 				}else{
 					if (wasStart) {
-						ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + "#");
+						ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + ";");
                     }else{
-                    	ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + "#");
+                    	ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + ";");
                     }
 				}
 				wasStart = false;

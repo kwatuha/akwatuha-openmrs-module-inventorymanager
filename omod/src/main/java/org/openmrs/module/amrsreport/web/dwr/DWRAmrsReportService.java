@@ -4,10 +4,14 @@ import net.sf.saxon.value.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.directwebremoting.util.MimeConstants;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.util.OpenmrsUtil;
+import org.springframework.util.FileCopyUtils;
 
+import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,65 +133,44 @@ public class DWRAmrsReportService {
 
         return strColumnDataDetails.toString();
     }
-    /*public List<List<String>> populateHistory(String history){
-
-        String filename="";
-        List<String> filenames=new ArrayList<String>();
+    public void downloadCSV(String csvFile)  {
+        //open the file and do all the manipulation
+        HttpServletResponse httpServletResponse = null;
 
         AdministrationService as = Context.getAdministrationService();
         String folderName=as.getGlobalProperty("amrsreport.file_dir");
-
-        File fileDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
-
-        String[] children = fileDir.list();
-        if (children == null) {
-            // Either dir does not exist or is not a directory
-        } else {
-            for (int i=0; i<children.length; i++) {
-                // Get filename of file or directory
-                filename = children[i];
-                filenames.add(filename);
-            }
-        }
-
-        //map.addAttribute("reportHistory",filenames);
-
-        ///end of interface population after submitting
-        List<List<String>> records=new ArrayList<List<String>>();
-        String [] linedata=null;
-        String first=null;
-        String second=null;
-        String third=null;
-        String fourth=null;
-        try{
-            File amrsFile=new File(fileDir,history);
-            FileInputStream fstream = new FileInputStream(amrsFile);
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line;
-            while ((line = br.readLine()) != null)   {
-
-                List<String> intlist=new ArrayList<String>();
-                linedata=line.split(",");
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[0])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[1])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[2])));
-                intlist.add(StringUtils.defaultString(stripLeadingAndTrailingQuotes(linedata[3])));
+        File fileDirectory = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
+        String urlToDownLoad= fileDirectory+"/"+csvFile;
 
 
-                records.add(intlist) ;
-            }
-            records.remove(0);
-            //map.addAttribute("records",records);
-            fstream.close();
-            in.close();
-            br.close();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-           return records;
-    }*/
+         try{
+        BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(httpServletResponse.getOutputStream() ) );
+        String mimeType = new MimetypesFileTypeMap().getContentType( urlToDownLoad );
+
+         log.info("We should reach here "+mimeType);
+
+
+        httpServletResponse.setContentType(mimeType);
+        httpServletResponse.setHeader("Content-Disposition", "attachment; filename=" + urlToDownLoad);
+        //httpServletResponse.setContentType(MimeConstants.MIME_PLAIN);
+        //httpServletResponse.setContentLength((int) urlToDownLoad.length());
+             bw.write(urlToDownLoad);
+
+        //FileCopyUtils.copy(new FileInputStream(urlToDownLoad), httpServletResponse.getOutputStream());
+
+       bw.flush();
+             bw.close();
+         }
+         catch (Exception e){
+             e.printStackTrace();
+         }
+        //return urlToDownLoad;
+    }
+    public void downloadPDF(String file)  {
+        AdministrationService as = Context.getAdministrationService();
+        String folderName=as.getGlobalProperty("amrsreport.file_dir");
+        File fileDirectory = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
+    }
     static String stripLeadingAndTrailingQuotes(String str)
     {
         if (str.startsWith("\""))

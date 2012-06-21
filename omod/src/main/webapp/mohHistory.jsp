@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 
 <%@ include file="/WEB-INF/template/header.jsp"%>
+
 <openmrs:require privilege="Manage AMRSReports" otherwise="/login.htm"
                  redirect="/module/amrsreport/mohHistory.form" />
 
@@ -24,22 +25,9 @@
             "sPaginationType": "full_numbers",
             "sDom": 'T<"clear">lfrtip',
             "oTableTools": {
-                "sSwfPath": "${pageContext.request.contextPath}/moduleResources/amrsreport/media/swf/copy_csv_xls_pdf.swf",
                 "sRowSelect": "single",
                 "aButtons": [
-                     "copy",
-                     "print",
-                     "csv",
-                    {
-                        sExtends: "xls",
-                        sPdfOrientation: "landscape",
-                        sPdfMessage: "Developed by Ampath"
-                    },
-                    {
-                        sExtends: "pdf",
-                        sPdfOrientation: "landscape",
-                        sPdfMessage: "Developed by Ampath"
-                    }
+                     "print"
                 ]
 
             }
@@ -79,8 +67,8 @@
                 var value = listSplit[i]+"\n";
                 var value2;
 
-                if(value.indexOf('#') !=0){
-                    listWithin=value.split("#");
+                if(value.indexOf(';') !=0){
+                    listWithin=value.split(";");
                       for(var f=0;f<listWithin.length;f++){
                           value2= listWithin[f]+"\n";
                           $j("<table id='tbldata'><thead></t><tbody><tr><td>"+value2+"</td></tr></table>").appendTo("#dlgData");
@@ -99,25 +87,49 @@
         }
 
 
+        $j('#pdfdownload').click(function(event){
+            DWRAmrsReportService.downloadPDF("${historyURL}",callbackPDF);
+        });
+
+
+        function callbackPDF(){
+            alert("Code to download PDF.............");
+
+        }
+
+
     });
     function clearDataTable(){
         //alert("on change has to take effect");
         dwr.util.removeAllRows("tbodydata");
+        var hidepic= document.getElementById("maindetails");
+        var titleheader=document.getElementById("titleheader");
+        hidepic.style.display='none';
+        titleheader.style.display='none';
+
     }
+
 
 
 
 </script>
 <c:if test="${not empty loci}">
-<table align="right">
-    <tr>
+<div id="titleheader">
+<table align="right" id="tocheckout">
+    <thead></thead>
+    <tbody>
+    <tr id="tocheck">
         <td><b>History Report for:</b></td>
         <td><u>${loci}</u></td>
         <td><b>As at:</b></td>
         <td><u>${time}</u></td>
     </tr>
+    </tbody>
+
 </table>
+</div>
 </c:if>
+
 
 <%@ include file="localHeader.jsp"%>
 <b class="boxHeader">Amrs Reports History</b>
@@ -142,7 +154,12 @@
 </div>
 <c:if test="${not empty records}">
 <b class="boxHeader">Amrs Reports Details</b>
-<div  class="box" style=" width:99%; height:auto;  overflow-x: auto;">
+<div  class="box" id="maindetails" style=" width:99%; height:auto;  overflow-x: auto;">
+    <div id="printbuttons">
+    <img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/pr_csv_file_document.png"  id="csvdownload" width="50" height="50" onclick="window.open('data:application/vnd.ms-excel,' + document.getElementById('tablehistory').outerHTML.replace(/ /g, '%20'))"/>
+    <img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/pdf.png"  id="pdfdownload" width="50" height="50" />
+    </div>
+
 
       <table id="tablehistory">
           <thead>
@@ -177,5 +194,6 @@
 <div id="dlgData" title="Patients More Information">
 
 </div>
+<%@ include file="/WEB-INF/template/footer.jsp"%>
 
 

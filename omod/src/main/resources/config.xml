@@ -66,6 +66,8 @@
 				<param name="class" value="@MODULE_PACKAGE@.web.dwr.DWRAmrsReportService"/>
 				<include method="viewMoreDetails"/>
                 <include method="viewMoreDetailsRender"/>
+                <include method="downloadCSV"/>
+                <include method="downloadPDF"/>
 			</create>
 		</allow>
 
@@ -74,6 +76,8 @@
 			import @MODULE_PACKAGE@.@MODULE_ID@.web.dwr.DWRAmrsReportService;
 			DWRAmrsReportService.viewMoreDetails(String file,String amrsid);
 			DWRAmrsReportService.viewMoreDetailsRender(String bff,String id);
+			DWRAmrsReportService.downloadCSV(String csvFile);
+			DWRAmrsReportService.downloadPDF(String file);
 			]]>
 		</signatures>	
 	</dwr>
