@@ -177,11 +177,11 @@ public class MohPregnancyPMTCReferralRule extends MohEvaluableRule {
                             return true;
             }
 
-            // PROBLEM ADDED (6042) = PREGNANCY, ECTOPIC (46) OR
+            /*// PROBLEM ADDED (6042) = PREGNANCY, ECTOPIC (46) OR
             if (concept.equals(getCachedConcept(PROBLEM_ADDED))) {
                     if (valueCoded.equals(getCachedConcept(PREGNANCY_ECTOPIC)))
                             return true;
-            }
+            }*/
 
             // FOETAL MOVEMENT (1856)=YES (1065) OR
             if (concept.equals(getCachedConcept(FOETAL_MOVEMENT))) {

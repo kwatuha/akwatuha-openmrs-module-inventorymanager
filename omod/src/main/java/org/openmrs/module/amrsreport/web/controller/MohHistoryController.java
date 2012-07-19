@@ -1,5 +1,6 @@
 package org.openmrs.module.amrsreport.web.controller;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,6 +22,7 @@ import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +44,7 @@ import java.util.*;
 @Controller
 public class MohHistoryController {
     private static final Log log = LogFactory.getLog(MohHistoryController.class);
+    //String fileToDownloadToCSV=null;
 
     @RequestMapping(method=RequestMethod.GET, value="module/amrsreport/mohHistory.form")
     public void preparePage(ModelMap map)  {
@@ -73,8 +76,9 @@ public class MohHistoryController {
                             @RequestParam(required=true, value="history") String history
 
     ) {
-
+        map.addAttribute("historyToCSV",history);
         ////////to be used for populating the interface
+        //fileToDownloadToCSV=history;
         String filename="";
         List<String> filenames=new ArrayList<String>();
 
@@ -82,7 +86,7 @@ public class MohHistoryController {
         String folderName=as.getGlobalProperty("amrsreport.file_dir");
 
         File fileDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
-
+          //log.info("Thius is the directory "+fileDir);
         String[] children = fileDir.list();
         if (children == null) {
             // Either dir does not exist or is not a directory
@@ -105,7 +109,7 @@ public class MohHistoryController {
         String third=null;
         String fourth=null;
         try{
-            File amrsFile=new File(fileDir,history);
+           File amrsFile=new File(fileDir,history);
             FileInputStream fstream = new FileInputStream(amrsFile);
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -178,5 +182,48 @@ public class MohHistoryController {
         }
         return str;
     }
+    @RequestMapping(value="/module/amrsreport/downloadcsv")
+    public void downloadCSV( HttpServletResponse response,
+                          @RequestParam(required=true, value="fileToImportToCSV") String fileToImportToCSV) throws IOException {
 
-}
+        AdministrationService as = Context.getAdministrationService();
+        String folderName=as.getGlobalProperty("amrsreport.file_dir");
+
+        File fileDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
+        File amrsFileToDownload=new File(fileDir,fileToImportToCSV);
+
+
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment; filename=" + amrsFileToDownload);
+        response.setContentLength((int) amrsFileToDownload.length());
+
+
+
+        FileCopyUtils.copy(new FileInputStream(amrsFileToDownload), response.getOutputStream());
+
+
+
+
+    }
+
+    @RequestMapping(value="/module/amrsreport/downloadpdf")
+    public void downloadPDF( HttpServletResponse response,
+                             @RequestParam(required=true, value="fileToImportToCSV") String fileToImportToCSV) throws IOException {
+        AdministrationService as = Context.getAdministrationService();
+        String folderName=as.getGlobalProperty("amrsreport.file_dir");
+
+        File fileDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
+        File amrsFileToDownload=new File(fileDir,fileToImportToCSV);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=" + amrsFileToDownload);
+        response.setContentLength((int) amrsFileToDownload.length());
+
+
+
+        FileCopyUtils.copy(new FileInputStream(amrsFileToDownload), response.getOutputStream());
+
+    }
+
+ }

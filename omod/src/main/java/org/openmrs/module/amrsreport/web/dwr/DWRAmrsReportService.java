@@ -71,6 +71,7 @@ public class DWRAmrsReportService {
 
 
                         strColumnData.append(columnName).append("    :").append(value).append(",");
+
                     }
 
                }
@@ -83,6 +84,7 @@ public class DWRAmrsReportService {
             e.printStackTrace();
         }
         //log.info("We are returning now "+recordsAfterAll);
+        log.info(strColumnData.toString());
         return strColumnData.toString();
     }
     public String viewMoreDetailsRender(String bff,String id){

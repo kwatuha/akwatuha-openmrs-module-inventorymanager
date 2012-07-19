@@ -139,7 +139,7 @@ public class MohCohortDefinitionEvaluator implements CohortDefinitionEvaluator {
 
 		Concept transferConcept = conceptService.getConcept("TRANSFER CARE TO OTHER CENTER");
 		Concept withinConcept = conceptService.getConcept("AMPATH");
-		//Concept missedVisitConcept = conceptService.getConcept("REASON FOR MISSED VISIT");
+		Concept missedVisitConcept = conceptService.getConcept("REASON FOR MISSED VISIT");
 		Concept transferVisitConcept = conceptService.getConcept("AMPATH CLINIC TRANSFER");
 
 		CodedObsCohortDefinition transferCohortDefinition = new CodedObsCohortDefinition();
@@ -149,12 +149,12 @@ public class MohCohortDefinitionEvaluator implements CohortDefinitionEvaluator {
 		transferCohortDefinition.setOperator(SetComparator.IN);
 		transferCohortDefinition.setValueList(Arrays.asList(withinConcept));
 
-		/*CodedObsCohortDefinition missedVisitCohortDefinition = new CodedObsCohortDefinition();
+		CodedObsCohortDefinition missedVisitCohortDefinition = new CodedObsCohortDefinition();
 		missedVisitCohortDefinition.setTimeModifier(PatientSetService.TimeModifier.ANY);
 		missedVisitCohortDefinition.setLocationList(mohCohortDefinition.getLocationList());
-		//missedVisitCohortDefinition.setQuestion(missedVisitConcept);
+		missedVisitCohortDefinition.setQuestion(missedVisitConcept);
 		missedVisitCohortDefinition.setOperator(SetComparator.IN);
-		missedVisitCohortDefinition.setValueList(Arrays.asList(transferVisitConcept));*/
+		missedVisitCohortDefinition.setValueList(Arrays.asList(transferVisitConcept));
 
 		CompositionCohortDefinition transferCompositionCohortDefinition = new CompositionCohortDefinition();
 		transferCompositionCohortDefinition.addSearch("HealthCenterAttribute", personAttributeCohortDefinition, null);
@@ -163,19 +163,19 @@ public class MohCohortDefinitionEvaluator implements CohortDefinitionEvaluator {
 
 		Cohort transferCompositionCohort = definitionService.evaluate(transferCompositionCohortDefinition, evaluationContext);
 
-		/*CompositionCohortDefinition missedVisitCompositionCohortDefinition = new CompositionCohortDefinition();
+		CompositionCohortDefinition missedVisitCompositionCohortDefinition = new CompositionCohortDefinition();
 		missedVisitCompositionCohortDefinition.addSearch("HealthCenterAttribute", personAttributeCohortDefinition, null);
 		missedVisitCompositionCohortDefinition.addSearch("MissedVisitTransfer", missedVisitCohortDefinition, null);
-		missedVisitCompositionCohortDefinition.setCompositionString("HealthCenterAttribute AND MissedVisitTransfer");*/
+		missedVisitCompositionCohortDefinition.setCompositionString("HealthCenterAttribute AND MissedVisitTransfer");
 
-		//Cohort missedVisitCompositionCohort = definitionService.evaluate(missedVisitCompositionCohortDefinition, evaluationContext);
+		Cohort missedVisitCompositionCohort = definitionService.evaluate(missedVisitCompositionCohortDefinition, evaluationContext);
 
 		Set<Integer> patientIds = new HashSet<Integer>();
 		patientIds.addAll(encounterCohort.getMemberIds());
 		patientIds.addAll(rapidCompositionCohort.getMemberIds());
 		patientIds.addAll(elisaCompositionCohort.getMemberIds());
 		patientIds.addAll(transferCompositionCohort.getMemberIds());
-		//patientIds.addAll(missedVisitCompositionCohort.getMemberIds());
+		patientIds.addAll(missedVisitCompositionCohort.getMemberIds());
 
 		return new EvaluatedCohort(new Cohort(patientIds), cohortDefinition, evaluationContext);
 	}

@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
@@ -43,18 +44,22 @@ public class MohUniquePatientNumberRule  extends MohEvaluableRule {
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		
 		List<PatientIdentifier> allPatientIdentifiers=mohCoreService.getAllPatientIdenifiers(patient);
-		
-		for(PatientIdentifier patientIdentifier:allPatientIdentifiers){
+
+        AdministrationService ams=Context.getAdministrationService();
+
+
+
+        for(PatientIdentifier patientIdentifier:allPatientIdentifiers){
 			// loop through the identifiers and get an identifier with mfl number
 				
 			try{
-					PatientIdentifierType pi=Context.getPatientService().getPatientIdentifierTypeByName("MFL Number");
+					PatientIdentifierType pi=Context.getPatientService().getPatientIdentifierTypeByName(ams.getGlobalProperty("mflgenerator.mfl"));
 					
 					if((pi !=null) && (pi==patientIdentifier.getIdentifierType()))
 						mflCode=patientIdentifier.getIdentifier();
 				}
 			catch(NullPointerException nullPointerException){
-				log.info("MFL Number not found  "+nullPointerException.toString());
+				log.info("CCC Number not found  "+nullPointerException.toString());
 			}
 				
 		

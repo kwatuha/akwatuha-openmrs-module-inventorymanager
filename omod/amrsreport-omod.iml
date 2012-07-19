@@ -117,6 +117,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:reporting:0.7.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:serialization.xstream-api:0.2.6-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.openmrs.module:htmlwidgets:1.6.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.opencsv:opencsv:2.3" level="project" />
   </component>
 </module>
 

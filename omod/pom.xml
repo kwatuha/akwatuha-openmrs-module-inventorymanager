@@ -58,6 +58,11 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>htmlwidgets</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.3</version>
+        </dependency>
 	</dependencies>
 
 	<build>

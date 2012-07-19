@@ -28,7 +28,9 @@ import org.openmrs.module.reporting.report.renderer.CsvReportRenderer;
 import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,13 +85,18 @@ public class MohRenderController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="module/amrsreport/mohRender.form")
-    public void processForm(ModelMap map,
+    public void processForm(ModelMap map,HttpServletRequest request,
                             @RequestParam(required=false, value="definition") String definitionuuid,
                             @RequestParam(required=true, value="cohortdef") String cohortdefuuid,
                             @RequestParam(required=true, value="location") Integer location
 
                             ) {
 
+         HttpSession httpSession=request.getSession();
+         Integer httpSessionvalue=httpSession.getMaxInactiveInterval();
+         httpSession.setMaxInactiveInterval(-1);
+
+        log.info("The sesion value is "+httpSessionvalue);
 
         Location loc=Context.getLocationService().getLocation(location);
         ReportDefinition reportDefinition=Context.getService(ReportDefinitionService.class).getDefinitionByUuid(definitionuuid);
@@ -128,6 +135,7 @@ public class MohRenderController {
             File loaddir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
 
             ReportDefinitionService reportDefinitionService = Context.getService(ReportDefinitionService.class);
+
             ReportData reportData = reportDefinitionService.evaluate(reportDefinition, evaluationContext);
 
             AmrReportRender amrReportRender= new AmrReportRender();
@@ -205,6 +213,9 @@ public class MohRenderController {
         catch (ClassCastException ex) {
             ex.printStackTrace();
           }
+        finally {
+            httpSession.setMaxInactiveInterval(httpSessionvalue);
+        }
 
     }
     static String stripLeadingAndTrailingQuotes(String str)
@@ -218,6 +229,31 @@ public class MohRenderController {
             str = str.substring(0, str.length() - 1);
         }
         return str;
+    }
+
+    @RequestMapping(value="/module/amrsreport/downloadcsvR")
+    public void downloadCSV( HttpServletResponse response,
+                             @RequestParam(required=true, value="fileToImportToCSV") String fileToImportToCSV) throws IOException {
+
+        AdministrationService as = Context.getAdministrationService();
+        String folderName=as.getGlobalProperty("amrsreport.file_dir");
+
+        File fileDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
+        File amrsFileToDownload=new File(fileDir,fileToImportToCSV);
+
+
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment; filename=" + amrsFileToDownload);
+        response.setContentLength((int) amrsFileToDownload.length());
+
+
+
+        FileCopyUtils.copy(new FileInputStream(amrsFileToDownload), response.getOutputStream());
+
+
+
+
     }
 
 

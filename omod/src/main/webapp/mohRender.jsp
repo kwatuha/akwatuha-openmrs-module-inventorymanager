@@ -18,6 +18,16 @@
 
 <openmrs:htmlInclude file="/dwr/interface/DWRAmrsReportService.js"/>
 
+<style type="text/css">
+    .tblformat tr:nth-child(odd) {
+        background-color: #009d8e;
+        color: #FFFFFF;
+    }
+    .tblformat tr:nth-child(even) {
+        background-color: #d3d3d3;
+        color: #000000;
+    }
+</style>
 <script type="text/javascript">
     //var $j = jQuery.noConflict();
     $j(document).ready(function(){
@@ -61,29 +71,16 @@
         function processThis(data){
             $j("#dlgData").empty();
             var listSplit=data.split(",");
-            var listWithin;
-            for(var i=0; i<listSplit.length; i++) {
-                var value = listSplit[i]+"\n";
-                var value2;
 
-                if(value.indexOf(';') !=0){
-                    listWithin=value.split(";");
-                    for(var f=0;f<listWithin.length;f++){
-                        value2= listWithin[f]+"\n";
-                        $j("<div>"+value2+"</div>").appendTo("#dlgData");
-                    }
-
-                }
-                else{
-
-                    $j("<div>"+value+"</div>").appendTo("#dlgData");
-                }
-            }
+            maketable(listSplit);
 
             $j("#dlgData").dialog("open");
         }
 
-
+        $j('#csvdownload').click(function() {
+            window.open("downloadcsvR.htm?fileToImportToCSV=${fileToManipulate}", 'Download csv');
+            return false;
+        });
 
     });
 
@@ -96,7 +93,39 @@
 
     }
 
+    function maketable(info1){
+        row=new Array();
+        cell=new Array();
 
+        row_num=info1.length; //edit this value to suit
+
+
+        tab=document.createElement('table');
+        tab.setAttribute('id','tblSummary');
+        tab.setAttribute('border','0');
+        tab.setAttribute('cellspacing','2');
+        tab.setAttribute('class','tblformat');
+
+
+        tbo=document.createElement('tbody');
+
+        for(c=0;c<row_num;c++){
+            var rowElement=info1[c].split(":");
+            row[c]=document.createElement('tr');
+            //alert(rowElement.length) ;
+
+            for(k=0;k<rowElement.length;k++) {
+
+                cell[k]=document.createElement('td');
+                cont=document.createTextNode(rowElement[k])
+                cell[k].appendChild(cont);
+                row[c].appendChild(cell[k]);
+            }
+            tbo.appendChild(row[c]);
+        }
+        tab.appendChild(tbo);
+        document.getElementById('dlgData').appendChild(tab);
+    }
 </script>
 <c:if test="${not empty loci}">
  <div id="titleheader">
@@ -148,9 +177,8 @@
 <c:if test="${not empty records}">
 <b class="boxHeader">Report Details</b>
 <div class="box" id="maindetails" style=" width:99%; height:auto;  overflow-x: auto;">
-    <div id="printbuttons">
-    <img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/pr_csv_file_document.png"  id="csvdownload" width="50" height="50" onclick="window.open('data:application/vnd.ms-excel,' + document.getElementById('tblMain').outerHTML.replace(/ /g, '%20'))"/>
-    <img src="${pageContext.request.contextPath}/moduleResources/amrsreport/images/pdf.png"  id="pdfdownload" width="50" height="50" />
+    <div id="printbuttons" align="right">
+        <input type="button" id="csvdownload" value="Download CSV Format">
     </div>
 
     <table border="0" id="tblMain">
@@ -179,6 +207,6 @@
 <div id="dlgData" title="Patients More Information">
 
 </div>
-<%--<input type="text" id="definitionname">--%>
+<input type="hidden" value="${fileToManipulate}" name="fileToImportToCSV">
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

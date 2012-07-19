@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
@@ -35,16 +36,15 @@ public class MohIdentifierRule extends MohEvaluableRule {
             String identifier="";
 
         Patient patient = Context.getPatientService().getPatient(patientId);
-        PatientIdentifierType ptype=  Context.getPatientService().getPatientIdentifierTypeByName("MFL Number");
-
-       // log.info(pidentifiermine);
+        AdministrationService ams=Context.getAdministrationService();
+        PatientIdentifierType patientIdentifierType=Context.getPatientService().getPatientIdentifierTypeByName(ams.getGlobalProperty("mflgenerator.mfl"));
 
 
         List<PatientIdentifier>  listPi= patient.getActiveIdentifiers() ;
 
         for(PatientIdentifier pid:listPi) {
 
-            if(!OpenmrsUtil.nullSafeEquals(pid.getIdentifierType(), ptype)){
+            if(!OpenmrsUtil.nullSafeEquals(pid.getIdentifierType(), patientIdentifierType)){
                 return new Result(pid.getIdentifier());
             }
         }
