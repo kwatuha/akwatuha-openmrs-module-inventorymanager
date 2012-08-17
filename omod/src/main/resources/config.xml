@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <module configVersion="1.2">
-	
+
 	<!-- Base Module Properties -->
 	<id>@MODULE_ID@</id>
 	<name>@MODULE_NAME@</name>
@@ -53,6 +53,11 @@
 			Site specific Master facility code that is available on http://www.ehealth.or.ke/facilities/
 		</description>
 	</globalProperty>
+    <globalProperty>
+        <property>@MODULE_ID@.file_dir</property>
+        <defaultValue>amrsreport/files</defaultValue>
+        <description>Directory for storing file temporarily for processing</description>
+    </globalProperty>
 	<!-- /Required Global Properties -->
 	
 	<!--
