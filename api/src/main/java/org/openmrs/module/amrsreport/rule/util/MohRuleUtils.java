@@ -13,7 +13,9 @@
  */
 package org.openmrs.module.amrsreport.rule.util;
 
+import java.text.Format;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
@@ -124,4 +126,14 @@ public class MohRuleUtils {
 		}
 		return date;
 	}
+	
+	public static String formatdates(Date date){
+		Format formatter;
+		formatter = new SimpleDateFormat("dd-MMM-yy");
+		String s = formatter.format(date);
+		
+		return s;
+		
+	}
+	
 }

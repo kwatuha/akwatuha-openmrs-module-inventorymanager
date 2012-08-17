@@ -38,7 +38,7 @@ public class MohLostToFollowUpRule  extends MohEvaluableRule {
 	public Result evaluate(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 	 try {
 		Patient patient = Context.getPatientService().getPatient(patientId);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 		if(patient.getDead())
 			return new Result("DEAD | " + sdf.format(patient.getDeathDate()));
 		else if(patient.getDeathDate() != null)

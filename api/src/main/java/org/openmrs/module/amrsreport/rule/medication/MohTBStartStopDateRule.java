@@ -38,6 +38,7 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.MohEvaluableNameConstants;
 import org.openmrs.module.amrsreport.rule.MohEvaluableRule;
+import org.openmrs.module.amrsreport.rule.util.MohRuleUtils;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
@@ -92,21 +93,21 @@ public class MohTBStartStopDateRule extends MohEvaluableRule {
 			if(observations.getConcept().equals(TBStartConcept)){
 				if(wasStart){
 					if(ret.equals(""))
-						ret += (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime()) + " - ");
+						ret += (MohRuleUtils.formatdates(observations.getValueDatetime()) + " - ");
 					else
-						ret += (", " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + " - ");
+						ret += (", " + (MohRuleUtils.formatdates(observations.getValueDatetime())) + " - ");
 				}else{
-					ret += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + " - ");
+					ret += ((MohRuleUtils.formatdates(observations.getValueDatetime())) + " - ");
 				}
 				wasStart = true;
 			}else{
 				if(ret.equals("")){
-					ret += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + ", ");
+					ret += (" - " + (MohRuleUtils.formatdates(observations.getValueDatetime())) + ", ");
 				}else{
 					if (wasStart) {
-						ret += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + ", ");
+						ret += ((MohRuleUtils.formatdates(observations.getValueDatetime())) + ", ");
                     }else{
-                    	ret += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime())) + ", ");
+                    	ret += (" - " + (MohRuleUtils.formatdates(observations.getValueDatetime())) + ", ");
                     }
 				}
 				wasStart = false;

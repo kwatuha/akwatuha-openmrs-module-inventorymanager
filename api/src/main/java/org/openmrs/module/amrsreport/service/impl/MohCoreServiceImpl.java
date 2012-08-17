@@ -27,6 +27,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.amrsreport.db.MohCoreDAO;
@@ -95,5 +97,11 @@ public class MohCoreServiceImpl extends BaseOpenmrsService implements MohCoreSer
 	public List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                        final MohFetchRestriction mohFetchRestriction) throws APIException {
 		return mohCoreDAO.getPatientObservations(patientId, restrictions, mohFetchRestriction);
+	}
+
+	@Override
+	public List<PatientIdentifier> getAllPatientIdenifiers(Patient p) {
+		
+		return mohCoreDAO.getAllPatientIdenifiers(p);
 	}
 }

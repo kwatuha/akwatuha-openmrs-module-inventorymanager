@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.EncounterType;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Person;
@@ -27,6 +26,7 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.MohEvaluableNameConstants;
 import org.openmrs.module.amrsreport.rule.MohEvaluableRule;
+import org.openmrs.module.amrsreport.rule.util.MohRuleUtils;
 import org.openmrs.util.OpenmrsUtil;
  
 public class MohWHOStageRule  extends MohEvaluableRule {
@@ -193,7 +193,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 				
 				log.info("Entering stage 1 for determination adult");
 				String stage1="WHO STAGE 1 ADULT";
-				String stageDate1=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+				String stageDate1=MohRuleUtils.formatdates((WHOObs.getObsDatetime()));
 				String stageDateCombined1=stage1 +"-"+stageDate1;
 				Result WHOStage1AdultResult = new Result(stageDateCombined1);
 				result.add(WHOStage1AdultResult);
@@ -210,7 +210,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 					){
 						log.info("Entering stage 2 for determination adult");
 						String stage2="WHO STAGE 2 ADULT";
-						String stageDate2=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+						String stageDate2=MohRuleUtils.formatdates(WHOObs.getObsDatetime());
 						String stageDateCombined2=stage2 +"-"+stageDate2;
 						Result WHOStage2AdultResult = new Result(stageDateCombined2);
 						result.add(WHOStage2AdultResult);
@@ -236,7 +236,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 					){
 						log.info("Entering stage 3 for determination adult");
 						String stage3="WHO STAGE 3 ADULT";
-						String stageDate3=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+						String stageDate3=MohRuleUtils.formatdates(WHOObs.getObsDatetime());
 						String stageDateCombined3=stage3 +"-"+stageDate3;
 						Result WHOStage3AdultResult = new Result(stageDateCombined3);
 						result.add(WHOStage3AdultResult);
@@ -283,7 +283,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 				
 						log.info("Entering stage 4 for determination adult");
 						String stage4="WHO STAGE 4 ADULT";
-						String stageDate4=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+						String stageDate4=MohRuleUtils.formatdates(WHOObs.getObsDatetime());
 						String stageDateCombined4=stage4 +"-"+stageDate4;
 						Result WHOStage4AdultResult = new Result(stageDateCombined4);
 						result.add(WHOStage4AdultResult);
@@ -294,7 +294,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 					){
 							log.info("Entering stage 1 for determination paeds");
 							String stagePaeds1="WHO STAGE 1 PEDS";
-							String stageDatePaeds1=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+							String stageDatePaeds1=MohRuleUtils.formatdates(WHOObs.getObsDatetime());
 							String stageDateCombinedPaeds1=stagePaeds1 +"-"+stageDatePaeds1;
 							Result WHOStage1PaedsResult = new Result(stageDateCombinedPaeds1);
 							result.add(WHOStage1PaedsResult);
@@ -320,7 +320,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 					){
 							log.info("Entering stage 2 for determination paeds");
 							String stagePaeds2="WHO STAGE 2 PEDS";
-							String stageDatePaeds2=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+							String stageDatePaeds2=MohRuleUtils.formatdates(WHOObs.getObsDatetime());
 							String stageDateCombinedPaeds2=stagePaeds2 +"-"+stageDatePaeds2;
 							Result WHOStage2PaedsResult = new Result(stageDateCombinedPaeds2);
 							result.add(WHOStage2PaedsResult);
@@ -348,7 +348,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 					){
 							log.info("Entering stage 3 for determination paeds");
 							String stagePaeds3="WHO STAGE 3 PEDS";
-							String stageDatePaeds3=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+							String stageDatePaeds3=MohRuleUtils.formatdates(WHOObs.getObsDatetime());
 							String stageDateCombinedPaeds3=stagePaeds3 +"-"+stageDatePaeds3;
 							Result WHOStage3PaedsResult = new Result(stageDateCombinedPaeds3);
 							result.add(WHOStage3PaedsResult);
@@ -375,7 +375,7 @@ public class MohWHOStageRule  extends MohEvaluableRule {
 					){
 							log.info("Entering stage 4 for determination paeds");
 							String stagePaeds4="WHO STAGE 4 PEDS";
-							String stageDatePaeds4=(OpenmrsUtil.getDateFormat(Context.getLocale()).format(WHOObs.getObsDatetime()));
+							String stageDatePaeds4=MohRuleUtils.formatdates(WHOObs.getObsDatetime());
 							String stageDateCombinedPaeds4=stagePaeds4 +"-"+stageDatePaeds4;
 							Result WHOStage4PaedsResult = new Result(stageDateCombinedPaeds4);
 							result.add(WHOStage4PaedsResult);

@@ -25,6 +25,7 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.MohEvaluableNameConstants;
 import org.openmrs.module.amrsreport.rule.MohEvaluableRule;
+import org.openmrs.module.amrsreport.rule.util.MohRuleUtils;
 import org.openmrs.util.OpenmrsUtil;
  
 public class MohFluconazoleStartStopDateRule  extends MohEvaluableRule {
@@ -80,21 +81,21 @@ public class MohFluconazoleStartStopDateRule  extends MohEvaluableRule {
 			if((observations.getValueCoded().equals(StartDrugs)) || (observations.getValueCoded().equals(FluconazoleDrug))){
 				if(wasStart){
 					if(ret.equals(""))
-						ret += (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime()) + " - ");
+						ret += (MohRuleUtils.formatdates(observations.getObsDatetime()) + " - ");
 					else
-						ret += (", " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + " - ");
+						ret += (", " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
 				}else{
-					ret += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + " - ");
+					ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + " - ");
 				}
 				wasStart = true;
 			}else if(observations.getValueCoded().equals(StopDrugs)){
 				if(ret.equals("")){
-					ret += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + ", ");
+					ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + ", ");
 				}else{
 					if (wasStart) {
-						ret += ((OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + ", ");
+						ret += ((MohRuleUtils.formatdates(observations.getObsDatetime())) + ", ");
                     }else{
-                    	ret += (" - " + (OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getObsDatetime())) + ", ");
+                    	ret += (" - " + (MohRuleUtils.formatdates(observations.getObsDatetime())) + ", ");
                     }
 				}
 				wasStart = false;

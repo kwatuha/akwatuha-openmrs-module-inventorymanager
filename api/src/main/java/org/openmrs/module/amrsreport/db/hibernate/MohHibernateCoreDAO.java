@@ -39,6 +39,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.amrsreport.cache.MohCacheUtils;
 import org.openmrs.module.amrsreport.db.MohCoreDAO;
@@ -248,5 +250,13 @@ public class MohHibernateCoreDAO implements MohCoreDAO {
 		criteria.setProjection(Projections.property("person.personId"));
 		criteria.add(Restrictions.eq("voided", Boolean.FALSE));
 		return new Cohort(criteria.list());
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public List<PatientIdentifier> getAllPatientIdenifiers(Patient p) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PatientIdentifier.class);
+		criteria.add(Restrictions.eq("patient", p));
+		return criteria.list();
 	}
 }

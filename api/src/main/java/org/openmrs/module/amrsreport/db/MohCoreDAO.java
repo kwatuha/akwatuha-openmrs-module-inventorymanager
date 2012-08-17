@@ -25,6 +25,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.amrsreport.util.MohFetchRestriction;
 
@@ -43,4 +45,6 @@ public interface MohCoreDAO {
 
 	List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                 final MohFetchRestriction mohFetchRestriction) throws DAOException;
+
+	List<PatientIdentifier> getAllPatientIdenifiers(Patient p);
 }

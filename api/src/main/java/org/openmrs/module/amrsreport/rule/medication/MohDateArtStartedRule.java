@@ -29,6 +29,7 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.module.amrsreport.rule.MohEvaluableNameConstants;
 import org.openmrs.module.amrsreport.rule.MohEvaluableRule;
+import org.openmrs.module.amrsreport.rule.util.MohRuleUtils;
 import org.openmrs.util.OpenmrsUtil;
 
 public class MohDateArtStartedRule extends MohEvaluableRule{
@@ -69,7 +70,7 @@ public class MohDateArtStartedRule extends MohEvaluableRule{
 		String ret = "";
 		boolean wasStart = true;
 		for(Obs observations:uniqueObs){
-			ret += OpenmrsUtil.getDateFormat(Context.getLocale()).format(observations.getValueDatetime()) + ",";
+			ret += MohRuleUtils.formatdates(observations.getValueDatetime()) + ",";
 		}
 			
  		return new Result(ret);

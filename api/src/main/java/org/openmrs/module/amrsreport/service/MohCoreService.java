@@ -25,6 +25,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
@@ -114,4 +116,6 @@ public interface MohCoreService extends OpenmrsService {
 	@Authorized({PrivilegeConstants.VIEW_OBS})
 	List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                 final MohFetchRestriction mohFetchRestriction) throws APIException;
+	
+	List<PatientIdentifier> getAllPatientIdenifiers(Patient p);
 }
