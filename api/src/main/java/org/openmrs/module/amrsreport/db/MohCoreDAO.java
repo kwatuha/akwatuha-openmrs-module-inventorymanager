@@ -45,6 +45,6 @@ public interface MohCoreDAO {
 
 	List<Obs> getPatientObservations(final Integer patientId, final Map<String, Collection<OpenmrsObject>> restrictions,
 	                                 final MohFetchRestriction mohFetchRestriction) throws DAOException;
-
+	
 	List<PatientIdentifier> getAllPatientIdenifiers(Patient p);
 }
