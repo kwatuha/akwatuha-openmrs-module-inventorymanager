@@ -14,7 +14,7 @@
 
 	<activator>org.openmrs.module.amrsreport.AmrsReportModuleActivator</activator>
 	
-	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
+	<updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 	<!-- /Base Module Properties -->
 	
 	<require_modules>
