@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>amrsreport</artifactId>
-		<version>0.1</version>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>amrsreport-omod</artifactId>
@@ -51,7 +51,7 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>serialization.xstream-api</artifactId>
+            <artifactId>serialization.xstream</artifactId>
         </dependency>
 
         <dependency>
