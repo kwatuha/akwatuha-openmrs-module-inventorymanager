@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
- 
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
@@ -13,28 +11,60 @@
         for a list of supported elements and attributes
     -->
  
- 	<!-- Uncomment this and edit the values below to use this file
  	
-	<changeSet id="mymoduleid-2010-05-25-15:50" author="bwolfe">
+  <changeSet id="create amrsreport_user_report 2012-09-12" author="akwatuha">
 		<preConditions onFail="MARK_RAN">
-			<not><tableExists tableName="mymoduleid_myobject"/></not>
+			<not><tableExists tableName="amrsreport_user_report"/></not>
 		</preConditions>
 		<comment>
-			Creating the mymoduleid_myobject table
+			Creating the amrsreport_user_report table
 		</comment>
-		<createTable tableName="mymoduleid_myobject">
-			<column name="mymoduleid_myobject_id" type="int">
-				<constraints primaryKey="true" nullable="false"/>
+		<createTable tableName="amrsreport_user_report">
+			<column name="report_user_id" type="int(11)">
+			    <constraints primaryKey="true" nullable="false"/>
+		    </column>
+			<column name="user_id" type="int(11)"/>
+			<column name="report_definition_uuid" type="char(38)"/>
+			<column name="creator" type="int(11)" defaultValue="0">
+			<constraints nullable="false" /></column>
+			<column name="datecreated" type="datetime">
+							<constraints nullable="true" />
 			</column>
-			<column name="firstname" type="varchar(255)"/>
-			<column name="lastname" type="varchar(255)"/>
-			<column name="username" type="varchar(255)">
-				<constraints unique="true" nullable="false"/>
+			<column name="voided" type="smallint(6)" defaultValue="0">
+							<constraints nullable="false" />
 			</column>
-			<column name="testid" type="int" />
-		</createTable>
-    </changeSet>
-    
-    -->
- 
+			<column name="voided_by" type="int(11)">
+							<constraints nullable="true" />
+			</column>
+			<column name="date_voided" type="datetime">
+							<constraints nullable="true" />
+			</column>
+			<column name="void_reason" type="varchar(255)">
+							<constraints nullable="true" />
+			</column>
+			<column name="uuid" type="char(38)">
+			<constraints nullable="false" /></column></createTable>
+
+<createIndex tableName="amrsreport_user_report" indexName="uuid">
+			<column name="uuid" />
+		</createIndex>
+</changeSet> 
+		
+<changeSet id="amrsreport_user_report autoicrement  2012-09-12" author="akwatuha">
+    <addAutoIncrement tableName="amrsreport_user_report" columnName="report_user_id" columnDataType="int"/>
+</changeSet>
+<changeSet id="amrsreport_user_report uuid  2012-09-12 " author="kwatuha">
+		<preConditions onFail="MARK_RAN">
+		<dbms type="mysql" />
+	</preConditions>
+<comment>Generating UUID row in amrsreport_user_report table via built in uuid function.</comment>
+		<update tableName="amrsreport_user_report">
+			<column name="uuid" valueNumeric="name-of-uuid-function" />
+			<where>uuid is null</where>
+		</update>
+		<modifySql dbms="mysql">
+			<replace replace="name-of-uuid-function" with="UUID()" />
+		</modifySql>
+	</changeSet>
+	
 </databaseChangeLog>
